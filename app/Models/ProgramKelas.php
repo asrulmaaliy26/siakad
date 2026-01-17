@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProgramKelas extends Model
 {
+    use HasFactory;
     protected $table = 'program_kelas';
     protected $fillable = ['nama'];
 

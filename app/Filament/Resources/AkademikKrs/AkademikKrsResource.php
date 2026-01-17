@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class AkademikKrsResource extends Resource
 {
@@ -21,6 +22,7 @@ class AkademikKrsResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'nama';
+    protected static string | UnitEnum | null $navigationGroup = 'Perkuliahan';
 
     public static function form(Schema $schema): Schema
     {

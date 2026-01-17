@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_ljk', function (Blueprint $table) {
+        Schema::create('siswa_data_ljk', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('id_akademik_krs')

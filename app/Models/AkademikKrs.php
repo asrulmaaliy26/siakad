@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AkademikKrs extends Model
 {
+    use HasFactory;
     protected $table = 'akademik_krs';
     protected $fillable = [
         'id_riwayat_pendidikan',

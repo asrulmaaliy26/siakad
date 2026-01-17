@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RiwayatPendidikan extends Model
 {
+    use HasFactory;
     protected $table = 'riwayat_pendidikan';
     protected $fillable = [
         'id_siswa_data',
@@ -25,5 +27,13 @@ class RiwayatPendidikan extends Model
     public function jurusan()
     {
         return $this->belongsTo(Jurusan::class, 'id_jurusan');
+    }
+    public function akademikKrs()
+    {
+        return $this->hasMany(
+            AkademikKrs::class,
+            'id_riwayat_pendidikan',
+            'id'
+        );
     }
 }

@@ -12,6 +12,12 @@ use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Columns\Column;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use Maatwebsite\Excel\Excel;
+use Filament\Tables\Actions\ButtonAction;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Collection;
 
 class MataPelajaranMastersTable
 {
@@ -71,12 +77,41 @@ class MataPelajaranMastersTable
             ->toolbarActions([
 
                 BulkActionGroup::make([
-                    ExportBulkAction::make()
+                    
+                    // ======================
+                    // EXPORT PDF (BULK)
+                    // ======================
+                    ExportBulkAction::make('cetak_pdf')
+                        ->label('Cetak PDF')
+                        ->icon('heroicon-o-printer')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+
+                            $pdf = Pdf::loadView(
+                                'exports.mata_pelajaran_pdf',
+                                [
+                                    'records' => $records,
+                                ]
+                            )->setPaper('A4', 'landscape');
+
+                            return response()->streamDownload(
+                                fn() => print($pdf->output()),
+                                'mata-pelajaran-' . now()->format('Y-m-d') . '.pdf'
+                            );
+                        }),
+
+                    // ======================
+                    // EXPORT EXCEL (BULK)
+                    // ======================
+                    ExportBulkAction::make('export_excel')
                         ->label('Export Excel')
+                        ->icon('heroicon-o-document-arrow-down')
                         ->exports([
                             ExcelExport::make()
+                                ->fromTable()
                                 ->withColumns([
-                                    Column::make('kode_feeder')->heading('Kode Feeder'),
+                                    Column::make('kode_feeder')->heading('Kode'),
                                     Column::make('nama')->heading('Nama Mata Pelajaran'),
                                     Column::make('jurusan.nama')->heading('Jurusan'),
                                     Column::make('bobot')->heading('Bobot'),
@@ -84,27 +119,12 @@ class MataPelajaranMastersTable
                                 ])
                                 ->withFilename(
                                     fn() =>
-                                    'mata-pelajaran-terpilih-' . now()->format('Y-m-d')
+                                    'mata-pelajaran-excel-' . now()->format('Y-m-d')
                                 ),
                         ]),
 
                     DeleteBulkAction::make(),
                 ]),
             ]);
-            // ->headerActions([
-            //     ExportAction::make()
-            //         ->exports([
-            //             ExcelExport::make()
-            //                 ->fromTable()
-            //                 ->withFilename('mata-pelajaran')
-            //                 ->withColumns([
-            //                     Column::make('kode_feeder')->heading('Kode Feeder'),
-            //                     Column::make('nama')->heading('Nama'),
-            //                     Column::make('jurusan.nama')->heading('Jurusan'),
-            //                     Column::make('bobot')->heading('Bobot'),
-            //                     Column::make('jenis')->heading('Jenis'),
-            //                 ]),
-            //         ]),
-            // ]);
     }
 }

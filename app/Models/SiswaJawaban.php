@@ -19,7 +19,7 @@ class SiswaJawaban extends Model
 
     protected $dates = ['waktu_submit'];
 
-    public function soal()
+    public function soalEvaluasi()
     {
         return $this->belongsTo(SiswaSoalEvaluasi::class, 'id_soal_evaluasi');
     }

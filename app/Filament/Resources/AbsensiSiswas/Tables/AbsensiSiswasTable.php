@@ -32,7 +32,7 @@ class AbsensiSiswasTable
                     ->searchable(),
 
                 TextColumn::make(
-                    'pertemuan.mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.name'
+                    'pertemuan.mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.nama'
                 )
                     ->label('Mata Pelajaran')
                     ->sortable()

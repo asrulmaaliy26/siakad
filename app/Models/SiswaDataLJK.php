@@ -12,7 +12,7 @@ class SiswaDataLJK extends Model
     // protected $primaryKey = 'id_data_ljk';
 
     protected $fillable = [
-        'id_krs',
+        'id_akademik_krs',
         'id_mata_pelajaran_kelas',
         'nilai'
     ];
@@ -25,7 +25,7 @@ class SiswaDataLJK extends Model
 
     public function krs()
     {
-        return $this->belongsTo(AkademikKrs::class, 'id_akadmik_krs');
+        return $this->belongsTo(AkademikKrs::class, 'id_akademik_krs');
     }
 
     public function mataPelajaranKelas()

@@ -24,7 +24,7 @@ class SiswaEvaluasi extends Model
         );
     }
 
-    public function jenisEvaluasi()
+    public function siswaJenisEvaluasi()
     {
         return $this->belongsTo(
             SiswaJenisEvaluasi::class,

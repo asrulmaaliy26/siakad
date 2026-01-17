@@ -15,9 +15,11 @@ class SiswaSoalEvaluasisTable
     {
         return $table
             ->columns([
-                IconColumn::make('is_soal_evaluasi')
-                    ->boolean(),
-                TextColumn::make('id_siswa_data')
+                TextColumn::make('siswaEvaluasi.keterangan')
+                    ->numeric(),
+                // TextColumn::make('siswaEvaluasi.mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.nama')
+                //     ->numeric(),
+                TextColumn::make('pertanyaan')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('tipe')

@@ -14,15 +14,15 @@ class KurikulumsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('nama')
                     ->searchable(),
-                TextColumn::make('id_jurusan')
+                TextColumn::make('jurusan.nama')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('id_tahun_akademik')
+                TextColumn::make('tahunAkademik.nama')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('id_jenjang_pendidikan')
+                TextColumn::make('jenjangPendidikan.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('status_aktif'),

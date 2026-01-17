@@ -10,8 +10,7 @@ class SiswaSoalEvaluasi extends Model
     use HasFactory;
     protected $table = 'siswa_soal_evaluasi';
     protected $fillable = [
-        'id_siswa_data',
-        'is_soal_evaluasi',
+        'is_siswa_evaluasi',
         'pertanyaan',
         'tipe',
         'skor',
@@ -22,9 +21,9 @@ class SiswaSoalEvaluasi extends Model
         'is_soal_evaluasi' => 'boolean'
     ];
 
-    public function siswa()
+    public function siswaEvaluasi()
     {
-        return $this->belongsTo(SiswaData::class, 'id_siswa_data');
+        return $this->belongsTo(SiswaEvaluasi::class, 'id_siswa_evaluasi');
     }
 
     public function jawaban()

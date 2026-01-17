@@ -12,7 +12,7 @@ class KurikulumForm
     {
         return $schema
             ->components([
-                TextInput::make('name'),
+                TextInput::make('nama'),
                 TextInput::make('id_jurusan')
                     ->numeric(),
                 TextInput::make('id_tahun_akademik')

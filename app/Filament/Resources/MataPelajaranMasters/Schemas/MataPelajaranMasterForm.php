@@ -12,7 +12,7 @@ class MataPelajaranMasterForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
+                TextInput::make('nama')
                     ->required(),
                 TextInput::make('id_jurusan')
                     ->numeric(),

@@ -7,6 +7,9 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TextInputFilter;
+use App\Models\MataPelajaranMaster;
 
 class MataPelajaranMastersTable
 {
@@ -14,9 +17,11 @@ class MataPelajaranMastersTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('kode_feeder')
                     ->searchable(),
-                TextColumn::make('id_jurusan')
+                TextColumn::make('nama')
+                    ->searchable(),
+                TextColumn::make('jurusan.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('bobot')
@@ -34,6 +39,28 @@ class MataPelajaranMastersTable
             ])
             ->filters([
                 //
+                SelectFilter::make('jurusan_id')
+                    ->label('Jurusan')
+                    ->relationship('jurusan', 'nama')
+                    ->searchable()
+                    ->preload(),
+
+                SelectFilter::make('jenis')
+                    ->label('Jenis Mapel')
+                    ->options([
+                        'Wajib' => 'Wajib',
+                        'Pilihan' => 'Pilihan',
+                        'Muatan Lokal' => 'Muatan Lokal',
+                    ]),
+
+                // SelectFilter::make('nama')
+                //     ->label('Nama Mapel')
+                //     ->options(
+                //         MataPelajaranMaster::query()
+                //             ->pluck('nama', 'nama')
+                //             ->toArray()
+                //     )
+                //     ->searchable(),
             ])
             ->recordActions([
                 EditAction::make(),

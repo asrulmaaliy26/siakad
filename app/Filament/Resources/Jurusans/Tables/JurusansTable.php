@@ -16,7 +16,7 @@ class JurusansTable
             ->columns([
                 TextColumn::make('nama')
                     ->searchable(),
-                TextColumn::make('id_fakultas')
+                TextColumn::make('fakultas.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')

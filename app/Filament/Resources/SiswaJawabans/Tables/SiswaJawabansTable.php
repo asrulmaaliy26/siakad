@@ -14,10 +14,10 @@ class SiswaJawabansTable
     {
         return $table
             ->columns([
-                TextColumn::make('id_soal_evaluasi')
+                TextColumn::make('soalEvaluasi.pertanyaan')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('id_akademik_krs')
+                TextColumn::make('krs.riwayatPendidikan.siswa.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('skor')

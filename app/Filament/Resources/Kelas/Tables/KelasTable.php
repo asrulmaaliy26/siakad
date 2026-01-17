@@ -14,16 +14,16 @@ class KelasTable
     {
         return $table
             ->columns([
-                TextColumn::make('id_program_kelas')
+                TextColumn::make('programKelas.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('semester')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('id_jenjang_pendidikan')
+                TextColumn::make('jenjangPendidikan.nama')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('id_tahun_akademik')
+                TextColumn::make('tahunAkademik.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('status_aktif'),

@@ -14,10 +14,21 @@ class AkademikKrsTable
     {
         return $table
             ->columns([
-                TextColumn::make('id_riwayat_pendidikan')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('id_kelas')
+                // TextColumn::make('id_riwayat_pendidikan')
+                //     ->numeric()
+                //     ->sortable(),
+                // TextColumn::make('riwayatPendidikan.siswa.nama')
+                //     ->numeric()
+                //     ->sortable(),
+                TextColumn::make('riwayat_pendidikan_siswa')
+                    ->label('Riwayat Pendidikan / Siswa')
+                    ->color('info')
+                    ->getStateUsing(function ($record) {
+                        return optional($record->riwayatPendidikan)->id
+                            . ' - ' .
+                            optional($record->riwayatPendidikan?->siswa)->nama;
+                    }),
+                TextColumn::make('kelas.programKelas.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('semester')

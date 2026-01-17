@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\JenjangPendidikan;
-
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\JenjangPendidikan>
  */
@@ -20,7 +19,7 @@ class JenjangPendidikanFactory extends Factory
     {
         return [
             'nama' => $this->faker->randomElement(['SMA', 'D3', 'S1', 'S2']),
-            'deskripsi' => $this->faker->sentence(3),
+            'deskripsi' => $this->faker->sentence(5),
         ];
     }
 }

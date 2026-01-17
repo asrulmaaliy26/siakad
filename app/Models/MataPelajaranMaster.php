@@ -9,7 +9,7 @@ class MataPelajaranMaster extends Model
 {
     use HasFactory;
     protected $table = 'mata_pelajaran_master';
-    protected $fillable = ['name', 'id_jurusan', 'bobot', 'jenis'];
+    protected $fillable = ['nama', 'kode_feeder', 'id_jurusan', 'bobot', 'jenis'];
 
     public function jurusan()
     {

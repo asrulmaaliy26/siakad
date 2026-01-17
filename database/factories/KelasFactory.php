@@ -21,10 +21,10 @@ class KelasFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_program_kelas' => ProgramKelas::factory(),
-            'semester' => $this->faker->numberBetween(1, 8),
-            'id_jenjang_pendidikan' => JenjangPendidikan::factory(),
-            'id_tahun_akademik' => TahunAkademik::factory(),
+            'id_program_kelas' => 2,
+            'semester' => 1,
+            'id_jenjang_pendidikan' => 3,
+            'id_tahun_akademik' => 1,
             'status_aktif' => 'Y',
         ];
     }

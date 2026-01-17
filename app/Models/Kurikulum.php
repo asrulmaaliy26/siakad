@@ -24,7 +24,7 @@ class Kurikulum extends Model
     {
         return $this->belongsTo(TahunAkademik::class, 'id_tahun_akademik');
     }
-    public function jenjangPednidikan()
+    public function jenjangPendidikan()
     {
         return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
     }

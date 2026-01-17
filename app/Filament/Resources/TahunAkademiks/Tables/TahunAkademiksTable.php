@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\ToggleColumn;
 
 class TahunAkademiksTable
 {
@@ -17,7 +18,16 @@ class TahunAkademiksTable
                 TextColumn::make('nama')
                     ->searchable(),
                 TextColumn::make('periode'),
-                TextColumn::make('status'),
+                ToggleColumn::make('status')
+                    ->label('Status')
+                    ->getStateUsing(fn($record) => $record->status === 'Y')
+                    ->updateStateUsing(function ($state, $record) {
+                        $record->update([
+                            'status' => $state ? 'Y' : 'N',
+                        ]);
+                    })
+                    ->onColor('success')
+                    ->offColor('danger'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

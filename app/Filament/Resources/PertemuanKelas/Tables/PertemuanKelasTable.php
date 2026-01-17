@@ -14,7 +14,7 @@ class PertemuanKelasTable
     {
         return $table
             ->columns([
-                TextColumn::make('id_mata_pelajaran_kelas')
+                TextColumn::make('mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('pertemuan_ke')

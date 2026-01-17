@@ -14,10 +14,11 @@ class MataPelajaranKurikulumsTable
     {
         return $table
             ->columns([
-                TextColumn::make('id_kurikulum')
+                TextColumn::make('id'),
+                TextColumn::make('kurikulum.nama')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('id_mata_pelajaran_master')
+                TextColumn::make('mataPelajaranMaster.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('semester')

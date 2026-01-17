@@ -15,17 +15,18 @@ class MataPelajaranKelasTable
     {
         return $table
             ->columns([
+                // TextColumn::make('id'),
                 TextColumn::make('id_mata_pelajaran_kurikulum')
                     ->numeric()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('id_kelas')
+                TextColumn::make('kelas.programKelas.nama')
                     ->numeric()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('id_dosen_data')
+                TextColumn::make('dosen.nama')
                     ->numeric()
                     ->sortable()
                     ->toggleable(),
@@ -40,75 +41,75 @@ class MataPelajaranKelasTable
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('id_ruang_kelas')
+                TextColumn::make('ruangKelas.nama')
                     ->numeric()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable()
-                    ->toggleable(),
+                // TextColumn::make('id')
+                //     ->label('ID')
+                //     ->sortable()
+                //     ->toggleable(),
 
-                TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.id')
-                    ->label('Kode Mata Pelajaran')
-                    ->sortable()
-                    ->searchable()
-                    ->toggleable(),
+                // TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.id')
+                //     ->label('Kode Mata Pelajaran')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->toggleable(),
 
-                TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.name')
-                    ->label('Nama Mata Pelajaran')
-                    ->sortable()
-                    ->searchable()
-                    ->toggleable(),
+                // TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.nama')
+                //     ->label('Nama Mata Pelajaran')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->toggleable(),
 
-                TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.bobot')
-                    ->label('Bobot')
-                    ->toggleable(),
+                // TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.bobot')
+                //     ->label('Bobot')
+                //     ->toggleable(),
 
-                TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.jenis')
-                    ->label('Jenis')
-                    ->toggleable(),
+                // TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.jenis')
+                //     ->label('Jenis')
+                //     ->toggleable(),
 
-                TextColumn::make('mataPelajaranKurikulum.kurikulum.name')
-                    ->label('Kurikulum')
-                    ->sortable()
-                    ->searchable()
-                    ->toggleable(),
+                // TextColumn::make('mataPelajaranKurikulum.kurikulum.nama')
+                //     ->label('Kurikulum')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->toggleable(),
 
-                TextColumn::make('mataPelajaranKurikulum.kurikulum.jurusan.nama')
-                    ->label('Jurusan')
-                    ->sortable()
-                    ->searchable()
-                    ->toggleable(),
+                // TextColumn::make('mataPelajaranKurikulum.kurikulum.jurusan.nama')
+                //     ->label('Jurusan')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->toggleable(),
 
-                TextColumn::make('dosen.nama')
-                    ->label('Dosen')
-                    ->sortable()
-                    ->searchable()
-                    ->toggleable(),
+                // TextColumn::make('dosen.nama')
+                //     ->label('Dosen')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->toggleable(),
 
-                TextColumn::make('kelas.id')
-                    ->label('ID Kelas')
-                    ->sortable()
-                    ->toggleable(),
+                // TextColumn::make('kelas.id')
+                //     ->label('ID Kelas')
+                //     ->sortable()
+                //     ->toggleable(),
 
-                TextColumn::make('kelas.programKelas.nama')
-                    ->label('Program Kelas')
-                    ->sortable()
-                    ->toggleable(),
+                // TextColumn::make('kelas.programKelas.nama')
+                //     ->label('Program Kelas')
+                //     ->sortable()
+                //     ->toggleable(),
 
-                TextColumn::make('kelas.semester')
-                    ->label('Semester Kelas')
-                    ->sortable()
-                    ->toggleable(),
+                // TextColumn::make('kelas.semester')
+                //     ->label('Semester Kelas')
+                //     ->sortable()
+                //     ->toggleable(),
 
-                TextColumn::make('kelas.tahunAkademik.nama')
-                    ->label('Tahun Akademik')
-                    ->sortable()
-                    ->toggleable(),
+                // TextColumn::make('kelas.tahunAkademik.nama')
+                //     ->label('Tahun Akademik')
+                //     ->sortable()
+                //     ->toggleable(),
             ])
-            ->defaultSort('kelas.semester')
+            // ->defaultSort('kelas.semester')
             ->filters([
                 //
             ])

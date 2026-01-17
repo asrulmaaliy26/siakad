@@ -52,13 +52,13 @@ class AbsensiSiswaResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->with([
-                'pertemuan.mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster',
-                'krs.riwayatPendidikan.siswa',
-                'krs.kelas.programKelas',
-            ]);
-    }
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     return parent::getEloquentQuery()
+    //         ->with([
+    //             'pertemuan.mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster',
+    //             'krs.riwayatPendidikan.siswa',
+    //             'krs.kelas.programKelas',
+    //         ]);
+    // }
 }

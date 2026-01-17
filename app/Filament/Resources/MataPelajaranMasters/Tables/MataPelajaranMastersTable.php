@@ -8,8 +8,10 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TextInputFilter;
-use App\Models\MataPelajaranMaster;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 
 class MataPelajaranMastersTable
 {
@@ -22,7 +24,8 @@ class MataPelajaranMastersTable
                 TextColumn::make('nama')
                     ->searchable(),
                 TextColumn::make('jurusan.nama')
-                    ->numeric()
+                    // ->numeric()
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('bobot')
                     ->numeric()
@@ -66,9 +69,42 @@ class MataPelajaranMastersTable
                 EditAction::make(),
             ])
             ->toolbarActions([
+
                 BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->label('Export Excel')
+                        ->exports([
+                            ExcelExport::make()
+                                ->withColumns([
+                                    Column::make('kode_feeder')->heading('Kode Feeder'),
+                                    Column::make('nama')->heading('Nama Mata Pelajaran'),
+                                    Column::make('jurusan.nama')->heading('Jurusan'),
+                                    Column::make('bobot')->heading('Bobot'),
+                                    Column::make('jenis')->heading('Jenis'),
+                                ])
+                                ->withFilename(
+                                    fn() =>
+                                    'mata-pelajaran-terpilih-' . now()->format('Y-m-d')
+                                ),
+                        ]),
+
                     DeleteBulkAction::make(),
                 ]),
             ]);
+            // ->headerActions([
+            //     ExportAction::make()
+            //         ->exports([
+            //             ExcelExport::make()
+            //                 ->fromTable()
+            //                 ->withFilename('mata-pelajaran')
+            //                 ->withColumns([
+            //                     Column::make('kode_feeder')->heading('Kode Feeder'),
+            //                     Column::make('nama')->heading('Nama'),
+            //                     Column::make('jurusan.nama')->heading('Jurusan'),
+            //                     Column::make('bobot')->heading('Bobot'),
+            //                     Column::make('jenis')->heading('Jenis'),
+            //                 ]),
+            //         ]),
+            // ]);
     }
 }

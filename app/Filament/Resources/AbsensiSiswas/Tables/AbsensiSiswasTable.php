@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\BadgeColumn;
 
 class AbsensiSiswasTable
 {
@@ -14,25 +15,69 @@ class AbsensiSiswasTable
     {
         return $table
             ->columns([
-                TextColumn::make('id_pertemuan')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('id_krs')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('status'),
-                TextColumn::make('waktu_absen')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
+                //indexing table
+                TextColumn::make('No')
+                    ->label('No')
+                    ->getStateUsing(
+                        fn($rowLoop) => $rowLoop->iteration
+                    ),
+                TextColumn::make('krs.riwayatPendidikan.siswa.nomor_induk')
+                    ->label('NIS / NIM')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->searchable(),
+
+                TextColumn::make('krs.riwayatPendidikan.siswa.nama')
+                    ->label('Nama Siswa')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->searchable(),
+
+                TextColumn::make(
+                    'pertemuan.mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.name'
+                )
+                    ->label('Mata Pelajaran')
+                    ->sortable()
+                    ->searchable(),
+
+                TextColumn::make('krs.kelas.programKelas.nama')
+                    ->label('Program Kelas')
+                    ->sortable(),
+
+                TextColumn::make('krs.kelas.semester')
+                    ->label('Semester')
+                    ->sortable(),
+
+                TextColumn::make('pertemuan.pertemuan_ke')
+                    ->label('Pertemuan')
+                    ->sortable(),
+
+                TextColumn::make('pertemuan.tanggal')
+                    ->date()
+                    ->sortable(),
+
+                TextColumn::make('status')
+                    ->sortable(),
+
             ])
+            // ->columns([
+            //     TextColumn::make('id_pertemuan')
+            //         ->numeric()
+            //         ->sortable(),
+            //     TextColumn::make('id_krs')
+            //         ->numeric()
+            //         ->sortable(),
+            //     TextColumn::make('status'),
+            //     TextColumn::make('waktu_absen')
+            //         ->dateTime()
+            //         ->sortable(),
+            //     TextColumn::make('created_at')
+            //         ->dateTime()
+            //         ->sortable()
+            //         ->toggleable(isToggledHiddenByDefault: true),
+            //     TextColumn::make('updated_at')
+            //         ->dateTime()
+            //         ->sortable()
+            //         ->toggleable(isToggledHiddenByDefault: true),
+            // ])
             ->filters([
                 //
             ])

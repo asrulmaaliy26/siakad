@@ -20,7 +20,7 @@ class MataPelajaranKurikulum extends Model
         return $this->belongsTo(Kurikulum::class, 'id_kurikulum');
     }
 
-    public function mataPelajaran()
+    public function mataPelajaranMaster()
     {
         return $this->belongsTo(MataPelajaranMaster::class, 'id_mata_pelajaran_master');
     }

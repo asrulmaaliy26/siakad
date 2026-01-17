@@ -7,18 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class JenjangPendidikan extends Model
 {
     protected $table = 'jenjang_pendidikan';
+    protected $fillable = ['nama', 'deskripsi'];
 
-    // Karena tidak ada created_at & updated_at
-    public $timestamps = false;
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'id_jenjang_pendidikan');
+    }
 
-    // Karena tidak ada primary key
-    protected $primaryKey = null;
-    public $incrementing = false;
-
-    // Proteksi mass assignment
-    protected $fillable = [
-        'id_jenjang_pendidikan',
-        'nama',
-        'deskripsi',
-    ];
+    public function riwayatPendidikan()
+    {
+        return $this->hasMany(RiwayatPendidikan::class, 'id_jenjang_pendidikan');
+    }
 }

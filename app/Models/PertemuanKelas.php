@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class PertemuanKelas extends Model
+{
+    protected $table = 'pertemuan_kelas';
+    protected $fillable = [
+        'id_mata_pelajaran_kelas',
+        'pertemuan_ke',
+        'tanggal',
+        'materi'
+    ];
+
+    public function mataPelajaranKelas()
+    {
+        return $this->belongsTo(
+            MataPelajaranKelas::class,
+            'id_mata_pelajaran_kelas'
+        );
+    }
+
+    public function absensi()
+    {
+        return $this->hasMany(AbsensiSiswa::class, 'id_pertemuan');
+    }
+}

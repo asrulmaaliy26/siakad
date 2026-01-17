@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class SiswaEvaluasi extends Model
+{
+    protected $table = 'siswa_evaluasi';
+    protected $fillable = [
+        'id_mata_pelajaran_kelas',
+        'id_siswa_jenis_evaluasi',
+        'tanggal',
+        'keterangan'
+    ];
+
+    public function mataPelajaranKelas()
+    {
+        return $this->belongsTo(
+            MataPelajaranKelas::class,
+            'id_mata_pelajaran_kelas'
+        );
+    }
+
+    public function jenisEvaluasi()
+    {
+        return $this->belongsTo(
+            SiswaJenisEvaluasi::class,
+            'id_siswa_jenis_evaluasi'
+        );
+    }
+}

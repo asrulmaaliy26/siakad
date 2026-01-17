@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::create('jenjang_pendidikan', function (Blueprint $table) {
+        Schema::create('tahun_akadmeik', function (Blueprint $table) {
             $table->id();
             $table->string('nama', 50)->nullable();
-            $table->string('deskripsi', 50)->nullable();
+            $table->enum('periode', ['Genap', 'Ganjil'])->nullable();
+            $table->enum('status', ['Y', 'N'])->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('tahun_akadmeik');
     }
 };

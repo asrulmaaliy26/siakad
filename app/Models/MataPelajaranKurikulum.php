@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class MataPelajaranKurikulum extends Model
+{
+    protected $table = 'mata_pelajaran_kurikulum';
+    protected $fillable = [
+        'id_kurikulum',
+        'id_mata_pelajaran_master',
+        'semester'
+    ];
+
+    public function kurikulum()
+    {
+        return $this->belongsTo(Kurikulum::class, 'id_kurikulum');
+    }
+
+    public function mataPelajaran()
+    {
+        return $this->belongsTo(MataPelajaranMaster::class, 'id_mata_pelajaran_master');
+    }
+}

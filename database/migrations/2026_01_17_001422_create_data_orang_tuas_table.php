@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::create('jenjang_pendidikan', function (Blueprint $table) {
+        Schema::create('siswa_data_orang_tua', function (Blueprint $table) {
             $table->id();
             $table->string('nama', 50)->nullable();
-            $table->string('deskripsi', 50)->nullable();
+            $table->foreignId('id_siswa_data')->nullable()
+                ->constrained('siswa_data', 'id');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('siswa_data_orang_tua');
     }
 };

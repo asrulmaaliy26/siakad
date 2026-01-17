@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::create('jenjang_pendidikan', function (Blueprint $table) {
+        Schema::create('mata_pelajaran_master', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 50)->nullable();
-            $table->string('deskripsi', 50)->nullable();
+            $table->string('name',50);
+            $table->foreignId('id_jurusan')->nullable()
+                ->constrained('jurusan', 'id');
+            $table->integer('bobot')->nullable();
+            $table->enum('jenis', ['wajib', 'peminatan'])->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('mata_pelajaran_master');
     }
 };

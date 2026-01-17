@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Filament\Resources\DosenData;
+
+use App\Filament\Resources\DosenData\Pages\CreateDosenData;
+use App\Filament\Resources\DosenData\Pages\EditDosenData;
+use App\Filament\Resources\DosenData\Pages\ListDosenData;
+use App\Filament\Resources\DosenData\Schemas\DosenDataForm;
+use App\Filament\Resources\DosenData\Tables\DosenDataTable;
+use App\Models\DosenData;
+use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
+
+class DosenDataResource extends Resource
+{
+    protected static ?string $model = DosenData::class;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'nama';
+
+    public static function form(Schema $schema): Schema
+    {
+        return DosenDataForm::configure($schema);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return DosenDataTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListDosenData::route('/'),
+            'create' => CreateDosenData::route('/create'),
+            'edit' => EditDosenData::route('/{record}/edit'),
+        ];
+    }
+}

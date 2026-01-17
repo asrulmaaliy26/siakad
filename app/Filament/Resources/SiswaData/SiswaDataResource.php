@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Filament\Resources\SiswaData;
+
+use App\Filament\Resources\SiswaData\Pages\CreateSiswaData;
+use App\Filament\Resources\SiswaData\Pages\EditSiswaData;
+use App\Filament\Resources\SiswaData\Pages\ListSiswaData;
+use App\Filament\Resources\SiswaData\Schemas\SiswaDataForm;
+use App\Filament\Resources\SiswaData\Tables\SiswaDataTable;
+use App\Models\SiswaData;
+use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
+
+class SiswaDataResource extends Resource
+{
+    protected static ?string $model = SiswaData::class;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    public static function form(Schema $schema): Schema
+    {
+        return SiswaDataForm::configure($schema);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return SiswaDataTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListSiswaData::route('/'),
+            'create' => CreateSiswaData::route('/create'),
+            'edit' => EditSiswaData::route('/{record}/edit'),
+        ];
+    }
+}

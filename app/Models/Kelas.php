@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\RefOption\ProgramKelas;
 
 class Kelas extends Model
 {
@@ -18,10 +19,10 @@ class Kelas extends Model
         'status_aktif'
     ];
 
-    public function programKelas()
-    {
-        return $this->belongsTo(ProgramKelas::class, 'id_program_kelas');
-    }
+    // public function programKelas()
+    // {
+    //     return $this->belongsTo(ProgramKelas::class, 'id_program_kelas');
+    // }
 
     public function jenjangPendidikan()
     {
@@ -35,5 +36,11 @@ class Kelas extends Model
     public function jurusan()
     {
         return $this->belongsTo(TahunAkademik::class, 'id_jurusan');
+    }
+
+    // Relasi ke ProgramKelas
+    public function programKelas()
+    {
+        return $this->belongsTo(ProgramKelas::class, 'id_program_kelas');
     }
 }

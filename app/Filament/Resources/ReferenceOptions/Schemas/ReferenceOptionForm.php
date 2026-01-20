@@ -51,20 +51,20 @@ class ReferenceOptionForm
                     ->label('Nilai')
                     ->required(),
 
-                Toggle::make('status')
-                    ->label('Status')
-                    ->onColor('success')
-                    ->offColor('danger')
+                // Toggle::make('status')
+                //     ->label('Status')
+                //     ->onColor('success')
+                //     ->offColor('danger')
 
-                    // saat edit → ambil dari DB
-                    ->afterStateHydrated(function (Toggle $component, $state) {
-                        $component->state($state === 'Y');
-                    })
+                //     // saat edit → ambil dari DB
+                //     ->afterStateHydrated(function (Toggle $component, $state) {
+                //         $component->state($state === 'Y');
+                //     })
 
-                    // saat simpan → konversi ke DB
-                    ->dehydrateStateUsing(fn(bool $state) => $state ? 'Y' : 'N')
+                //     // saat simpan → konversi ke DB
+                //     ->dehydrateStateUsing(fn(bool $state) => $state ? 'Y' : 'N')
 
-                    ->default(true),
+                //     ->default(true),
 
                 Textarea::make('deskripsi')
                     ->label('Deskripsi')

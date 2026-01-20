@@ -26,11 +26,13 @@ class ReferenceOptionsTable
 
                 TextColumn::make('kode')
                     ->label('Kode')
+                    ->sortable()
                     ->searchable(),
 
                 TextColumn::make('nilai')
                     ->label('Nilai')
-                    ->wrap(),
+                    ->wrap()
+                    ->sortable(),
 
                 ToggleColumn::make('status')
                     ->label('Status')

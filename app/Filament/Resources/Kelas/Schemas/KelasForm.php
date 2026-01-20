@@ -12,8 +12,11 @@ class KelasForm
     {
         return $schema
             ->components([
-                TextInput::make('id_program_kelas')
-                    ->numeric(),
+                Select::make('id_program_kelas')
+                    ->label('Program Kelas')
+                    ->options(\App\Models\RefOption\ProgramKelas::pluck('nilai', 'id'))
+                    ->searchable()
+                    ->required(),
                 TextInput::make('semester')
                     ->numeric(),
                 TextInput::make('id_jenjang_pendidikan')

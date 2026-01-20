@@ -20,9 +20,10 @@ class KelasTable
     {
         return $table
             ->columns([
-                TextColumn::make('programKelas.nama')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('programKelas.nilai') // memanggil relasi programKelas di model Kelas
+                    ->label('Program Kelas')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('semester')
                     ->numeric()
                     ->sortable(),
@@ -80,12 +81,12 @@ class KelasTable
                     )
                     ->searchable(),
 
-                SelectFilter::make('id_program_kelas')
-                    ->label('Program Kelas')
-                    ->options(
-                        ProgramKelas::pluck('nama', 'id')
-                    )
-                    ->searchable(),
+                // SelectFilter::make('id_program_kelas')
+                //     ->label('Program Kelas')
+                //     ->options(
+                //         ProgramKelas::pluck('nama', 'id')
+                //     )
+                //     ->searchable(),
             ])
             ->recordActions([
                 EditAction::make(),

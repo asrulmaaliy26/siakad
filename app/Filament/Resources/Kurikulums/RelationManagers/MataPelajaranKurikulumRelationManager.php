@@ -36,7 +36,7 @@ class MataPelajaranKurikulumRelationManager extends RelationManager
                 ->searchable()
                 ->required()
                 ->reactive()
-                ->afterStateUpdated(fn ($set) => $set('mata_pelajaran_master_ids', [])),
+                ->afterStateUpdated(fn($set) => $set('mata_pelajaran_master_ids', [])),
 
             /* =========================
              * MULTISELECT MAPEL (ASYNC)
@@ -45,32 +45,39 @@ class MataPelajaranKurikulumRelationManager extends RelationManager
                 ->label('Mata Pelajaran')
                 ->required()
                 ->searchable()
-                ->preload(false) // ❗ penting
-                ->optionsLimit(20) // "pagination"
+                ->preload(false)
+                ->optionsLimit(20)
                 ->reactive()
 
+                // Saat dropdown dibuka (tanpa search)
                 ->options(function (callable $get) {
-                    if (! $get('id_jurusan')) {
-                        return [];
+                    $query = MataPelajaranMaster::query();
+
+                    if ($get('id_jurusan')) {
+                        $query->where('id_jurusan', $get('id_jurusan'));
                     }
 
-                    return MataPelajaranMaster::where('id_jurusan', $get('id_jurusan'))
+                    return $query
                         ->limit(20)
                         ->pluck('nama', 'id');
                 })
 
+                // Saat search
                 ->getSearchResultsUsing(function (string $search, callable $get) {
-                    if (! $get('id_jurusan')) {
-                        return [];
+                    $query = MataPelajaranMaster::query()
+                        ->where('nama', 'like', "%{$search}%");
+
+                    if ($get('id_jurusan')) {
+                        $query->where('id_jurusan', $get('id_jurusan'));
                     }
 
-                    return MataPelajaranMaster::where('id_jurusan', $get('id_jurusan'))
-                        ->where('nama', 'like', "%{$search}%")
+                    return $query
                         ->limit(20)
                         ->pluck('nama', 'id');
                 })
 
-                ->getOptionLabelUsing(fn ($value) =>
+                ->getOptionLabelUsing(
+                    fn($value) =>
                     MataPelajaranMaster::find($value)?->nama
                 ),
 

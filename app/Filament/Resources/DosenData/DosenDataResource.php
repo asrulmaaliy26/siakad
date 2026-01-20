@@ -20,9 +20,11 @@ class DosenDataResource extends Resource
     protected static ?string $model = DosenData::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Z';
+    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
+    protected static ?int $navigationSort = 15;
 
     protected static ?string $recordTitleAttribute = 'nama';
+    protected static ?string $navigationLabel = 'Dosen';
 
     public static function form(Schema $schema): Schema
     {

@@ -14,6 +14,7 @@ class Kelas extends Model
         'semester',
         'id_jenjang_pendidikan',
         'id_tahun_akademik',
+        'id_jurusan',
         'status_aktif'
     ];
 
@@ -30,5 +31,9 @@ class Kelas extends Model
     public function tahunAkademik()
     {
         return $this->belongsTo(TahunAkademik::class, 'id_tahun_akademik');
+    }
+    public function jurusan()
+    {
+        return $this->belongsTo(TahunAkademik::class, 'id_jurusan');
     }
 }

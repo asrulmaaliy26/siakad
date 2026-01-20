@@ -24,7 +24,7 @@ class DosenDataResource extends Resource
     protected static ?int $navigationSort = 15;
 
     protected static ?string $recordTitleAttribute = 'nama';
-    protected static ?string $navigationLabel = 'Dosen';
+    protected static ?string $navigationLabel = 'Dosen  ✓';
 
     public static function form(Schema $schema): Schema
     {

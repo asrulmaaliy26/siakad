@@ -16,4 +16,8 @@ class EditRiwayatPendidikan extends EditRecord
             DeleteAction::make(),
         ];
     }
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index'); // kembali ke list page
+    }
 }

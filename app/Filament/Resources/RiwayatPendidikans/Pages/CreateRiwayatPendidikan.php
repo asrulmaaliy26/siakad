@@ -8,4 +8,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateRiwayatPendidikan extends CreateRecord
 {
     protected static string $resource = RiwayatPendidikanResource::class;
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index'); // kembali ke list page
+    }
 }

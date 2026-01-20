@@ -20,7 +20,11 @@ class RiwayatPendidikanResource extends Resource
     protected static ?string $model = RiwayatPendidikan::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Master Data Siswa';
+    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
+
+    protected static ?string $navigationLabel = 'Pendidikan Siswa ';
+
+    protected static ?int $navigationSort = 16;
 
     public static function form(Schema $schema): Schema
     {

@@ -20,7 +20,7 @@ class MataPelajaranKurikulumResource extends Resource
     protected static ?string $model = MataPelajaranKurikulum::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
+    protected static string | UnitEnum | null $navigationGroup = 'Z';
 
     public static function form(Schema $schema): Schema
     {

@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\Kurikulums;
 
+use App\Filament\Resources\Kurikulums\RelationManagers\MataPelajaranKurikulumRelationManager;
 use App\Filament\Resources\Kurikulums\Pages\CreateKurikulum;
 use App\Filament\Resources\Kurikulums\Pages\EditKurikulum;
 use App\Filament\Resources\Kurikulums\Pages\ListKurikulums;
+use App\Filament\Resources\Kurikulums\Pages\ViewKurikulum;
 use App\Filament\Resources\Kurikulums\Schemas\KurikulumForm;
 use App\Filament\Resources\Kurikulums\Tables\KurikulumsTable;
+use App\Filament\Resources\Kurikulums\RelationManagers\KurikulumRelationManager;
 use App\Models\Kurikulum;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -22,6 +25,10 @@ class KurikulumResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static string | UnitEnum | null $navigationGroup = 'Master Data';
 
+    protected static ?string $navigationLabel = 'Kurikulum ✓';
+
+    protected static ?int $navigationSort = 13;
+
     public static function form(Schema $schema): Schema
     {
         return KurikulumForm::configure($schema);
@@ -36,6 +43,8 @@ class KurikulumResource extends Resource
     {
         return [
             //
+            // KurikulumRelationManager::class,
+            MataPelajaranKurikulumRelationManager::class,
         ];
     }
 
@@ -44,6 +53,7 @@ class KurikulumResource extends Resource
         return [
             'index' => ListKurikulums::route('/'),
             'create' => CreateKurikulum::route('/create'),
+            'view' => ViewKurikulum::route('/{record}'),
             'edit' => EditKurikulum::route('/{record}/edit'),
         ];
     }

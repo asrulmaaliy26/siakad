@@ -28,4 +28,9 @@ class Kurikulum extends Model
     {
         return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
     }
+
+    public function mataPelajaranKurikulum()
+    {
+        return $this->hasMany(MataPelajaranKurikulum::class, 'id_kurikulum');
+    }
 }

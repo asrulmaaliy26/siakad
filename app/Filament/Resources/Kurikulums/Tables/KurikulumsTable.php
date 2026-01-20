@@ -5,8 +5,10 @@ namespace App\Filament\Resources\Kurikulums\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\ToggleColumn;
 
 class KurikulumsTable
 {
@@ -25,7 +27,16 @@ class KurikulumsTable
                 TextColumn::make('jenjangPendidikan.nama')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('status_aktif'),
+                // TextColumn::make('status_aktif'),
+                ToggleColumn::make('status_aktif')
+                    ->label('Status')
+                    ->updateStateUsing(function ($state, $record) {
+                        $record->update([
+                            'status' => $state ? 'Y' : 'N',
+                        ]);
+                    })
+                    ->onColor('success')
+                    ->offColor('danger'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -39,6 +50,7 @@ class KurikulumsTable
                 //
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

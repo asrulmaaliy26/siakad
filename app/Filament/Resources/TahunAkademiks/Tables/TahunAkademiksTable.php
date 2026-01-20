@@ -20,7 +20,6 @@ class TahunAkademiksTable
                 TextColumn::make('periode'),
                 ToggleColumn::make('status')
                     ->label('Status')
-                    ->getStateUsing(fn($record) => $record->status === 'Y')
                     ->updateStateUsing(function ($state, $record) {
                         $record->update([
                             'status' => $state ? 'Y' : 'N',

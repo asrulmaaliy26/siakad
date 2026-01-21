@@ -9,7 +9,7 @@ class SiswaData extends Model
 {
     use HasFactory;
     protected $table = 'siswa_data';
-    protected $fillable = ['nama', 'nomor_induk'];
+    protected $fillable = ['nama'];
 
     public function riwayatPendidikan()
     {

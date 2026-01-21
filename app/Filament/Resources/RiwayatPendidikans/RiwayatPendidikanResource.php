@@ -5,6 +5,7 @@ namespace App\Filament\Resources\RiwayatPendidikans;
 use App\Filament\Resources\RiwayatPendidikans\Pages\CreateRiwayatPendidikan;
 use App\Filament\Resources\RiwayatPendidikans\Pages\EditRiwayatPendidikan;
 use App\Filament\Resources\RiwayatPendidikans\Pages\ListRiwayatPendidikans;
+use App\Filament\Resources\RiwayatPendidikans\Pages\ViewRiwayatPendidikan;
 use App\Filament\Resources\RiwayatPendidikans\Schemas\RiwayatPendidikanForm;
 use App\Filament\Resources\RiwayatPendidikans\Tables\RiwayatPendidikansTable;
 use App\Models\RiwayatPendidikan;
@@ -22,7 +23,7 @@ class RiwayatPendidikanResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static string | UnitEnum | null $navigationGroup = 'Master Data';
 
-    protected static ?string $navigationLabel = 'Pendidikan Siswa ';
+    protected static ?string $navigationLabel = 'Siswa/Mahasiswa';
 
     protected static ?int $navigationSort = 16;
 
@@ -48,6 +49,7 @@ class RiwayatPendidikanResource extends Resource
         return [
             'index' => ListRiwayatPendidikans::route('/'),
             'create' => CreateRiwayatPendidikan::route('/create'),
+            'view' => ViewRiwayatPendidikan::route('/{record}'),
             'edit' => EditRiwayatPendidikan::route('/{record}/edit'),
         ];
     }

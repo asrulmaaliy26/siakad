@@ -46,17 +46,17 @@ class DosenDataTable
                     ->toggleable(false)
                     ->sortable(),
 
-                TextColumn::make('jabaanFungsional.nama')
+                TextColumn::make('jabatanFungsional.nilai')
                     ->label('Jabatan Fungsional')
                     ->toggleable(false)
                     ->sortable(),
 
-                TextColumn::make('pangkat.nama')
+                TextColumn::make('pangkat.nilai')
                     ->label('Pangkat Golongan')
                     ->toggleable(false)
                     ->sortable(),
 
-                TextColumn::make('statusDosen.nama')
+                TextColumn::make('statusDosen.nilai')
                     ->label('Status Dosen')
                     ->toggleable(false)
                     ->sortable(),

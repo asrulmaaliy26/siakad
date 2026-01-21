@@ -43,9 +43,9 @@ class DosenData extends Model
     }
 
     // Relasi ke ProgramKelas
-    public function jabaanFungsional()
+    public function jabatanFungsional()
     {
-        return $this->belongsTo(JabatanFungsional::class, 'id_program_kelas');
+        return $this->belongsTo(JabatanFungsional::class, 'id_jabatan');
     }
 
     public function pangkat()

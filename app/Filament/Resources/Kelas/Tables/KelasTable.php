@@ -39,6 +39,7 @@ class KelasTable
                 // TextColumn::make('status_aktif'),
                 ToggleColumn::make('status_aktif')
                     ->label('Status')
+                    ->getStateUsing(fn($record) => $record->status === 'Y')
                     ->updateStateUsing(function ($state, $record) {
                         $record->update([
                             'status' => $state ? 'Y' : 'N',

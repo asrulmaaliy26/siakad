@@ -5,8 +5,10 @@ namespace App\Filament\Resources\RiwayatPendidikans\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\ToggleColumn;
 
 class RiwayatPendidikansTable
 {
@@ -14,20 +16,37 @@ class RiwayatPendidikansTable
     {
         return $table
             ->columns([
-                TextColumn::make('id_siswa_data')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('id_jenjang_pendidikan')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('id_jurusan')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('status_siswa'),
                 TextColumn::make('angkatan'),
-                TextColumn::make('tanggal_mulai')
-                    ->date()
+                TextColumn::make('siswa.nama')
+                    ->label('Nama')
+                    // ->numeric()
                     ->sortable(),
+                TextColumn::make('nomor_induk')
+                    ->sortable(),
+                TextColumn::make('jenjangPendidikan.nama')
+                    // ->numeric()
+                    ->sortable(),
+                TextColumn::make('jurusan.nama')
+                    // ->numeric()
+                    ->sortable(),
+                TextColumn::make('statusSiswa.nilai')
+                    ->label('Status Siswa')
+                    ->toggleable(false)
+                    ->sortable(),
+                // TextColumn::make('tanggal_mulai')
+                //     ->date()
+                //     ->sortable(),
+                ToggleColumn::make('status')
+                    ->label('Status')
+                    ->getStateUsing(fn($record) => $record->status === 'Y')
+                    ->updateStateUsing(function ($state, $record) {
+                        // dd($record, $state);
+                        $record->update([
+                            'status' => $state ? 'Y' : 'N',
+                        ]);
+                    })
+                    ->onColor('success')
+                    ->offColor('danger'),
                 TextColumn::make('tanggal_selesai')
                     ->date()
                     ->sortable(),
@@ -45,6 +64,7 @@ class RiwayatPendidikansTable
             ])
             ->recordActions([
                 EditAction::make(),
+                VIewAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

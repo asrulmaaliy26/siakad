@@ -54,11 +54,6 @@ class RiwayatPendidikan extends Model
         return $this->belongsTo(SiswaData::class, 'id_siswa_data');
     }
 
-    public function riwayatPendidikan()
-    {
-        return $this->belongsTo(RiwayatPendidikan::class, 'id_siswa_data');
-    }
-
     public function jurusan()
     {
         return $this->belongsTo(Jurusan::class, 'id_jurusan');
@@ -71,6 +66,7 @@ class RiwayatPendidikan extends Model
     {
         return $this->hasMany(AkademikKrs::class, 'id_riwayat_pendidikan');
     }
+
     // public function akademikKrs()
     // {
     //     return $this->hasMany(

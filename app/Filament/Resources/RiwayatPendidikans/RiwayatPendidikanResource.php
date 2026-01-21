@@ -15,6 +15,8 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
+use App\Filament\Resources\RiwayatPendidikans\RelationManagers\AkademikKRSRelationManager;
+use App\Models\AkademikKrs;
 
 class RiwayatPendidikanResource extends Resource
 {
@@ -41,6 +43,7 @@ class RiwayatPendidikanResource extends Resource
     {
         return [
             //
+            AkademikKRSRelationManager::class,
         ];
     }
 

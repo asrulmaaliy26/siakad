@@ -9,6 +9,7 @@ use App\Filament\Resources\SiswaData\Schemas\SiswaDataForm;
 use App\Filament\Resources\SiswaData\Tables\SiswaDataTable;
 use App\Models\SiswaData;
 use App\Filament\Resources\SiswaData\RelationManagers\RiwayatPendidikanRelationManager;
+use App\Filament\Resources\SiswaData\RelationManagers\AkademikKRSRelationManager;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -43,6 +44,7 @@ class SiswaDataResource extends Resource
         return [
             //
             RiwayatPendidikanRelationManager::class,
+            AkademikKRSRelationManager::class,
         ];
     }
 

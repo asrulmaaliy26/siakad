@@ -61,4 +61,16 @@ class SiswaData extends Model
     {
         return $this->hasMany(RiwayatPendidikan::class, 'id_siswa_data');
     }
+
+    public function akademikKrs()
+    {
+        return $this->hasManyThrough(
+            AkademikKrs::class,
+            RiwayatPendidikan::class,
+            'id_siswa_data',           // FK di riwayat_pendidikan
+            'id_riwayat_pendidikan',   // FK di akademik_krs
+            'id',                      // PK siswa_data
+            'id'                       // PK riwayat_pendidikan
+        );
+    }
 }

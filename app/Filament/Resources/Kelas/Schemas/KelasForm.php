@@ -17,6 +17,8 @@ class KelasForm
                     ->options(\App\Models\RefOption\ProgramKelas::pluck('nilai', 'id'))
                     ->searchable()
                     ->required(),
+                // TextInput::make('nama'),
+                    // ->numeric(),
                 TextInput::make('semester')
                     ->numeric(),
                 TextInput::make('id_jenjang_pendidikan')

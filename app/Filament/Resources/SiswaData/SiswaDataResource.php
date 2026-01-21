@@ -8,6 +8,7 @@ use App\Filament\Resources\SiswaData\Pages\ListSiswaData;
 use App\Filament\Resources\SiswaData\Schemas\SiswaDataForm;
 use App\Filament\Resources\SiswaData\Tables\SiswaDataTable;
 use App\Models\SiswaData;
+use App\Filament\Resources\SiswaData\RelationManagers\RiwayatPendidikanRelationManager;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -20,7 +21,12 @@ class SiswaDataResource extends Resource
     protected static ?string $model = SiswaData::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Master Data Siswa';
+    // protected static string | UnitEnum | null $navigationGroup = 'Master Data Siswa';
+    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
+
+    protected static ?string $navigationLabel = 'Siswa/Mahasiswa';
+
+    protected static ?int $navigationSort = 16;
 
     public static function form(Schema $schema): Schema
     {
@@ -36,6 +42,7 @@ class SiswaDataResource extends Resource
     {
         return [
             //
+            RiwayatPendidikanRelationManager::class,
         ];
     }
 

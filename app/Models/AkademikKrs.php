@@ -15,8 +15,14 @@ class AkademikKrs extends Model
         'semester',
         'status_bayar',
         'jumlah_sks',
-        'status_aktif'
+        'tgl_krs',
+        'kode_ta',
+        'syarat_uts',
+        'syarat_krs',
+        'kwitansi_krs',
+        'status_aktif',
     ];
+
 
     public function riwayatPendidikan()
     {

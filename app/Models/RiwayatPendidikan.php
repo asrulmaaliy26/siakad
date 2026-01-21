@@ -46,6 +46,7 @@ class RiwayatPendidikan extends Model
         'keterangan',
         'jalur_masuk',
         'pembiayaan',
+        'status',
     ];
 
     public function siswa()
@@ -53,10 +54,10 @@ class RiwayatPendidikan extends Model
         return $this->belongsTo(SiswaData::class, 'id_siswa_data');
     }
 
-    // public function riwayatPendidikan()
-    // {
-    //     return $this->belongsTo(RiwayatPendidikan::class, 'id_siswa_data');
-    // }
+    public function riwayatPendidikan()
+    {
+        return $this->belongsTo(RiwayatPendidikan::class, 'id_siswa_data');
+    }
 
     public function jurusan()
     {
@@ -68,12 +69,16 @@ class RiwayatPendidikan extends Model
     }
     public function akademikKrs()
     {
-        return $this->hasMany(
-            AkademikKrs::class,
-            'id_riwayat_pendidikan',
-            'id'
-        );
+        return $this->hasMany(AkademikKrs::class, 'id_riwayat_pendidikan');
     }
+    // public function akademikKrs()
+    // {
+    //     return $this->hasMany(
+    //         AkademikKrs::class,
+    //         'id_riwayat_pendidikan',
+    //         'id'
+    //     );
+    // }
 
     // ref option
 
@@ -81,4 +86,5 @@ class RiwayatPendidikan extends Model
     {
         return $this->belongsTo(StatusSiswa::class, 'id_status_siswa');
     }
+
 }

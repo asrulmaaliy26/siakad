@@ -38,7 +38,7 @@ class RiwayatPendidikansTable
                 //     ->sortable(),
                 ToggleColumn::make('status')
                     ->label('Status')
-                    ->getStateUsing(fn($record) => $record->status === 'Y')
+                    // ->getStateUsing(fn($record) => $record->status === 'Y')
                     ->updateStateUsing(function ($state, $record) {
                         // dd($record, $state);
                         $record->update([

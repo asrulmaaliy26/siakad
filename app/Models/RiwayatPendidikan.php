@@ -9,6 +9,7 @@ use App\Models\SiswaData;
 use App\Models\Jurusan;
 use App\Models\JenjangPendidikan;
 use App\Models\AkademikKrs;
+use App\Models\RefOption\ProgramSekolah;
 
 class RiwayatPendidikan extends Model
 {
@@ -79,7 +80,12 @@ class RiwayatPendidikan extends Model
 
     public function statusSiswa()
     {
-        return $this->belongsTo(StatusSiswa::class, 'id_status_siswa');
+        return $this->belongsTo(StatusSiswa::class, 'ro_status_siswa');
+    }
+    
+    public function programSekolah()
+    {
+        return $this->belongsTo(ProgramSekolah::class, 'ro_program_sekolah');
     }
 
 }

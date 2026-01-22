@@ -29,7 +29,7 @@ class RiwayatPendidikanForm
                     ->label('Jurusan')
                     ->options(Jurusan::pluck('nama', 'id'))
                     ->searchable(),
-                Select::make('id_status_siswa')
+                Select::make('ro_status_siswa')
                     ->label('Status Siswa')
                     ->options(StatusSiswa::pluck('nilai', 'id'))
                     ->searchable(),

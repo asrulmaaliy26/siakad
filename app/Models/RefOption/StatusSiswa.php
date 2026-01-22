@@ -57,7 +57,7 @@ class StatusSiswa extends Model
      */
     public function riwayatPednidikan()
     {
-        return $this->hasMany(\App\Models\RiwayatPendidikan::class, 'id_status_siswa');
+        return $this->hasMany(\App\Models\RiwayatPendidikan::class, 'ro_status_siswa');
     }
 
     /**

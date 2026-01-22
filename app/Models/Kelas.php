@@ -52,4 +52,12 @@ class Kelas extends Model
             'id'          // PK di tabel kelas
         );
     }
+    public function akademikKrs()
+    {
+        return $this->hasMany(
+            AkademikKrs::class,
+            'id_kelas',   // FK di tabel mata_pelajaran_kelas
+            'id'          // PK di tabel kelas
+        );
+    }
 }

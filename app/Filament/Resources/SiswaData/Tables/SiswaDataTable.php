@@ -16,8 +16,6 @@ class SiswaDataTable
             ->columns([
                 TextColumn::make('nama')
                     ->searchable(),
-                TextColumn::make('nomor_induk')
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

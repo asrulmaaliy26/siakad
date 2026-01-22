@@ -25,7 +25,7 @@ class SiswaDataResource extends Resource
     // protected static string | UnitEnum | null $navigationGroup = 'Master Data Siswa';
     protected static string | UnitEnum | null $navigationGroup = 'Master Data';
 
-    protected static ?string $navigationLabel = 'Siswa/Mahasiswa';
+    protected static ?string $navigationLabel = 'Siswa/Mahasiswa ✓';
 
     protected static ?int $navigationSort = 16;
 

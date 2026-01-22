@@ -12,11 +12,12 @@ class SiswaData extends Model
     protected $fillable = [
         'nama',
         'nama_lengkap',
+        'foto_profil',
         'id_pendaftaran',
         'jenis_kelamin',
-        'gol_darah',
-        'kota_lhr',
-        'tgl_lhr',
+        'golongan_darah',
+        'kota_lahir',
+        'tanggal_lahir',
         'alamat',
         'nomor_rumah',
         'dusun',
@@ -29,13 +30,13 @@ class SiswaData extends Model
         'provinsi',
         'tempat_domisili',
         'jenis_domisili',
-        'no_telepon_wa',
+        'no_telepon',
         'no_ktp',
         'no_kk',
-        'agama',
+        'agama', //ro
         'kewarganegaraan',
         'kode_negara',
-        'status_perkawinan',
+        'status_pkawin',
         'pekerjaan',
         'biaya_ditanggung',
         'transportasi',
@@ -53,7 +54,6 @@ class SiswaData extends Model
         'penerima_kps',
         'no_kps',
         'kebutuhan_khusus',
-        'foto_profil',
     ];
 
 

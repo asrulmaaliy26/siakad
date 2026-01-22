@@ -1,6 +1,10 @@
 <?php
+
 namespace App\Filament\Resources\SiswaData\RelationManagers;
 
+use App\Models\RefOption\JenisKeluar;
+use App\Models\RefOption\JenisPendaftaran;
+use App\Models\RefOption\ProgramSekolah;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -8,6 +12,10 @@ use Filament\Schemas\Schema;
 use Filament\Actions\CreateAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\DatePicker;
 
 class RiwayatPendidikanRelationManager extends RelationManager
 {
@@ -17,13 +25,109 @@ class RiwayatPendidikanRelationManager extends RelationManager
     public function form(Schema $form): Schema
     {
         return $form->schema([
-            Forms\Components\Select::make('id_jenjang_pendidikan')
+            // Relasi dan pilihan
+            Select::make('id_jenjang_pendidikan')
                 ->label('Jenjang Pendidikan')
-                ->required(),
+                ->relationship('jenjangPendidikan', 'nama'), // kolom display dari JenjangPendidikan
+            
 
-            Forms\Components\TextInput::make('angkatan'),
-            Forms\Components\TextInput::make('nomor_induk'),
-            Forms\Components\TextInput::make('status'),
+            Select::make('id_jurusan')
+                ->label('Jurusan')
+                ->relationship('jurusan', 'nama'), // kolom display dari Jurusan
+            
+
+            Select::make('ro_status_siswa')
+                ->label('Status Siswa')
+                ->relationship('statusSiswa', 'nilai'), // kolom display dari StatusSiswa
+            
+
+            // kalo mau pake model yang kaya di bawah harus menambahkan relation di
+            // Select::make('ro_program_sekolah')
+            //     ->label('Program Sekolah')
+            //     ->relationship('ProgramSekolah', 'nilai')
+            Select::make('ro_program_sekolah')
+                ->label('Program Sekolah')
+                ->options(ProgramSekolah::pluck('nilai', 'id'))
+                ->searchable(),
+            // Data teks
+            TextInput::make('nomor_induk')
+                ->label('Nomor Induk'),
+
+            TextInput::make('angkatan')
+                ->label('Angkatan'),
+
+            TextInput::make('smt_aktif')
+                ->numeric()
+                ->label('Semester Aktif'),
+
+            TextInput::make('th_masuk')
+                ->label('Tahun Masuk'),
+
+            TextInput::make('dosen_wali')
+                ->label('Dosen Wali'),
+
+            TextInput::make('no_seri_ijazah')
+                ->label('No. Seri Ijazah'),
+
+            TextInput::make('sks_diakui')
+                ->label('SKS Diakui'),
+
+            TextInput::make('judul_skripsi')
+                ->label('Judul Skripsi'),
+
+            TextInput::make('jalur_skripsi')
+                ->label('Jalur Skripsi'),
+
+            TextInput::make('bln_awal_bimbingan')
+                ->label('Bulan Awal Bimbingan'),
+
+            TextInput::make('bln_akhir_bimbingan')
+                ->label('Bulan Akhir Bimbingan'),
+
+            TextInput::make('sk_yudisium')
+                ->label('SK Yudisium'),
+
+            DatePicker::make('tgl_sk_yudisium')
+                ->label('Tanggal SK Yudisium'),
+
+            TextInput::make('ipk')
+                ->label('IPK'),
+
+            TextInput::make('nm_pt_asal')
+                ->label('Nama PT Asal'),
+
+            TextInput::make('nm_prodi_asal')
+                ->label('Nama Prodi Asal'),
+
+            Select::make('ro_jns_daftar')
+                ->label('Jenis Pendaftaran')
+                ->options(JenisPendaftaran::pluck('nilai', 'id'))
+                ->searchable(),
+            Select::make('ro_jns_keluar')
+                ->label('Jenis Keluar')
+                ->options(JenisKeluar::pluck('nilai', 'id'))
+                ->searchable(),
+
+            TextInput::make('keluar_smt')
+                ->label('Keluar Semester'),
+
+            TextInput::make('keterangan')
+                ->label('Keterangan'),
+
+            TextInput::make('pembiayaan')
+                ->label('Pembiayaan'),
+
+            Select::make('status')
+                ->label('Status')
+                ->options([
+                    'Y' => 'Aktif',
+                    'N' => 'Tidak Aktif',
+                ]),
+
+            // Upload foto profil
+            FileUpload::make('foto_profil')
+                ->label('Foto Profil')
+                ->image(),
         ]);
     }
 

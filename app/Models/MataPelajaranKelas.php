@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\RefOption\RuangKelas;
 
 class MataPelajaranKelas extends Model
 {
@@ -15,7 +16,7 @@ class MataPelajaranKelas extends Model
         'id_dosen_data',
         'uts',
         'uas',
-        'id_ruang_kelas'
+        'ro_ruang_kelas'
     ];
 
     public function mataPelajaranKurikulum()
@@ -39,5 +40,13 @@ class MataPelajaranKelas extends Model
     public function ruangKelas()
     {
         return $this->belongsTo(RuangKelas::class, 'id_ruang_kelas');
+    }
+    public function pertemuanKelas()
+    {
+        return $this->hasMany(
+            PertemuanKelas::class,
+            'id_mata_pelajaran_kelas',   // FK di tabel mata_pelajaran_kelas
+            'id'          // PK di tabel kelas
+        );
     }
 }

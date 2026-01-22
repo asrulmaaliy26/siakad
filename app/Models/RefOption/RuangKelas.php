@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\RefOption;
 
+use App\Models\MataPelajaranKelas;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ReferenceOption;
@@ -38,7 +39,7 @@ class RuangKelas extends Model
     // Contoh relasi (misal ke MataPelajaranKelas)
     public function mataPelajaranKelas()
     {
-        return $this->hasMany(MataPelajaranKelas::class, 'id_ruang_kelas', 'id');
+        return $this->hasMany(MataPelajaranKelas::class, 'ro_ruang_kelas');
     }
 }
 

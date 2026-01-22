@@ -13,6 +13,7 @@ use App\Models\TahunAkademik;
 use App\Models\JenjangPendidikan;
 use App\Models\Jurusan;
 use App\Models\ProgramKelas;
+use Filament\Actions\ViewAction;
 
 class KelasTable
 {
@@ -92,6 +93,7 @@ class KelasTable
             ])
             ->recordActions([
                 EditAction::make(),
+                ViewAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

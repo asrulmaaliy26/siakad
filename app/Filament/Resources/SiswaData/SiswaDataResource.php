@@ -5,6 +5,7 @@ namespace App\Filament\Resources\SiswaData;
 use App\Filament\Resources\SiswaData\Pages\CreateSiswaData;
 use App\Filament\Resources\SiswaData\Pages\EditSiswaData;
 use App\Filament\Resources\SiswaData\Pages\ListSiswaData;
+use App\Filament\Resources\SiswaData\Pages\ViewSiswaData;
 use App\Filament\Resources\SiswaData\Schemas\SiswaDataForm;
 use App\Filament\Resources\SiswaData\Tables\SiswaDataTable;
 use App\Models\SiswaData;
@@ -53,6 +54,7 @@ class SiswaDataResource extends Resource
         return [
             'index' => ListSiswaData::route('/'),
             'create' => CreateSiswaData::route('/create'),
+            'view' => ViewSiswaData::route('/{record}'),
             'edit' => EditSiswaData::route('/{record}/edit'),
         ];
     }

@@ -35,12 +35,21 @@ class Kelas extends Model
     }
     public function jurusan()
     {
-        return $this->belongsTo(TahunAkademik::class, 'id_jurusan');
+        return $this->belongsTo(Jurusan::class, 'id_jurusan');
     }
 
     // Relasi ke ProgramKelas
     public function programKelas()
     {
         return $this->belongsTo(ProgramKelas::class, 'id_program_kelas');
+    }
+
+    public function mataPelajaranKelas()
+    {
+        return $this->hasMany(
+            MataPelajaranKelas::class,
+            'id_kelas',   // FK di tabel mata_pelajaran_kelas
+            'id'          // PK di tabel kelas
+        );
     }
 }

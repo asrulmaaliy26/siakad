@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Kurikulums\RelationManagers;
+namespace App\Filament\Resources\Kelas\RelationManagers;
 
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Forms\Form;
@@ -17,31 +17,32 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use App\Models\MataPelajaranMaster;
 use App\Models\Jurusan;
+use App\Models\Kurikulum;
+use App\Models\MataPelajaranKurikulum;
 
-class MataPelajaranKurikulumRelationManager extends RelationManager
+class MataPelajaranKelasRelationManager extends RelationManager
 {
-    protected static string $relationship = 'mataPelajaranKurikulum';
-    protected static ?string $title = 'Mata Pelajaran Kurikulum';
+    protected static string $relationship = 'mataPelajaranKelas';
+    protected static ?string $title = 'Mata Pelajaran Kelas';
 
     public function form(Schema $form): Schema
     {
         return $form->schema([
-
             /* =========================
              * PILIH JURUSAN DULU
              * ========================= */
-            Select::make('id_jurusan')
-                ->label('Jurusan')
-                ->options(Jurusan::pluck('nama', 'id'))
+            Select::make('id_kurikulum')
+                ->label('kurikulum')
+                ->options(Kurikulum::pluck('nama', 'id'))
                 ->searchable()
                 ->required()
                 ->reactive()
-                ->afterStateUpdated(fn($set) => $set('mata_pelajaran_master_ids', [])),
+                ->afterStateUpdated(fn($set) => $set('mata_pelajaran_kurikulum_ids', [])),
 
             /* =========================
              * MULTISELECT MAPEL (ASYNC)
              * ========================= */
-            MultiSelect::make('mata_pelajaran_master_ids')
+            MultiSelect::make('mata_pelajaran_kurikulum_ids')
                 ->label('Mata Pelajaran')
                 ->required()
                 ->searchable()
@@ -51,40 +52,54 @@ class MataPelajaranKurikulumRelationManager extends RelationManager
 
                 // Saat dropdown dibuka (tanpa search)
                 ->options(function (callable $get) {
-                    $query = MataPelajaranMaster::query();
+                    $query = MataPelajaranKurikulum::query()
+                        ->with('mataPelajaranMaster');
 
-                    if ($get('id_jurusan')) {
-                        $query->where('id_jurusan', $get('id_jurusan'));
+                    if ($get('id_kurikulum')) {
+                        $query->where('id_kurikulum', $get('id_kurikulum'));
                     }
 
                     return $query
                         ->limit(20)
-                        ->pluck('nama', 'id');
+                        ->get()
+                        ->mapWithKeys(fn($item) => [
+                            $item->id => $item->mataPelajaranMaster->nama
+                        ])
+                        ->toArray();
                 })
+
 
                 // Saat search
                 ->getSearchResultsUsing(function (string $search, callable $get) {
-                    $query = MataPelajaranMaster::query()
-                        ->where('nama', 'like', "%{$search}%");
+                    $query = MataPelajaranKurikulum::query()
+                        ->with('mataPelajaranMaster')
+                        ->whereHas('mataPelajaranMaster', function ($q) use ($search) {
+                            $q->where('nama', 'like', "%{$search}%");
+                        });
 
-                    if ($get('id_jurusan')) {
-                        $query->where('id_jurusan', $get('id_jurusan'));
+                    if ($get('id_kurikulum')) {
+                        $query->where('id_kurikulum', $get('id_kurikulum'));
                     }
 
                     return $query
                         ->limit(20)
-                        ->pluck('nama', 'id');
+                        ->get()
+                        ->mapWithKeys(fn($item) => [
+                            $item->id => $item->mataPelajaranMaster->nama
+                        ])
+                        ->toArray();
                 })
+
 
                 ->getOptionLabelUsing(
                     fn($value) =>
-                    MataPelajaranMaster::find($value)?->nama
+                    MataPelajaranKurikulum::find($value)?->nama
                 ),
 
-            TextInput::make('semester')
-                ->numeric()
-                ->minValue(1)
-                ->required(),
+            // TextInput::make('semester')
+            //     ->numeric()
+            //     ->minValue(1)
+            //     ->required(),
         ]);
     }
 
@@ -92,11 +107,14 @@ class MataPelajaranKurikulumRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('mataPelajaranMaster.nama')
+                TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.nama')
                     ->label('Mata Pelajaran')
                     ->searchable(),
+                TextColumn::make('mataPelajaranKurikulum.kurikulum.nama')
+                    ->label('Kurikulum')
+                    ->searchable(),
 
-                TextColumn::make('semester'),
+                // TextColumn::make('semester'),
             ])
             ->headerActions([
                 CreateAction::make()
@@ -106,19 +124,19 @@ class MataPelajaranKurikulumRelationManager extends RelationManager
 
                         Log::info('CreateAction raw data', $data);
 
-                        $mapelIds = $data['mata_pelajaran_master_ids'] ?? [];
+                        $mapelIds = $data['mata_pelajaran_kurikulum_ids'] ?? [];
 
                         if (empty($mapelIds)) {
                             Log::warning('Tidak ada mata pelajaran dipilih');
                             return null;
                         }
 
-                        $kurikulum = $livewire->getOwnerRecord();
+                        $kelas = $livewire->getOwnerRecord();
 
                         foreach ($mapelIds as $idMapel) {
-                            $kurikulum->mataPelajaranKurikulum()->create([
-                                'id_mata_pelajaran_master' => $idMapel,
-                                'semester' => $data['semester'],
+                            $kelas->mataPelajaranKelas()->create([
+                                'id_mata_pelajaran_kurikulum' => $idMapel,
+                                // 'semester' => $data['semester'],
                             ]);
                         }
 
@@ -126,33 +144,18 @@ class MataPelajaranKurikulumRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                DeleteAction::make(),
+                // DeleteAction::make(),
+                DeleteAction::make()
+                    ->disabled(fn($record) => $record->pertemuanKelas()->exists())
+                    ->tooltip('Masih memiliki data pertemuan')
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+
                 ]),
             ]);
     }
-    // protected function canCreate(): bool
-    // {
-    //     return true;
-    // }
-
-    // protected function canEdit($record): bool
-    // {
-    //     return true;
-    // }
-
-    // protected function canDelete($record): bool
-    // {
-    //     return true;
-    // }
-
-    // protected function canDeleteAny(): bool
-    // {
-    //     return true;
-    // }
     public function isReadOnly(): bool
     {
         return false;

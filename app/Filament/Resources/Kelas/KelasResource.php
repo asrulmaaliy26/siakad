@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Kelas;
 use App\Filament\Resources\Kelas\Pages\CreateKelas;
 use App\Filament\Resources\Kelas\Pages\EditKelas;
 use App\Filament\Resources\Kelas\Pages\ListKelas;
+use App\Filament\Resources\Kelas\Pages\ViewKelas;
+use App\Filament\Resources\Kelas\RelationManagers\MataPelajaranKelasRelationManager;
 use App\Filament\Resources\Kelas\Schemas\KelasForm;
 use App\Filament\Resources\Kelas\Tables\KelasTable;
 use App\Models\Kelas;
@@ -40,6 +42,7 @@ class KelasResource extends Resource
     {
         return [
             //
+            MataPelajaranKelasRelationManager::class,
         ];
     }
 
@@ -48,6 +51,7 @@ class KelasResource extends Resource
         return [
             'index' => ListKelas::route('/'),
             'create' => CreateKelas::route('/create'),
+            'view' => ViewKelas::route('/{record}'),
             'edit' => EditKelas::route('/{record}/edit'),
         ];
     }

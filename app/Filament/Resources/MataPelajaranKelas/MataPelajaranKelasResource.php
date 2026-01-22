@@ -21,7 +21,7 @@ class MataPelajaranKelasResource extends Resource
     protected static ?string $model = MataPelajaranKelas::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Z';
+    protected static string | UnitEnum | null $navigationGroup = 'Temp';
 
     protected static ?string $recordTitleAttribute = 'nama';
 

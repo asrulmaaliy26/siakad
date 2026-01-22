@@ -20,7 +20,7 @@ class SiswaDataLJKResource extends Resource
     protected static ?string $model = SiswaDataLJK::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Perkuliahan';
+    protected static string | UnitEnum | null $navigationGroup = 'Temp';
 
     public static function form(Schema $schema): Schema
     {

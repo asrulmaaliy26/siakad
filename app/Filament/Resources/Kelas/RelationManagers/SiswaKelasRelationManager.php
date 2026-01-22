@@ -33,14 +33,14 @@ class SiswaKelasRelationManager extends RelationManager
             /* =========================
              * PILIH JURUSAN DULU
              * ========================= */
-            Select::make('id_jenjang_pendidikan')
-                ->label('Jenjang Pendidikan')
-                ->options(JenjangPendidikan::pluck('nama', 'id'))
-                ->searchable()
-                ->required()
-                ->reactive()
-                ->afterStateUpdated(fn($set) => $set('riwayat_pendidikan_ids', [])),
-                
+            // Select::make('id_jenjang_pendidikan')
+            //     ->label('Jenjang Pendidikan')
+            //     ->options(JenjangPendidikan::pluck('nama', 'id'))
+            //     ->searchable()
+            //     ->required()
+            //     ->reactive()
+            //     ->afterStateUpdated(fn($set) => $set('riwayat_pendidikan_ids', [])),
+
             /* =========================
              * PILIH JURUSAN DULU
              * ========================= */
@@ -64,31 +64,34 @@ class SiswaKelasRelationManager extends RelationManager
                 ->reactive()
 
                 // Saat dropdown dibuka (tanpa search)
-                ->options(function (callable $get) {
+                ->options(function (callable $get, RelationManager $livewire) {
+                    $kelas = $livewire->getOwnerRecord();
+
                     $query = RiwayatPendidikan::query()
-                        ->with('siswa');
+                        ->with('siswa')
+                        ->where('id_jenjang_pendidikan', $kelas->id_jenjang_pendidikan);
 
                     if ($get('id_jurusan')) {
                         $query->where('id_jurusan', $get('id_jurusan'));
-                    }
-
-                    if ($get('id_jenjang_pendidikan')) {
-                        $query->where('id_jenjang_pendidikan', $get('id_jenjang_pendidikan'));
                     }
 
                     return $query
                         ->limit(20)
                         ->get()
                         ->mapWithKeys(fn($item) => [
-                            $item->id => $item->siswa->nama
+                            $item->id => $item->siswa?->nama ?? '-'
                         ])
-                        ->toArray();;
+                        ->toArray();
                 })
 
+
                 // Saat search
-                ->getSearchResultsUsing(function (string $search, callable $get) {
+                ->getSearchResultsUsing(function (string $search, callable $get, RelationManager $livewire) {
+                    $kelas = $livewire->getOwnerRecord();
+
                     $query = RiwayatPendidikan::query()
                         ->with('siswa')
+                        ->where('id_jenjang_pendidikan', $kelas->id_jenjang_pendidikan)
                         ->whereHas('siswa', function ($q) use ($search) {
                             $q->where('nama', 'like', "%{$search}%");
                         });
@@ -97,18 +100,15 @@ class SiswaKelasRelationManager extends RelationManager
                         $query->where('id_jurusan', $get('id_jurusan'));
                     }
 
-                    if ($get('id_jenjang_pendidikan')) {
-                        $query->where('id_jenjang_pendidikan', $get('id_jenjang_pendidikan'));
-                    }
-
                     return $query
                         ->limit(20)
                         ->get()
                         ->mapWithKeys(fn($item) => [
-                            $item->id => $item->siswa->nama
+                            $item->id => $item->siswa?->nama ?? '-'
                         ])
                         ->toArray();
                 })
+
 
                 ->getOptionLabelUsing(
                     fn($value) =>

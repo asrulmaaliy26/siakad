@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\MataPelajaranMasters\Schemas;
 
+use App\Models\Jurusan;
+use App\Models\RefOption\JenisMapel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -14,12 +16,16 @@ class MataPelajaranMasterForm
             ->components([
                 TextInput::make('nama')
                     ->required(),
-                TextInput::make('id_jurusan')
-                    ->numeric(),
+                Select::make('id_jurusan')
+                    ->label('Jurusan')
+                    ->options(Jurusan::pluck('nama', 'id'))
+                    ->searchable(),
                 TextInput::make('bobot')
                     ->numeric(),
-                Select::make('jenis')
-                    ->options(['wajib' => 'Wajib', 'peminatan' => 'Peminatan']),
+                Select::make('ro_jenis')
+                    ->label('Jenis Pelajaran')
+                    ->options(JenisMapel::pluck('nilai', 'id'))
+                    ->searchable(),
             ]);
     }
 }

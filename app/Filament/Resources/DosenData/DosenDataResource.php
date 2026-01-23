@@ -5,6 +5,7 @@ namespace App\Filament\Resources\DosenData;
 use App\Filament\Resources\DosenData\Pages\CreateDosenData;
 use App\Filament\Resources\DosenData\Pages\EditDosenData;
 use App\Filament\Resources\DosenData\Pages\ListDosenData;
+use App\Filament\Resources\DosenData\Pages\ViewDosenData;
 use App\Filament\Resources\DosenData\Schemas\DosenDataForm;
 use App\Filament\Resources\DosenData\Tables\DosenDataTable;
 use App\Models\DosenData;
@@ -48,6 +49,7 @@ class DosenDataResource extends Resource
         return [
             'index' => ListDosenData::route('/'),
             'create' => CreateDosenData::route('/create'),
+            'view' => ViewDosenData::route('/{record}'),
             'edit' => EditDosenData::route('/{record}/edit'),
         ];
     }

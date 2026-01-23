@@ -14,6 +14,8 @@ use Filament\Schemas\Components\Card;
 use Filament\Schemas\Components\Section;
 use App\Models\RefOption\Agama;
 use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SiswaDataForm
 {
@@ -27,7 +29,24 @@ class SiswaDataForm
                         FileUpload::make('foto_profil')
                             ->label('Foto Profil')
                             ->image()
-                            ->extraAttributes(['class' => 'col-span-full']), // full width
+                            ->disk('public')
+                            ->directory(fn($get) => 'foto-siswa/' . Str::slug($get('nama') ?? 'tanpa-nama'))
+                            ->reactive()
+
+                            // Hapus file saat klik ❌
+                            ->afterStateUpdated(function ($state, $record) {
+                                if (blank($state) && $record?->foto_profil) {
+                                    Storage::disk('public')->delete($record->foto_profil);
+                                }
+                            })
+
+                            // Hapus file lama saat upload baru
+                            ->deleteUploadedFileUsing(function ($file, $record) {
+                                if ($record?->foto_profil) {
+                                    Storage::disk('public')->delete($record->foto_profil);
+                                }
+                                return true;
+                            }), // full width
                         TextInput::make('nama')
                             ->label('Nama Panggilan'),
                         TextInput::make('nama_lengkap'),
@@ -46,12 +65,10 @@ class SiswaDataForm
                                     ->searchable(),
 
                                 TextInput::make('kota_lahir')
-                                    ->label('Kota Lahir')
-                                    ->required(),
+                                    ->label('Kota Lahir'),
 
                                 DatePicker::make('tanggal_lahir')
-                                    ->label('Tanggal Lahir')
-                                    ->required(),
+                                    ->label('Tanggal Lahir'),
 
                                 Textarea::make('alamat')
                                     ->label('Alamat'),

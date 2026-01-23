@@ -5,7 +5,7 @@ namespace App\Models\RefOption;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProgramSekolah extends Model
+class JenisMapel extends Model
 {
     use HasFactory;
 
@@ -30,13 +30,13 @@ class ProgramSekolah extends Model
      */
     protected static function booted()
     {
-        static::addGlobalScope('program_sekolah', function ($query) {
-            $query->where('nama_grup', 'program_sekolah');
+        static::addGlobalScope('jenis_mapel', function ($query) {
+            $query->where('nama_grup', 'jenis_mapel');
         });
     }
 
     /**
-     * Getter alias "nama" agar sesuai konsep Agama
+     * Getter alias "nama" agar sesuai konsep JenisMapel
      */
     public function getNamaAttribute()
     {
@@ -46,18 +46,18 @@ class ProgramSekolah extends Model
     /**
      * Getter untuk deskripsi (hanya alias, optional)
      */
-    // public function getDeskripsiAttribute()
-    // {
-    //     return $this->deskripsi;
-    // }
+    public function getDeskripsiAttribute()
+    {
+        return $this->deskripsi;
+    }
 
     /**
      * Relasi ke tabel Kelas
-     * Misal, satu Agama bisa punya banyak Kelas
+     * Misal, satu JenisMapel bisa punya banyak Kelas
      */
-    public function riwayatPendidikan()
+    public function mataPelajaranMaster()
     {
-        return $this->hasMany(\App\Models\RiwayatPendidikan::class, 'id_riwayat_pendidikan');
+        return $this->hasMany(\App\Models\MataPelajaranMaster::class, 'id_jenis_mapel');
     }
 
     /**

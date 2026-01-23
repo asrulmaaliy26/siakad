@@ -8,4 +8,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMataPelajaranMaster extends CreateRecord
 {
     protected static string $resource = MataPelajaranMasterResource::class;
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index'); // kembali ke list page
+    }
 }

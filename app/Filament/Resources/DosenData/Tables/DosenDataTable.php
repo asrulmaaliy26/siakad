@@ -14,6 +14,7 @@ use App\Models\RefOption\PangkatGolongan;
 use App\Models\RefOption\JabatanFungsional;
 use App\Models\RefOption\StatusDosen;
 use App\Models\RefOption\Agama;
+use Filament\Actions\ViewAction;
 
 class DosenDataTable
 {
@@ -101,6 +102,7 @@ class DosenDataTable
             ])
             ->recordActions([
                 EditAction::make(),
+                ViewAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

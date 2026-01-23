@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Kurikulums\Schemas;
 
+use App\Models\JenjangPendidikan;
+use App\Models\Jurusan;
+use App\Models\TahunAkademik;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -13,12 +16,18 @@ class KurikulumForm
         return $schema
             ->components([
                 TextInput::make('nama'),
-                TextInput::make('id_jurusan')
-                    ->numeric(),
-                TextInput::make('id_tahun_akademik')
-                    ->numeric(),
-                TextInput::make('id_jenjang_pendidikan')
-                    ->numeric(),
+                Select::make('id_jurusan')
+                    ->label('Jurusan')
+                    ->options(Jurusan::pluck('nama', 'id'))
+                    ->searchable(),
+                Select::make('id_tahun_akademik')
+                    ->label('Tahun Akademik')
+                    ->options(TahunAkademik::pluck('nama', 'id'))
+                    ->searchable(),
+                Select::make('id_jenjang_pendidikan')
+                    ->label('Jenjang Pendidikan')
+                    ->options(JenjangPendidikan::pluck('nama', 'id'))
+                    ->searchable(),
                 Select::make('status_aktif')
                     ->options(['Y' => 'Y', 'N' => 'N']),
             ]);

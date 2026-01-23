@@ -15,7 +15,19 @@ class SiswaDataTable
     {
         return $table
             ->columns([
+                TextColumn::make('riwayatPendidikan.angkatan')
+                    ->label('Angkatan')
+                    ->searchable(),
                 TextColumn::make('nama')
+                    ->searchable(),
+                TextColumn::make('riwayatPendidikan.nomor_induk')
+                    ->label('Nomor Induk')
+                    ->searchable(),
+                TextColumn::make('riwayatPendidikan.programSekolah.nilai')
+                    ->searchable(),
+                TextColumn::make('riwayatPendidikan.jurusan.nama')
+                    ->searchable(),
+                TextColumn::make('riwayatPendidikan.statusSiswa.nilai')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

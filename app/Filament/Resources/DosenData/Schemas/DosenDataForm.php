@@ -13,6 +13,7 @@ use App\Models\RefOption\PangkatGolongan;
 use App\Models\RefOption\JabatanFungsional;
 use App\Models\RefOption\StatusDosen;
 use App\Models\RefOption\Agama;
+use Filament\Forms\Components\FileUpload;
 
 class DosenDataForm
 {
@@ -21,7 +22,11 @@ class DosenDataForm
         return $schema
             ->columns(2) // optional: atur jadi 2 kolom
             ->components([
-
+                FileUpload::make('foto_profil')
+                    ->label('Foto Profil')
+                    ->image()
+                    ->directory(fn ($get) => 'foto-dosen/' . str()->slug($get('nama') ?? 'tanpa-nama'))
+                    ->deleteUploadedFileUsing(fn ($file) => true),
                 // IDENTITAS
                 TextInput::make('nama')
                     ->label('Nama Lengkap')

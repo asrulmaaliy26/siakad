@@ -136,6 +136,10 @@ class RiwayatPendidikanRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('angkatan'),
+                Tables\Columns\TextColumn::make('nomor_induk'),
+                Tables\Columns\TextColumn::make('jurusan.nama'),
+                Tables\Columns\TextColumn::make('programSekolah.nilai'),
+                Tables\Columns\TextColumn::make('statusSiswa.nilai'),
                 Tables\Columns\TextColumn::make('status'),
             ])
             ->headerActions([

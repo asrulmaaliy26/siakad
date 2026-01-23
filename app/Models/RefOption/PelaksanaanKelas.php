@@ -3,11 +3,12 @@
 namespace App\Models\RefOption;
 
 use App\Models\MataPelajaranKelas;
+use App\Models\MataPelajaranKelasDistribusi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ReferenceOption;
 
-class RuangKelas extends Model
+class PelaksanaanKelas extends Model
 {
     use HasFactory;
 
@@ -17,8 +18,8 @@ class RuangKelas extends Model
     // Kita hanya ingin filter grup 'Ruang Kelas'
     protected static function booted()
     {
-        static::addGlobalScope('ruang_kuliah', function ($query) {
-            $query->where('nama_grup', 'ruang_kuliah');
+        static::addGlobalScope('pelaksanaan_kelas', function ($query) {
+            $query->where('nama_grup', 'pelaksanaan_kelas');
         });
     }
 
@@ -39,7 +40,11 @@ class RuangKelas extends Model
     // Contoh relasi (misal ke MataPelajaranKelas)
     public function mataPelajaranKelas()
     {
-        return $this->hasMany(MataPelajaranKelas::class, 'ro_ruang_kelas');
+        return $this->hasMany(MataPelajaranKelas::class, 'ro_pelaksanaan_kelas');
+    }
+    public function mataPelajaranKelasDistribusi()
+    {
+        return $this->hasMany(MataPelajaranKelasDistribusi::class, 'ro_pelaksanaan_kelas');
     }
 }
 

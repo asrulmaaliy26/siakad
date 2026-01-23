@@ -12,7 +12,7 @@ class RuangKelas extends Model
     use HasFactory;
 
     // Kita tetap pakai tabel refoption
-    protected $table = 'refoption';
+    protected $table = 'reference_option';
 
     // Kita hanya ingin filter grup 'Ruang Kelas'
     protected static function booted()

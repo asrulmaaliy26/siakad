@@ -39,7 +39,7 @@ class MataPelajaranKelasDistribusi extends Model
 
     public function ruangKelas()
     {
-        return $this->belongsTo(RuangKelas::class, 'id_ruang_kelas');
+        return $this->belongsTo(RuangKelas::class, 'ro_ruang_kelas');
     }
     public function pertemuanKelas()
     {

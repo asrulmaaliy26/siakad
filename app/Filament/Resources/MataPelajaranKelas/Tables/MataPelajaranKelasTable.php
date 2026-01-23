@@ -22,12 +22,15 @@ class MataPelajaranKelasTable
                     ->toggleable(),
 
                 TextColumn::make('kelas.programKelas.nama')
-                    ->numeric()
                     ->sortable()
                     ->toggleable(),
 
+                TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.kode_feeder')
+                    ->label('kode')
+                    // ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('dosen.nama')
-                    ->numeric()
                     ->sortable()
                     ->toggleable(),
 
@@ -42,7 +45,6 @@ class MataPelajaranKelasTable
                     ->toggleable(),
 
                 TextColumn::make('ruangKelas.nama')
-                    ->numeric()
                     ->sortable()
                     ->toggleable(),
 

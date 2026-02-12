@@ -56,9 +56,8 @@ class MataPelajaranKelasDistribusiForm
 
                 Select::make('ro_ruang_kelas')
                     ->label('Ruang Kelas')
-                    // ->relationship('ruangKelas', 'nilai')
                     ->options(
-                        RuangKelas::query()->pluck('nilai', 'nilai')
+                        RuangKelas::query()->pluck('nilai', 'id')
                     )
                     ->searchable()
                     ->preload(),
@@ -66,7 +65,7 @@ class MataPelajaranKelasDistribusiForm
                 Select::make('ro_pelaksanaan_kelas')
                     ->label('Pelaksanaan Kelas')
                     ->options(
-                        PelaksanaanKelas::query()->pluck('nilai', 'nilai')
+                        PelaksanaanKelas::query()->pluck('nilai', 'id')
                     )
                     ->searchable(),
 
@@ -79,7 +78,7 @@ class MataPelajaranKelasDistribusiForm
                 Select::make('hari')
                     ->label('hari')
                     ->options(
-                        Hari::query()->pluck('nilai', 'nilai')
+                        Hari::query()->pluck('nilai', 'nilai') // Tetap nilai karena kolom hari di DB adalah varchar
                     )
                     ->searchable(),
 

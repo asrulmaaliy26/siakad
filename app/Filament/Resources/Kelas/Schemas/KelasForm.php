@@ -14,7 +14,7 @@ class KelasForm
     {
         return $schema
             ->components([
-                Select::make('id_program_kelas')
+                Select::make('ro_program_kelas')
                     ->label('Program Kelas')
                     ->options(\App\Models\RefOption\ProgramKelas::pluck('nilai', 'id'))
                     ->searchable()

@@ -88,22 +88,22 @@ class DosenDataForm
                     ->options(Jurusan::pluck('nama', 'id'))
                     ->searchable(),
 
-                Select::make('id_pangkat_gol')
+                Select::make('ro_pangkat_gol')
                     ->label('Pangkat Golongan')
                     ->options(PangkatGolongan::pluck('nilai', 'id'))
                     ->searchable(),
 
-                Select::make('id_jabatan')
+                Select::make('ro_jabatan')
                     ->label('Jabatan Fungsional')
                     ->options(JabatanFungsional::pluck('nilai', 'id'))
                     ->searchable(),
 
-                Select::make('id_status_dosen')
+                Select::make('ro_status_dosen')
                     ->label('Status Dosen')
                     ->options(StatusDosen::pluck('nilai', 'id'))
                     ->searchable(),
 
-                Select::make('id_agama')
+                Select::make('ro_agama')
                     ->label('Agama')
                     ->options(Agama::pluck('nilai', 'id'))
                     ->searchable(),

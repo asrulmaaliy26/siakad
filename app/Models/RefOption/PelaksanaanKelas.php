@@ -42,7 +42,7 @@ class PelaksanaanKelas extends Model
     {
         return $this->hasMany(MataPelajaranKelas::class, 'ro_pelaksanaan_kelas');
     }
-    public function mataPelajaranKelasDistribusi()
+    public function MataPelajaranKelasDistribusi()
     {
         return $this->hasMany(MataPelajaranKelasDistribusi::class, 'ro_pelaksanaan_kelas');
     }

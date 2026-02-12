@@ -57,7 +57,7 @@ class ProgramKelas extends Model
      */
     public function kelas()
     {
-        return $this->hasMany(\App\Models\Kelas::class, 'id_program_kelas');
+        return $this->hasMany(\App\Models\Kelas::class, 'ro_program_kelas');
     }
 
     /**

@@ -57,7 +57,7 @@ class PangkatGolongan extends Model
      */
     public function DosenData()
     {
-        return $this->hasMany(\App\Models\DosenData::class, 'id_pangkat_gol');
+        return $this->hasMany(\App\Models\DosenData::class, 'ro_pangkat_gol');
     }
 
     /**

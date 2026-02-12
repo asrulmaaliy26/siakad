@@ -80,22 +80,22 @@ class DosenDataTable
                     ->options(Jurusan::pluck('nama', 'id'))
                     ->searchable(),
 
-                SelectFilter::make('id_pangkat_gol')
+                SelectFilter::make('ro_pangkat_gol')
                     ->label('Pangkat Golongan')
                     ->options(PangkatGolongan::pluck('nilai', 'id'))
                     ->searchable(),
 
-                SelectFilter::make('id_jabatan')
+                SelectFilter::make('ro_jabatan')
                     ->label('Jabatan Fungsional')
                     ->options(JabatanFungsional::pluck('nilai', 'id'))
                     ->searchable(),
 
-                SelectFilter::make('id_status_dosen')
+                SelectFilter::make('ro_status_dosen')
                     ->label('Status Dosen')
                     ->options(StatusDosen::pluck('nilai', 'id'))
                     ->searchable(),
 
-                SelectFilter::make('id_agama')
+                SelectFilter::make('ro_agama')
                     ->label('Agama')
                     ->options(Agama::pluck('nilai', 'id'))
                     ->searchable(),

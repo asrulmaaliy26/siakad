@@ -33,4 +33,14 @@ class AkademikKrs extends Model
     {
         return $this->belongsTo(Kelas::class, 'id_kelas');
     }
+
+    public function siswaDataLjk()
+    {
+        return $this->hasMany(SiswaDataLJK::class, 'id_akademik_krs');
+    }
+
+    public function absensiSiswa()
+    {
+        return $this->hasMany(AbsensiSiswa::class, 'id_krs');
+    }
 }

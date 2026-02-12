@@ -59,9 +59,9 @@ class SiswaDataForm
                             ->schema([
                                 Select::make('jenis_kelamin')
                                     ->options(['L' => 'Laki-laki', 'P' => 'Perempuan']),
-                                Select::make('id_agama')
+                                Select::make('agama')
                                     ->label('Agama')
-                                    ->options(Agama::pluck('nilai', 'id'))
+                                    ->options(Agama::pluck('nilai', 'nilai'))
                                     ->searchable(),
 
                                 TextInput::make('kota_lahir')

@@ -57,7 +57,7 @@ class JenisPendaftaran extends Model
      */
     public function riwayatPendidikan()
     {
-        return $this->hasMany(\App\Models\RiwayatPendidikan::class, 'id_riwayat_pendidikan');
+        return $this->hasMany(\App\Models\RiwayatPendidikan::class, 'ro_jns_daftar');
     }
 
     /**

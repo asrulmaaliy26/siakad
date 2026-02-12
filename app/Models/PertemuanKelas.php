@@ -23,9 +23,4 @@ class PertemuanKelas extends Model
             'id_mata_pelajaran_kelas'
         );
     }
-
-    public function absensi()
-    {
-        return $this->hasMany(AbsensiSiswa::class, 'id_pertemuan');
-    }
 }

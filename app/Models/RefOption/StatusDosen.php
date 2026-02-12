@@ -57,7 +57,7 @@ class StatusDosen extends Model
      */
     public function DosenData()
     {
-        return $this->hasMany(\App\Models\DosenData::class, 'id_status_dosen');
+        return $this->hasMany(\App\Models\DosenData::class, 'ro_status_dosen');
     }
 
     /**

@@ -17,8 +17,8 @@ class RuangKelas extends Model
     // Kita hanya ingin filter grup 'Ruang Kelas'
     protected static function booted()
     {
-        static::addGlobalScope('ruang_kuliah', function ($query) {
-            $query->where('nama_grup', 'ruang_kuliah');
+        static::addGlobalScope('ruang_kelas', function ($query) {
+            $query->where('nama_grup', 'ruang_kelas');
         });
     }
 

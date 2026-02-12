@@ -7,6 +7,8 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use App\Models\MataPelajaranKelas;
 
 class SiswaDataLJKSTable
 {
@@ -14,17 +16,51 @@ class SiswaDataLJKSTable
     {
         return $table
             ->columns([
-                //
-                TextColumn::make('krs.riwayatPendidikan.siswa.nama')
+                TextColumn::make('index')
+                    ->label('No')
+                    ->rowIndex(),
+
+                TextColumn::make('akademikKrs.riwayatPendidikan.siswa.nama')
+                    ->label('Nama Peserta')
+                    ->searchable()
                     ->sortable(),
-                // TextColumn::make('krs.riwayatPendidikan.siswa.nama')
-                //     ->sortable(),
-                TextColumn::make('mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.nama')
+
+                TextColumn::make('akademikKrs.riwayatPendidikan.nomor_induk')
+                    ->label('NIM')
                     ->searchable(),
-                TextColumn::make('nilai'),
+
+                TextColumn::make('mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.nama')
+                    ->label('Mata Kuliah')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('mataPelajaranKelas.dosen.nama')
+                    ->label('Dosen')
+                    ->sortable(),
+
+                TextColumn::make('nilai')
+                    ->label('Nilai')
+                    ->numeric(decimalPlaces: 2)
+                    ->sortable(),
+
+                TextColumn::make('created_at')
+                    ->label('Tanggal Input')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('id_mata_pelajaran_kelas')
+                    ->label('Mata Pelajaran Kelas')
+                    ->relationship('mataPelajaranKelas', 'id')
+                    ->getOptionLabelFromRecordUsing(function ($record) {
+                        $matkul = optional($record->mataPelajaranKurikulum->mataPelajaranMaster)->nama ?? '-';
+                        $kelas = optional($record->kelas->programKelas)->nilai ?? '-';
+                        $dosen = optional($record->dosen)->nama ?? '-';
+                        return "$matkul - $kelas ($dosen)";
+                    })
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 EditAction::make(),
@@ -33,6 +69,7 @@ class SiswaDataLJKSTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }

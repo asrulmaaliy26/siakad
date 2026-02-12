@@ -26,7 +26,7 @@ class MataPelajaranKelasDistribusisTable
                 //     ->sortable()
                 //     ->toggleable(),
 
-                TextColumn::make('kelas.programKelas.nama')
+                TextColumn::make('kelas.programKelas.nilai')
                     ->label('Program Kelas')
                     ->sortable()
                     ->toggleable(),
@@ -50,7 +50,7 @@ class MataPelajaranKelasDistribusisTable
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('ro_pelaksanaan_kelas')
+                TextColumn::make('pelaksanaanKelas.nilai')
                     ->label('Pelaksanaan')
                     ->sortable()
                     ->toggleable(),

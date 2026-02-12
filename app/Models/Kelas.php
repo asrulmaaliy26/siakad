@@ -11,7 +11,7 @@ class Kelas extends Model
     use HasFactory;
     protected $table = 'kelas';
     protected $fillable = [
-        'id_program_kelas',
+        'ro_program_kelas',
         'semester',
         'id_jenjang_pendidikan',
         'id_tahun_akademik',
@@ -41,7 +41,7 @@ class Kelas extends Model
     // Relasi ke ProgramKelas
     public function programKelas()
     {
-        return $this->belongsTo(ProgramKelas::class, 'id_program_kelas');
+        return $this->belongsTo(ProgramKelas::class, 'ro_program_kelas');
     }
 
     public function mataPelajaranKelas()

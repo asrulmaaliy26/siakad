@@ -10,6 +10,8 @@ use App\Models\Jurusan;
 use App\Models\JenjangPendidikan;
 use App\Models\AkademikKrs;
 use App\Models\RefOption\ProgramSekolah;
+use App\Models\RefOption\JenisPendaftaran;
+use App\Models\RefOption\JenisKeluar;
 
 class RiwayatPendidikan extends Model
 {
@@ -86,6 +88,16 @@ class RiwayatPendidikan extends Model
     public function programSekolah()
     {
         return $this->belongsTo(ProgramSekolah::class, 'ro_program_sekolah');
+    }
+
+    public function jenisDaftar()
+    {
+        return $this->belongsTo(JenisPendaftaran::class, 'ro_jns_daftar');
+    }
+
+    public function jenisKeluar()
+    {
+        return $this->belongsTo(JenisKeluar::class, 'ro_jns_keluar');
     }
 
 }

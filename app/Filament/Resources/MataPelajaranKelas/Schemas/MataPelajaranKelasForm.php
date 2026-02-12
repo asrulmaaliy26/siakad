@@ -20,8 +20,13 @@ class MataPelajaranKelasForm
                     ->numeric(),
                 Select::make('id_kelas')
                     ->label('Kelas')
-                    ->options(Kelas::pluck('nama', 'id'))
-                    ->searchable(),
+                    ->relationship('kelas', 'id')
+                    ->getOptionLabelFromRecordUsing(
+                        fn($record) => 
+                        $record->id . ' - ' . optional($record->programKelas)->nilai . ' - ' . optional($record->tahunAkademik)->nama
+                    )
+                    ->searchable()
+                    ->preload(),
                 Select::make('id_dosen_data')
                     ->label('Dosen')
                     ->options(DosenData::pluck('nama', 'id'))

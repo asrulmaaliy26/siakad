@@ -20,8 +20,8 @@ class DosenData extends Model
         'NIY',
         'gelar_depan',
         'gelar_belakang',
-        'id_pangkat_gol',
-        'id_jabatan',
+        'ro_pangkat_gol',
+        'ro_jabatan',
         'id_jurusan',
         'email',
         'tanggal_lahir',
@@ -30,8 +30,8 @@ class DosenData extends Model
         'kewarganegaraan',
         'Alamat',
         'status_kawin',
-        'id_status_dosen',
-        'id_agama',
+        'ro_status_dosen',
+        'ro_agama',
     ];
 
     public function mataPelajaranKelas()
@@ -43,24 +43,24 @@ class DosenData extends Model
         return $this->belongsTo(Jurusan::class, 'id_jurusan');
     }
 
-    // Relasi ke ProgramKelas
+    // Relasi ke Reference Options
     public function jabatanFungsional()
     {
-        return $this->belongsTo(JabatanFungsional::class, 'id_jabatan');
+        return $this->belongsTo(JabatanFungsional::class, 'ro_jabatan');
     }
 
     public function pangkat()
     {
-        return $this->belongsTo(PangkatGolongan::class, 'id_pangkat_gol');
+        return $this->belongsTo(PangkatGolongan::class, 'ro_pangkat_gol');
     }
 
     public function statusDosen()
     {
-        return $this->belongsTo(StatusDosen::class, 'id_status_dosen');
+        return $this->belongsTo(StatusDosen::class, 'ro_status_dosen');
     }
     public function agama()
     {
-        return $this->belongsTo(Agama::class, 'id_agama');
+        return $this->belongsTo(Agama::class, 'ro_agama');
     }
 
 }

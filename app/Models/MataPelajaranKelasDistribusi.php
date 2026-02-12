@@ -30,18 +30,6 @@ class MataPelajaranKelasDistribusi extends Model
         'ruang_uas',
         'link_kelas',
         'passcode',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
     ];
 
     public function mataPelajaranKurikulum()

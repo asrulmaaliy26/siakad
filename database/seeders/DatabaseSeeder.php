@@ -9,7 +9,8 @@ use App\Models\JenjangPendidikan;
 use App\Models\Fakultas;
 use App\Models\Jurusan;
 use App\Models\TahunAkademik;
-use App\Models\ProgramKelas;
+use App\Models\RefOption\ProgramKelas;
+use App\Models\RefOption\StatusSiswa;
 
 // AKADEMIK
 use App\Models\Kelas;
@@ -19,7 +20,7 @@ use App\Models\MataPelajaranKurikulum;
 
 // SDM & FASILITAS
 use App\Models\DosenData;
-use App\Models\RuangKelas;
+use App\Models\RefOption\RuangKelas;
 
 // MAHASISWA
 use App\Models\SiswaData;
@@ -30,16 +31,12 @@ use App\Models\SiswaDataOrangTua;
 
 // PROSES BELAJAR
 use App\Models\MataPelajaranKelas;
-use App\Models\PertemuanKelas;
 use App\Models\AbsensiSiswa;
 
 // EVALUASI
-use App\Models\SiswaJenisEvaluasi;
-use App\Models\SiswaEvaluasi;
-use App\Models\SiswaSoalEvaluasi;
-use App\Models\SiswaJawaban;
 use App\Models\SiswaDataLjk;
 use Illuminate\Support\Facades\DB;
+use App\Models\ReferenceOption;
 use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
@@ -51,380 +48,626 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $jenjang = ['SMA', 'D3', 'S1', 'S2'];
-
-        // // Membuat 4 record unik
-        // foreach ($jenjang as $nama) {
-        //     JenjangPendidikan::factory()->create([
-        //         'nama' => $nama,
-        //     ]);
-        // }
-
-        // JenjangPendidikan::factory()->create();
-        // Fakultas::factory()->count(3)->create();
-        // Jurusan::factory()->count(5)->create();
-        // DB::table('jurusan')->insert([
-        //     ['nama' => 'Informatika', 'id_fakultas' => 1, 'created_at' => now(), 'updated_at' => now()],
-        //     ['nama' => 'Sistem Informasi', 'id_fakultas' => 1, 'created_at' => now(), 'updated_at' => now()],
-        //     ['nama' => 'Teknik Komputer', 'id_fakultas' => 1, 'created_at' => now(), 'updated_at' => now()],
-        // ]);
-
-        // TahunAkademik::factory()->count(2)->create();
-
-        // DB::table('tahun_akadmeik')->insert([
-        //     ['nama' => '2025/2026', 'periode' => 'Ganjil', 'status' => 'Y', 'created_at' => now(), 'updated_at' => now()],
-        //     ['nama' => '2025/2026', 'periode' => 'Genap', 'status' => 'N', 'created_at' => now(), 'updated_at' => now()],
-        // ]);
-
-        // ProgramKelas::factory()->count(2)->create();
-
-        // DB::table('program_kelas')->insert([
-        //     ['nama' => 'Reguler', 'created_at' => now(), 'updated_at' => now()],
-        //     ['nama' => 'Karyawan', 'created_at' => now(), 'updated_at' => now()],
-        // ]);
-
-        // $kelas = Kelas::factory()->create();
-
-        // $siswa = SiswaData::factory()
-        //     ->count(10)
-        //     ->has(
-        //         RiwayatPendidikan::factory()
-        //             ->has(
-        //                 AkademikKrs::factory()
-        //                     ->count(1)
-        //             )
-        //     )
-        //     ->create();
-
-        // $kelas1 = Kelas::find(1); // ambil kelas dengan ID 1
-        // $kelas2 = Kelas::find(2); // ambil kelas dengan ID 2
-
-        // $kelasList = [$kelas1, $kelas2];
-
-        // foreach ($kelasList as $kelas) {
-        //     // pastikan kelas ada
-        //     if (!$kelas) continue;
-
-        //     for ($i = 1; $i <= 10; $i++) {
-        //         $siswa = SiswaData::create([
-        //             'nama' => "Siswa {$kelas->nama} {$i}",
-        //             'nomor_induk' => 'NIS' . rand(1000, 9999),
-        //         ]);
-
-        //         $riwayat = RiwayatPendidikan::create([
-        //             'id_siswa_data' => $siswa->id,
-        //             'id_jenjang_pendidikan' => 1, // sesuaikan
-        //             'id_jurusan' => 1, // sesuaikan
-        //             'status_siswa' => 'Aktif',
-        //             'angkatan' => 2026,
-        //             'tanggal_mulai' => now()->subYears(3),
-        //             'tanggal_selesai' => null,
-        //         ]);
-
-        //         AkademikKrs::create([
-        //             'id_riwayat_pendidikan' => $riwayat->id,
-        //             'id_kelas' => $kelas->id,
-        //             'semester' => 1,
-        //             'status_bayar' => 'Y',
-        //             'jumlah_sks' => 20,
-        //             'status_aktif' => 'Y',
-        //         ]);
-        //     }
-        // }
-
-        // MataPelajaranMaster::factory()->count(5)->create();
-
-        // $mataPelajaran = [
-        //     ['name' => 'Matematika', 'id_jurusan' => 1, 'bobot' => 3, 'jenis' => 'wajib'],
-        //     ['name' => 'Fisika', 'id_jurusan' => 1, 'bobot' => 3, 'jenis' => 'wajib'],
-        //     ['name' => 'Kimia', 'id_jurusan' => 1, 'bobot' => 3, 'jenis' => 'wajib'],
-        //     ['name' => 'Bahasa Inggris', 'id_jurusan' => 1, 'bobot' => 2, 'jenis' => 'wajib'],
-        //     ['name' => 'Pemrograman', 'id_jurusan' => 1, 'bobot' => 3, 'jenis' => 'peminatan'],
-        // ];
-
-        // foreach ($mataPelajaran as $mp) {
-        //     MataPelajaranMaster::create($mp);
-        // }
-
-        // Kurikulum::factory()->count(1)->create();
-
-        // $kurikulumList = [
-        //     [
-        //         'name' => 'Kurikulum 1',
-        //         'id_jurusan' => 1,
-        //         'id_tahun_akademik' => 1,
-        //         'id_jenjang_pendidikan' => 1,
-        //         'status_aktif' => 'Y',
-        //     ],
-        //     [
-        //         'name' => 'Kurikulum 2',
-        //         'id_jurusan' => 1,
-        //         'id_tahun_akademik' => 1,
-        //         'id_jenjang_pendidikan' => 1,
-        //         'status_aktif' => 'Y',
-        //     ],
-        // ];
-
-        // foreach ($kurikulumList as $kurikulum) {
-        //     Kurikulum::create($kurikulum);
-        // }
-
-        // MataPelajaranKurikulum::factory()->count(5)->create();
-
-        // $kurikulum1Mapel = [1, 2, 3];
-
-        // foreach ($kurikulum1Mapel as $mapelId) {
-        //     MataPelajaranKurikulum::create([
-        //         'id_kurikulum' => 1,
-        //         'id_mata_pelajaran_master' => $mapelId,
-        //         'semester' => 1,
-        //     ]);
-        // }
-
-        // /**
-        //  * Kurikulum 2 → 5 Mata Pelajaran
-        //  */
-        // $kurikulum2Mapel = [1, 2, 3, 4, 5];
-
-        // foreach ($kurikulum2Mapel as $mapelId) {
-        //     MataPelajaranKurikulum::create([
-        //         'id_kurikulum' => 2,
-        //         'id_mata_pelajaran_master' => $mapelId,
-        //         'semester' => 1,
-        //     ]);
-        // }
-
-
-        // RuangKelas::factory()->count(3)->create();
-
-        // DosenData::factory()->count(4)->create();
-
-        // MataPelajaranKelas::factory()->count(5)->create();
-        // $mapelKurikulumIds = range(1, 8); // total 8 mapel
-
-        // $dosenIds = [1, 2, 3, 4]; // 4 dosen
-        // $ruangKelasIds = [1, 2, 3];
-
-        // foreach ($mapelKurikulumIds as $index => $mapelKurikulumId) {
-
-        //     // 5 mapel pertama → kelas 1, sisanya → kelas 2
-        //     $kelasId = $index < 5 ? 1 : 2;
-
-        //     // pembagian dosen: 4 mapel - 4 mapel
-        //     $dosenIndex = intdiv($index, 4); // 0 atau 1
-        //     $dosenId = $dosenIds[$dosenIndex];
-
-        //     MataPelajaranKelas::create([
-        //         'id_mata_pelajaran_kurikulum' => $mapelKurikulumId,
-        //         'id_kelas' => $kelasId,
-        //         'id_dosen_data' => $dosenId,
-        //         'uts' => Carbon::now()->addWeeks(8),
-        //         'uas' => Carbon::now()->addWeeks(16),
-        //         'id_ruang_kelas' => $ruangKelasIds[array_rand($ruangKelasIds)],
-        //     ]);
-        // }
-        // SiswaJenisEvaluasi::factory()->count(4)->create();
-        // $data = [
-        //     [
-        //         'nama' => 'Tugas 1',
-        //         'deskrispsi' => 'Evaluasi berupa tugas pertama',
-        //     ],
-        //     [
-        //         'nama' => 'Tugas 2',
-        //         'deskrispsi' => 'Evaluasi berupa tugas kedua',
-        //     ],
-        //     [
-        //         'nama' => 'UTS',
-        //         'deskrispsi' => 'Ujian Tengah Semester',
-        //     ],
-        //     [
-        //         'nama' => 'UAS',
-        //         'deskrispsi' => 'Ujian Akhir Semester',
-        //     ],
-        // ];
-
-        // foreach ($data as $item) {
-        //     SiswaJenisEvaluasi::create($item);
-        // }
-
-        // SiswaEvaluasi::factory()->count(10)->create();
-        // $mapelKelas = MataPelajaranKelas::orderBy('id')
-        //     ->limit(3)
-        //     ->pluck('id')
-        //     ->toArray();
-
-        // foreach ($mapelKelas as $mapelKelasId) {
-
-        //     // UTS
-        //     SiswaEvaluasi::create([
-        //         'id_mata_pelajaran_kelas' => $mapelKelasId,
-        //         'id_siswa_jenis_evaluasi' => 3, // UTS
-        //         'tanggal' => Carbon::now()->addWeeks(8),
-        //         'keterangan' => 'Ujian Tengah Semester',
-        //     ]);
-
-        //     // UAS
-        //     SiswaEvaluasi::create([
-        //         'id_mata_pelajaran_kelas' => $mapelKelasId,
-        //         'id_siswa_jenis_evaluasi' => 4, // UAS
-        //         'tanggal' => Carbon::now()->addWeeks(16),
-        //         'keterangan' => 'Ujian Akhir Semester',
-        //     ]);
-        // }
-
-        // SiswaSoalEvaluasi::factory()->count(20)->create();
-
-        // $siswaEvaluasiId = SiswaEvaluasi::first()?->id;
-
-        // if (!$siswaEvaluasiId) {
-        //     return; // stop jika belum ada evaluasi
-        // }
-
-        // $soal = [
-        //     // PILIHAN GANDA
-        //     [
-        //         'pertanyaan' => 'Hasil dari 5 + 3 adalah?',
-        //         'tipe' => 'pilihan_ganda',
-        //         'skor' => 10,
-        //         'kunci_jawaban' => '8',
-        //     ],
-        //     [
-        //         'pertanyaan' => 'Bahasa pemrograman untuk web backend adalah?',
-        //         'tipe' => 'pilihan_ganda',
-        //         'skor' => 10,
-        //         'kunci_jawaban' => 'PHP',
-        //     ],
-
-        //     // ESSAY
-        //     [
-        //         'pertanyaan' => 'Jelaskan pengertian algoritma!',
-        //         'tipe' => 'essay',
-        //         'skor' => 20,
-        //         'kunci_jawaban' => null,
-        //     ],
-        //     [
-        //         'pertanyaan' => 'Sebutkan fungsi database!',
-        //         'tipe' => 'essay',
-        //         'skor' => 20,
-        //         'kunci_jawaban' => null,
-        //     ],
-
-        //     // TRUE / FALSE
-        //     [
-        //         'pertanyaan' => 'Laravel adalah framework PHP.',
-        //         'tipe' => 'true_false',
-        //         'skor' => 10,
-        //         'kunci_jawaban' => 'true',
-        //     ],
-        //     [
-        //         'pertanyaan' => 'CSS digunakan untuk membuat database.',
-        //         'tipe' => 'true_false',
-        //         'skor' => 10,
-        //         'kunci_jawaban' => 'false',
-        //     ],
-        // ];
-
-        // foreach ($soal as $item) {
-        //     SiswaSoalEvaluasi::create([
-        //         'id_siswa_evaluasi' => $siswaEvaluasiId,
-        //         'pertanyaan' => $item['pertanyaan'],
-        //         'tipe' => $item['tipe'],
-        //         'skor' => $item['skor'],
-        //         'kunci_jawaban' => $item['kunci_jawaban'],
-        //     ]);
-        // }
+        $this->command->info('🧹 Membersihkan data lama...');
         
-        // SiswaJawaban::factory()->count(50)->create();
+        // Nonaktifkan foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        
+        // Hapus data dalam urutan yang benar (dari child ke parent)
+        try {
+            // EVALUASI
+            SiswaDataLjk::truncate();
+            
+            // PROSES BELAJAR
+            MataPelajaranKelas::truncate();
+            AbsensiSiswa::truncate();
+            
+            // MAHASISWA
+            AkademikKrs::truncate();
+            RiwayatPendidikan::truncate();
+            SiswaData::truncate();
+            SiswaDataPendaftar::truncate();
+            SiswaDataOrangTua::truncate();
+            
+            // AKADEMIK
+            Kelas::truncate();
+            Kurikulum::truncate();
+            MataPelajaranKurikulum::truncate();
+            MataPelajaranMaster::truncate();
+            
+            // SDM & FASILITAS
+            DosenData::truncate();
+            
+            // REFERENSI
+            ReferenceOption::truncate();
+            Jurusan::truncate();
+            Fakultas::truncate();
+            TahunAkademik::truncate();
+            JenjangPendidikan::truncate();
+            
+            $this->command->info('✅ Data lama berhasil dihapus!');
+            $this->command->info('');
+            
+        } catch (\Exception $e) {
+            $this->command->error('❌ Gagal menghapus data lama: ' . $e->getMessage());
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            return;
+        }
+        
+        // Aktifkan kembali foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        
+        $this->command->info('🚀 Mulai seeding data SIAKAD...');
+        $this->command->info('');
 
-        // $krsId = AkademikKrs::first()?->id;
+        // ============================================
+        // 0. REFERENCE OPTIONS (HARUS PERTAMA!)
+        // ============================================
+        $this->command->info('⚙️ Membuat Reference Options...');
+        
+        $refOptions = [
+            // Jenis Mapel
+            ['nama_grup' => 'jenis_mapel', 'kode' => 'A', 'nilai' => 'Wajib Program Studi', 'status' => 'Y'],
+            ['nama_grup' => 'jenis_mapel', 'kode' => 'B', 'nilai' => 'Pilihan', 'status' => 'Y'],
+            ['nama_grup' => 'jenis_mapel', 'kode' => 'C', 'nilai' => 'Peminatan', 'status' => 'Y'],
+            ['nama_grup' => 'jenis_mapel', 'kode' => 'W', 'nilai' => 'Wajib Nasional', 'status' => 'Y'],
+            ['nama_grup' => 'jenis_mapel', 'kode' => 'S', 'nilai' => 'Tugas Akhir / Skripsi', 'status' => 'Y'],
+            
+            // Jabatan Fungsional
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '1', 'nilai' => 'Asisten Ahli - 100.00', 'status' => 'Y'],
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '2', 'nilai' => 'Asisten Ahli - 150.00', 'status' => 'Y'],
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '3', 'nilai' => 'Lektor - 200.00', 'status' => 'Y'],
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '4', 'nilai' => 'Lektor - 300.00', 'status' => 'Y'],
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '5', 'nilai' => 'Lektor Kepala - 400.00', 'status' => 'Y'],
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '6', 'nilai' => 'Lektor Kepala - 550.00', 'status' => 'Y'],
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '7', 'nilai' => 'Lektor Kepala - 700.00', 'status' => 'Y'],
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '8', 'nilai' => 'Profesor - 850.00', 'status' => 'Y'],
+            ['nama_grup' => 'jabatan_fungsional', 'kode' => '9', 'nilai' => 'Profesor - 1050.00', 'status' => 'Y'],
+            
+            // Pangkat Golongan
+            ['nama_grup' => 'pangkat', 'kode' => '1', 'nilai' => 'Juru Muda, I/a', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '2', 'nilai' => 'Juru Muda Tk. I, I/b', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '3', 'nilai' => 'Juru, I/c', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '4', 'nilai' => 'Juru Tk. I, I/d', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '5', 'nilai' => 'Pengatur Muda, II/a', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '6', 'nilai' => 'Pengatur Muda Tk. I, II/b', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '7', 'nilai' => 'Pengatur, II/c', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '8', 'nilai' => 'Pengatur Tk. I, II/d', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '9', 'nilai' => 'Penata Muda, III/a', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '10', 'nilai' => 'Penata Muda Tk. I, III/b', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '11', 'nilai' => 'Penata, III/c', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '12', 'nilai' => 'Penata Tk. I, III/d', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '13', 'nilai' => 'Pembina, IV/a', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '14', 'nilai' => 'Pembina Tk. I, IV/b', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '15', 'nilai' => 'Pembina Utama Muda, IV/c', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '16', 'nilai' => 'Pembina Utama Madya, IV/d', 'status' => 'Y'],
+            ['nama_grup' => 'pangkat', 'kode' => '17', 'nilai' => 'Pembina Utama, IV/e', 'status' => 'Y'],
+            
+            // Status Dosen
+            ['nama_grup' => 'status_dosen', 'kode' => '1', 'nilai' => 'Dosen Tetap', 'status' => 'Y'],
+            ['nama_grup' => 'status_dosen', 'kode' => '2', 'nilai' => 'Dosen Tidak Tetap', 'status' => 'Y'],
+            ['nama_grup' => 'status_dosen', 'kode' => '3', 'nilai' => 'Dosen Luar Biasa (DLB)', 'status' => 'Y'],
+            ['nama_grup' => 'status_dosen', 'kode' => '4', 'nilai' => 'Pegawai Tetap', 'status' => 'Y'],
+            ['nama_grup' => 'status_dosen', 'kode' => '5', 'nilai' => 'Pegawai Tidak Tetap', 'status' => 'Y'],
+            
+            // Status Siswa
+            ['nama_grup' => 'status_siswa', 'kode' => 'A', 'nilai' => 'Aktif', 'status' => 'Y'],
+            ['nama_grup' => 'status_siswa', 'kode' => 'C', 'nilai' => 'Cuti', 'status' => 'Y'],
+            ['nama_grup' => 'status_siswa', 'kode' => 'D', 'nilai' => 'Drop-Out/Putus Studi', 'status' => 'Y'],
+            ['nama_grup' => 'status_siswa', 'kode' => 'G', 'nilai' => 'Sedang Double Degree', 'status' => 'Y'],
+            ['nama_grup' => 'status_siswa', 'kode' => 'K', 'nilai' => 'Keluar', 'status' => 'Y'],
+            ['nama_grup' => 'status_siswa', 'kode' => 'L', 'nilai' => 'Lulus', 'status' => 'Y'],
+            ['nama_grup' => 'status_siswa', 'kode' => 'N', 'nilai' => 'Non-Aktif', 'status' => 'Y'],
+            ['nama_grup' => 'status_siswa', 'kode' => 'M', 'nilai' => 'Kampus Merdeka (Pertukaran Pelajar)', 'status' => 'Y'],
+            ['nama_grup' => 'status_siswa', 'kode' => 'U', 'nilai' => 'Menunggu Uji Kompetensi', 'status' => 'Y'],
+            
+            // Agama
+            ['nama_grup' => 'agama', 'kode' => '1', 'nilai' => 'Islam', 'status' => 'Y'],
+            ['nama_grup' => 'agama', 'kode' => '2', 'nilai' => 'Kristen', 'status' => 'Y'],
+            ['nama_grup' => 'agama', 'kode' => '3', 'nilai' => 'Katholik', 'status' => 'Y'],
+            ['nama_grup' => 'agama', 'kode' => '4', 'nilai' => 'Hindu', 'status' => 'Y'],
+            ['nama_grup' => 'agama', 'kode' => '5', 'nilai' => 'Budha', 'status' => 'Y'],
+            ['nama_grup' => 'agama', 'kode' => '6', 'nilai' => 'Konghucu', 'status' => 'Y'],
+            ['nama_grup' => 'agama', 'kode' => '99', 'nilai' => 'Lainnya', 'status' => 'Y'],
+            
+            // Alat Transportasi
+            ['nama_grup' => 'alat_transport', 'kode' => '1', 'nilai' => 'Jalan Kaki', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '2', 'nilai' => 'Kendaraan Pribadi', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '3', 'nilai' => 'Angkutan Umum / Bus', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '4', 'nilai' => 'Mobil / Bus Antar Jemput', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '5', 'nilai' => 'Kereta Api', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '6', 'nilai' => 'Ojek', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '12', 'nilai' => 'Sepeda', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '13', 'nilai' => 'Sepeda Motor', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '14', 'nilai' => 'Mobil Pribadi', 'status' => 'Y'],
+            ['nama_grup' => 'alat_transport', 'kode' => '99', 'nilai' => 'Lainnya', 'status' => 'Y'],
+            
+            // Jenis Keluar
+            ['nama_grup' => 'jns_keluar', 'kode' => '1', 'nilai' => 'Lulus', 'status' => 'Y'],
+            ['nama_grup' => 'jns_keluar', 'kode' => '2', 'nilai' => 'Mutasi', 'status' => 'Y'],
+            ['nama_grup' => 'jns_keluar', 'kode' => '3', 'nilai' => 'Dikeluarkan', 'status' => 'Y'],
+            ['nama_grup' => 'jns_keluar', 'kode' => '4', 'nilai' => 'Mengundurkan Diri', 'status' => 'Y'],
+            ['nama_grup' => 'jns_keluar', 'kode' => '5', 'nilai' => 'Putus Sekolah', 'status' => 'Y'],
+            ['nama_grup' => 'jns_keluar', 'kode' => '6', 'nilai' => 'Wafat', 'status' => 'Y'],
+            ['nama_grup' => 'jns_keluar', 'kode' => '9', 'nilai' => 'Pensiun', 'status' => 'Y'],
+            
+            // Jenis Pendaftaran
+            ['nama_grup' => 'jns_pendaftaran', 'kode' => '1', 'nilai' => 'Peserta Didik Baru', 'status' => 'Y'],
+            ['nama_grup' => 'jns_pendaftaran', 'kode' => '2', 'nilai' => 'Pindahan', 'status' => 'Y'],
+            ['nama_grup' => 'jns_pendaftaran', 'kode' => '8', 'nilai' => 'Pindahan Alih Bentuk', 'status' => 'Y'],
+            
+            // Jenis Tinggal
+            ['nama_grup' => 'jns_tinggal', 'kode' => '1', 'nilai' => 'Bersama Orang Tua', 'status' => 'Y'],
+            ['nama_grup' => 'jns_tinggal', 'kode' => '2', 'nilai' => 'Wali', 'status' => 'Y'],
+            ['nama_grup' => 'jns_tinggal', 'kode' => '3', 'nilai' => 'Kost', 'status' => 'Y'],
+            ['nama_grup' => 'jns_tinggal', 'kode' => '4', 'nilai' => 'Asrama / Pesantren', 'status' => 'Y'],
+            ['nama_grup' => 'jns_tinggal', 'kode' => '5', 'nilai' => 'Panti Asuhan', 'status' => 'Y'],
+            ['nama_grup' => 'jns_tinggal', 'kode' => '6', 'nilai' => 'Rumah Sendiri', 'status' => 'Y'],
+            ['nama_grup' => 'jns_tinggal', 'kode' => '99', 'nilai' => 'Lainnya', 'status' => 'Y'],
+            
+            // Pekerjaan
+            ['nama_grup' => 'pekerjaan', 'kode' => '1', 'nilai' => 'Tidak bekerja', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '2', 'nilai' => 'Nelayan', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '3', 'nilai' => 'Petani', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '4', 'nilai' => 'Peternak', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '5', 'nilai' => 'PNS/TNI/Polri', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '6', 'nilai' => 'Karyawan Swasta', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '7', 'nilai' => 'Pedagang Kecil', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '8', 'nilai' => 'Pedagang Besar', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '9', 'nilai' => 'Wiraswasta', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '10', 'nilai' => 'Wirausaha', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '11', 'nilai' => 'Buruh', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '12', 'nilai' => 'Pensiun', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '98', 'nilai' => 'Sudah Meninggal', 'status' => 'Y'],
+            ['nama_grup' => 'pekerjaan', 'kode' => '99', 'nilai' => 'Lainnya', 'status' => 'Y'],
+            
+            // Penghasilan
+            ['nama_grup' => 'penghasilan', 'kode' => '0', 'nilai' => 'Rp. 0', 'status' => 'Y'],
+            ['nama_grup' => 'penghasilan', 'kode' => '11', 'nilai' => 'Kurang dari Rp. 500.000', 'status' => 'Y'],
+            ['nama_grup' => 'penghasilan', 'kode' => '12', 'nilai' => 'Rp. 500.000 - Rp. 999.999', 'status' => 'Y'],
+            ['nama_grup' => 'penghasilan', 'kode' => '13', 'nilai' => 'Rp. 1.000.000 - Rp. 1.999.999', 'status' => 'Y'],
+            ['nama_grup' => 'penghasilan', 'kode' => '14', 'nilai' => 'Rp. 2.000.000 - Rp. 4.999.999', 'status' => 'Y'],
+            ['nama_grup' => 'penghasilan', 'kode' => '15', 'nilai' => 'Rp. 5.000.000 - Rp. 20.000.000', 'status' => 'Y'],
+            ['nama_grup' => 'penghasilan', 'kode' => '16', 'nilai' => 'Lebih dari Rp. 20.000.000', 'status' => 'Y'],
+            
+            // Program Kelas
+            ['nama_grup' => 'program_kelas', 'kode' => 'A', 'nilai' => 'Kelas A', 'status' => 'Y'],
+            ['nama_grup' => 'program_kelas', 'kode' => 'B', 'nilai' => 'Kelas B', 'status' => 'Y'],
+            ['nama_grup' => 'program_kelas', 'kode' => 'C', 'nilai' => 'Kelas C', 'status' => 'Y'],
+            ['nama_grup' => 'program_kelas', 'kode' => 'D', 'nilai' => 'Kelas D', 'status' => 'Y'],
+            ['nama_grup' => 'program_kelas', 'kode' => 'S2-Reg', 'nilai' => 'S2-Reguler', 'status' => 'Y'],
+            ['nama_grup' => 'program_kelas', 'kode' => 'Afiliasi', 'nilai' => 'Afiliasi Kampus', 'status' => 'Y'],
+            
+            // Hari
+            ['nama_grup' => 'hari', 'kode' => '1', 'nilai' => 'Sabtu', 'status' => 'Y'],
+            ['nama_grup' => 'hari', 'kode' => '2', 'nilai' => 'Minggu', 'status' => 'Y'],
+            ['nama_grup' => 'hari', 'kode' => '3', 'nilai' => 'Senin', 'status' => 'Y'],
+            ['nama_grup' => 'hari', 'kode' => '4', 'nilai' => 'Selasa', 'status' => 'Y'],
+            ['nama_grup' => 'hari', 'kode' => '5', 'nilai' => 'Rabu', 'status' => 'Y'],
+            ['nama_grup' => 'hari', 'kode' => '6', 'nilai' => 'Kamis', 'status' => 'Y'],
+            ['nama_grup' => 'hari', 'kode' => '7', 'nilai' => 'Jumat', 'status' => 'Y'],
+            
+            // Ruang Kelas
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'A1', 'nilai' => 'A1', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'A2', 'nilai' => 'A2', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'A3', 'nilai' => 'A3', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'A6', 'nilai' => 'A6', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'A7', 'nilai' => 'A7', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'A8', 'nilai' => 'A8', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'A9', 'nilai' => 'A9', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'A10', 'nilai' => 'A10', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'B1', 'nilai' => 'B1', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'B2', 'nilai' => 'B2', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'B3', 'nilai' => 'B3', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'B4', 'nilai' => 'B4', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'B5', 'nilai' => 'B5', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'B6', 'nilai' => 'B6', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'B7', 'nilai' => 'B7', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'B8', 'nilai' => 'B8', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'C1', 'nilai' => 'C1', 'status' => 'Y'],
+            ['nama_grup' => 'ruang_kelas', 'kode' => 'C2', 'nilai' => 'C2', 'status' => 'Y'],
+            
+            // Pelaksanaan Kelas
+            ['nama_grup' => 'pelaksanaan_kelas', 'kode' => '1', 'nilai' => 'Pararel Institut', 'status' => 'Y'],
+            ['nama_grup' => 'pelaksanaan_kelas', 'kode' => '2', 'nilai' => 'Pararel Lintas Fakultas', 'status' => 'Y'],
+            ['nama_grup' => 'pelaksanaan_kelas', 'kode' => '3', 'nilai' => 'Pararel Lintas Prodi Satu Fakultas', 'status' => 'Y'],
+            ['nama_grup' => 'pelaksanaan_kelas', 'kode' => '4', 'nilai' => 'Non Pararel', 'status' => 'Y'],
+            ['nama_grup' => 'pelaksanaan_kelas', 'kode' => '5', 'nilai' => 'Pararel Antar Semester', 'status' => 'Y'],
+            
+            // Program Sekolah
+            ['nama_grup' => 'program_sekolah', 'kode' => '1', 'nilai' => 'Reguler', 'status' => 'Y'],
+            ['nama_grup' => 'program_sekolah', 'kode' => '2', 'nilai' => 'Kelas Karyawan', 'status' => 'Y'],
+            ['nama_grup' => 'program_sekolah', 'kode' => '3', 'nilai' => 'Madin', 'status' => 'Y'],
+        ];
+        
+        $refOptionCount = 0;
+        foreach ($refOptions as $data) {
+            ReferenceOption::create($data);
+            $refOptionCount++;
+        }
+        
+        $this->command->info('   ✓ ' . $refOptionCount . ' Reference Options created');
 
-        // if (!$krsId) {
-        //     return; // stop jika belum ada KRS
-        // }
+        // ============================================
+        // 1. JENJANG PENDIDIKAN
+        // ============================================
+        $this->command->info('📚 Membuat Jenjang Pendidikan...');
+        $jenjangS1 = JenjangPendidikan::create([
+            'nama' => 'S1',
+            'deskripsi' => 'Sarjana Strata 1',
+        ]);
+        $this->command->info('   ✓ Jenjang S1 created');
+        
+        // ============================================
+        // 2. TAHUN AKADEMIK (2 tahun)
+        // ============================================
+        $this->command->info('📅 Membuat Tahun Akademik...');
+        $tahunAkademik = [
+            TahunAkademik::create([
+                'nama' => '2024/2025',
+                'periode' => 'Ganjil',
+                'status' => 'N',
+            ]),
+            TahunAkademik::create([
+                'nama' => '2024/2025',
+                'periode' => 'Genap',
+                'status' => 'N',
+            ]),
+            TahunAkademik::create([
+                'nama' => '2025/2026',
+                'periode' => 'Ganjil',
+                'status' => 'Y',
+            ]),
+            TahunAkademik::create([
+                'nama' => '2025/2026',
+                'periode' => 'Genap',
+                'status' => 'N',
+            ]),
+        ];
+        $this->command->info('   ✓ ' . count($tahunAkademik) . ' Tahun Akademik created');
 
-        // // Ambil semua soal evaluasi
-        // $soalList = SiswaSoalEvaluasi::all();
+        // ============================================
+        // 4. FAKULTAS (3 fakultas)
+        // ============================================
+        $this->command->info('🏛️ Membuat Fakultas...');
+        $fakultasList = [
+            Fakultas::create(['nama' => 'Fakultas Teknik']),
+            Fakultas::create(['nama' => 'Fakultas Ekonomi dan Bisnis']),
+            Fakultas::create(['nama' => 'Fakultas Ilmu Sosial dan Politik']),
+        ];
+        $this->command->info('   ✓ ' . count($fakultasList) . ' Fakultas created');
 
-        // foreach ($soalList as $soal) {
+        // ============================================
+        // 5. JURUSAN/PRODI (3 per fakultas = 9 total)
+        // ============================================
+        $this->command->info('🎓 Membuat Program Studi...');
+        $jurusanList = [
+            // Fakultas Teknik
+            Jurusan::create(['nama' => 'Teknik Informatika', 'id_fakultas' => $fakultasList[0]->id]),
+            Jurusan::create(['nama' => 'Sistem Informasi', 'id_fakultas' => $fakultasList[0]->id]),
+            Jurusan::create(['nama' => 'Teknik Elektro', 'id_fakultas' => $fakultasList[0]->id]),
+            
+            // Fakultas Ekonomi
+            Jurusan::create(['nama' => 'Manajemen', 'id_fakultas' => $fakultasList[1]->id]),
+            Jurusan::create(['nama' => 'Akuntansi', 'id_fakultas' => $fakultasList[1]->id]),
+            Jurusan::create(['nama' => 'Ekonomi Pembangunan', 'id_fakultas' => $fakultasList[1]->id]),
+            
+            // Fakultas Ilmu Sosial dan Politik
+            Jurusan::create(['nama' => 'Ilmu Komunikasi', 'id_fakultas' => $fakultasList[2]->id]),
+            Jurusan::create(['nama' => 'Administrasi Publik', 'id_fakultas' => $fakultasList[2]->id]),
+            Jurusan::create(['nama' => 'Hubungan Internasional', 'id_fakultas' => $fakultasList[2]->id]),
+        ];
+        $this->command->info('   ✓ ' . count($jurusanList) . ' Program Studi created');
 
-        //     $jawaban = null;
-        //     $skor = 0;
+        // ============================================
+        // 6. MATA PELAJARAN MASTER (per jurusan)
+        // ============================================
+        $this->command->info('📖 Membuat Mata Kuliah...');
+        $matkulData = [
+            // Teknik Informatika
+            1 => [
+                ['nama' => 'Algoritma dan Pemrograman', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Struktur Data', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Basis Data', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Pemrograman Web', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'Kecerdasan Buatan', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+            // Sistem Informasi
+            2 => [
+                ['nama' => 'Sistem Informasi Manajemen', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Analisis dan Perancangan Sistem', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'E-Business', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Enterprise Resource Planning', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'Business Intelligence', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+            // Teknik Elektro
+            3 => [
+                ['nama' => 'Rangkaian Listrik', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Elektronika Dasar', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Sistem Kontrol', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Mikroprosesor', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'Sistem Tenaga Listrik', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+            // Manajemen
+            4 => [
+                ['nama' => 'Pengantar Manajemen', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Manajemen Pemasaran', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Manajemen Keuangan', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Manajemen SDM', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'Manajemen Operasional', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+            // Akuntansi
+            5 => [
+                ['nama' => 'Pengantar Akuntansi', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Akuntansi Keuangan', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Akuntansi Biaya', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Audit', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'Perpajakan', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+            // Ekonomi Pembangunan
+            6 => [
+                ['nama' => 'Pengantar Ekonomi Mikro', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Pengantar Ekonomi Makro', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Ekonomi Pembangunan', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Ekonomi Regional', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'Ekonomi Internasional', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+            // Ilmu Komunikasi
+            7 => [
+                ['nama' => 'Pengantar Ilmu Komunikasi', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Komunikasi Massa', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Jurnalistik', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Public Relations', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'Broadcasting', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+            // Administrasi Publik
+            8 => [
+                ['nama' => 'Pengantar Administrasi Publik', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Kebijakan Publik', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Manajemen Pemerintahan', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Administrasi Keuangan Negara', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'E-Government', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+            // Hubungan Internasional
+            9 => [
+                ['nama' => 'Pengantar Hubungan Internasional', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Politik Internasional', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Diplomasi', 'bobot' => 3, 'jenis' => 'wajib'],
+                ['nama' => 'Organisasi Internasional', 'bobot' => 3, 'jenis' => 'peminatan'],
+                ['nama' => 'Hukum Internasional', 'bobot' => 3, 'jenis' => 'peminatan'],
+            ],
+        ];
 
-        //     switch ($soal->tipe) {
-        //         case 'pilihan_ganda':
-        //         case 'true_false':
-        //             // jawaban benar
-        //             $jawaban = $soal->kunci_jawaban;
-        //             $skor = $soal->skor;
-        //             break;
+        $matkulList = [];
+        foreach ($matkulData as $jurusanId => $matkuls) {
+            foreach ($matkuls as $matkul) {
+                $matkulList[] = MataPelajaranMaster::create([
+                    'nama' => $matkul['nama'],
+                    'id_jurusan' => $jurusanId,
+                    'bobot' => $matkul['bobot'],
+                    'jenis' => $matkul['jenis'],
+                ]);
+            }
+        }
+        $this->command->info('   ✓ ' . count($matkulList) . ' Mata Kuliah Master created');
 
-        //         case 'essay':
-        //             $jawaban = 'Jawaban essay mahasiswa';
-        //             // skor essay biasanya manual
-        //             $skor = intval($soal->skor / 2);
-        //             break;
-        //     }
+        // ============================================
+        // 7. DOSEN (15 dosen)
+        // ============================================
+        $this->command->info('👨‍🏫 Membuat Data Dosen...');
+        $dosenNamas = [
+            'Dr. Ahmad Fauzi, M.Kom', 'Dr. Siti Nurhaliza, M.T', 'Prof. Budi Santoso, Ph.D',
+            'Dr. Dewi Lestari, M.M', 'Dr. Eko Prasetyo, M.Ak', 'Dr. Fitri Handayani, M.E',
+            'Dr. Gunawan, M.I.Kom', 'Dr. Hendra Wijaya, M.AP', 'Dr. Indah Permata, M.HI',
+            'Ir. Joko Susilo, M.T', 'Dra. Kartika Sari, M.M', 'Drs. Lukman Hakim, M.Si',
+            'Dr. Maya Anggraini, M.Kom', 'Dr. Nugroho, M.E', 'Dr. Olivia Tan, M.I.Kom',
+        ];
+        
+        $dosenList = [];
+        foreach ($dosenNamas as $nama) {
+            $dosenList[] = DosenData::create(['nama' => $nama]);
+        }
+        $this->command->info('   ✓ ' . count($dosenList) . ' Dosen created');
 
-        //     SiswaJawaban::create([
-        //         'id_soal_evaluasi' => $soal->id,
-        //         'id_akademik_krs' => $krsId,
-        //         'jawaban' => $jawaban,
-        //         'skor' => $skor,
-        //         'waktu_submit' => Carbon::now(),
-        //     ]);
-        // }
+        // ============================================
+        // 9. KURIKULUM & KELAS (untuk 2 tahun akademik)
+        // ============================================
+        $this->command->info('📋 Membuat Kurikulum dan Kelas...');
+        
+        $kelasList = [];
+        $kurikulumList = [];
+        
+        // Loop untuk 2 tahun akademik (tahun ke-3 dan ke-4 yang aktif)
+        for ($tahunIdx = 2; $tahunIdx < 4; $tahunIdx++) {
+            $tahun = $tahunAkademik[$tahunIdx];
+            
+            foreach ($jurusanList as $jurusan) {
+                // Buat kurikulum untuk setiap jurusan
+                $kurikulum = Kurikulum::create([
+                    'nama' => "Kurikulum {$jurusan->nama} {$tahun->nama}",
+                    'id_jurusan' => $jurusan->id,
+                    'id_tahun_akademik' => $tahun->id,
+                    'id_jenjang_pendidikan' => $jenjangS1->id,
+                    'status_aktif' => 'Y',
+                ]);
+                $kurikulumList[] = $kurikulum;
 
-        // PertemuanKelas::factory()->count(10)->create();
+                // Tambahkan mata kuliah ke kurikulum
+                $matkulJurusan = array_filter($matkulList, function($m) use ($jurusan) {
+                    return $m->id_jurusan == $jurusan->id;
+                });
 
-        // $mapelKelasList = MataPelajaranKelas::pluck('id');
+                foreach ($matkulJurusan as $idx => $matkul) {
+                    MataPelajaranKurikulum::create([
+                        'id_kurikulum' => $kurikulum->id,
+                        'id_mata_pelajaran_master' => $matkul->id,
+                        'semester' => ($idx < 3) ? 1 : 2, // 3 matkul semester 1, sisanya semester 2
+                    ]);
+                }
 
-        // foreach ($mapelKelasList as $mapelKelasId) {
-        //     for ($i = 1; $i <= 4; $i++) {
-        //         PertemuanKelas::create([
-        //             'id_mata_pelajaran_kelas' => $mapelKelasId,
-        //             'pertemuan_ke' => $i,
-        //             'tanggal' => Carbon::now()->addWeeks($i),
-        //             'materi' => "Materi Pertemuan Ke-{$i}",
-        //         ]);
-        //     }
-        // }
+                // Buat kelas untuk program Reguler Pagi dan Reguler Sore
+                $programA = ReferenceOption::where('nama_grup', 'program_kelas')->where('kode', 'A')->first();
+                $programB = ReferenceOption::where('nama_grup', 'program_kelas')->where('kode', 'B')->first();
+                
+                foreach ([$programA, $programB] as $program) {
+                    if (!$program) continue;
+                    
+                    $kelas = Kelas::create([
+                        'ro_program_kelas' => $program->id,
+                        'semester' => 1,
+                        'id_jenjang_pendidikan' => $jenjangS1->id,
+                        'id_tahun_akademik' => $tahun->id,
+                        'id_jurusan' => $jurusan->id,
+                        'status_aktif' => 'Y',
+                    ]);
+                    $kelasList[] = [
+                        'kelas' => $kelas,
+                        'jurusan' => $jurusan,
+                        'kurikulum' => $kurikulum,
+                        'tahun' => $tahun,
+                        'program' => $program,
+                    ];
+                }
+            }
+        }
+        $this->command->info('   ✓ ' . count($kelasList) . ' Kelas created');
+        $this->command->info('   ✓ ' . count($kurikulumList) . ' Kurikulum created');
 
-        // AbsensiSiswa::factory()->count(30)->create();
+        // ============================================
+        // 10. MAHASISWA (10 per prodi = 90 total per tahun, 180 total)
+        // ============================================
+        $this->command->info('👨‍🎓 Membuat Data Mahasiswa...');
+        
+        $allKrs = [];
+        $mahasiswaCounter = 1;
+        
+        foreach ($kelasList as $kelasData) {
+            $kelas = $kelasData['kelas'];
+            $jurusan = $kelasData['jurusan'];
+            $tahun = $kelasData['tahun'];
+            $program = $kelasData['program'];
+            
+            // Tentukan angkatan berdasarkan tahun akademik
+            $angkatan = (strpos($tahun->nama, '2024') !== false) ? 2024 : 2025;
+            
+            for ($i = 1; $i <= 10; $i++) {
+                $nim = $angkatan . str_pad($jurusan->id, 2, '0', STR_PAD_LEFT) . str_pad($mahasiswaCounter, 4, '0', STR_PAD_LEFT);
+                
+                $siswa = SiswaData::create([
+                    'nama' => fake()->name(),
+                    'nomor_induk' => $nim,
+                ]);
 
-        // $krsId = AkademikKrs::first()?->id;
+                // Ambil status siswa aktif dari reference_option
+                $statusAktif = ReferenceOption::where('nama_grup', 'status_siswa')
+                    ->where('nilai', 'Aktif')
+                    ->first();
 
-        // if (!$krsId) {
-        //     return;
-        // }
+                $riwayat = RiwayatPendidikan::create([
+                    'id_siswa_data' => $siswa->id,
+                    'id_jenjang_pendidikan' => $jenjangS1->id,
+                    'id_jurusan' => $jurusan->id,
+                    'ro_status_siswa' => $statusAktif ? $statusAktif->id : null,
+                    'angkatan' => $angkatan,
+                    'tanggal_mulai' => Carbon::create($angkatan, 9, 1),
+                    'tanggal_selesai' => null,
+                ]);
 
-        // $statusList = ['Hadir', 'Izin', 'Sakit', 'Alpa'];
+                $krs = AkademikKrs::create([
+                    'id_riwayat_pendidikan' => $riwayat->id,
+                    'id_kelas' => $kelas->id,
+                    'semester' => 1,
+                    'status_bayar' => 'Y',
+                    'jumlah_sks' => 15,
+                    'status_aktif' => 'Y',
+                ]);
+                
+                $allKrs[] = [
+                    'krs' => $krs,
+                    'siswa' => $siswa,
+                    'jurusan' => $jurusan,
+                ];
 
-        // $pertemuanList = PertemuanKelas::pluck('id');
+                $mahasiswaCounter++;
+            }
+        }
 
-        // foreach ($pertemuanList as $pertemuanId) {
-        //     AbsensiSiswa::create([
-        //         'id_pertemuan' => $pertemuanId,
-        //         'id_krs' => $krsId,
-        //         'status' => $statusList[array_rand($statusList)],
-        //         'waktu_absen' => Carbon::now(),
-        //     ]);
-        // }
-        // $krsId = AkademikKrs::first()?->id;
+        $this->command->info('   ✓ Total Mahasiswa: ' . count($allKrs));
 
-        // if (!$krsId) {
-        //     return;
-        // }
+        // ============================================
+        // 11. MATA PELAJARAN KELAS & JADWAL
+        // ============================================
+        $this->command->info('📚 Membuat Jadwal Mata Kuliah...');
+        
+        $mataPelajaranKelasList = [];
+        
+        foreach ($kelasList as $kelasData) {
+            $kelas = $kelasData['kelas'];
+            $kurikulum = $kelasData['kurikulum'];
+            
+            // Ambil mata kuliah dari kurikulum
+            $matkulKurikulum = MataPelajaranKurikulum::where('id_kurikulum', $kurikulum->id)->get();
+            
+            foreach ($matkulKurikulum as $mk) {
+                $dosen = $dosenList[array_rand($dosenList)];
+                $ruang = ReferenceOption::where('nama_grup', 'ruang_kelas')->inRandomOrder()->first();
+                
+                $mpKelas = MataPelajaranKelas::create([
+                    'id_mata_pelajaran_kurikulum' => $mk->id,
+                    'id_kelas' => $kelas->id,
+                    'id_dosen_data' => $dosen->id,
+                    'uts' => Carbon::now()->addWeeks(8),
+                    'uas' => Carbon::now()->addWeeks(16),
+                    'ro_ruang_kelas' => $ruang->id,
+                ]);
+                
+                $mataPelajaranKelasList[] = $mpKelas;
+            }
+        }
+        $this->command->info('   ✓ ' . count($mataPelajaranKelasList) . ' Jadwal Mata Kuliah created');
 
-        // // Ambil semua mata pelajaran kelas
-        // $mapelKelasList = MataPelajaranKelas::pluck('id');
+        // ============================================
+        // 16. DATA LJK (Lembar Jawaban Komputer / Nilai)
+        // ============================================
+        $this->command->info('📊 Membuat Data LJK (Nilai)...');
+        
+        $ljkCounter = 0;
+        foreach ($allKrs as $krsData) {
+            $krs = $krsData['krs'];
+            
+            // Ambil semua mata pelajaran untuk kelas ini
+            $mataPelajaranKelas = MataPelajaranKelas::where('id_kelas', $krs->id_kelas)->get();
+            
+            foreach ($mataPelajaranKelas as $mpKelas) {
+                $nilai = rand(60, 95) + (rand(0, 99) / 100);
+                
+                SiswaDataLjk::create([
+                    'id_akademik_krs' => $krs->id,
+                    'id_mata_pelajaran_kelas' => $mpKelas->id,
+                    'nilai' => $nilai,
+                ]);
+                $ljkCounter++;
+            }
+        }
 
-        // foreach ($mapelKelasList as $mapelKelasId) {
-        //     SiswaDataLjk::create([
-        //         'id_akademik_krs' => $krsId,
-        //         'id_mata_pelajaran_kelas' => $mapelKelasId,
-        //         'nilai' => rand(70, 95) + (rand(0, 99) / 100), // contoh 70.00 – 95.99
-        //     ]);
-        // }
-        // SiswaDataLjk::factory()->count(20)->create();
+        $this->command->info('   ✓ ' . $ljkCounter . ' Data LJK created');
+        $this->command->info('');
+        $this->command->info('🎉 ========================================');
+        $this->command->info('✅ SEEDING SELESAI!');
+        $this->command->info('🎉 ========================================');
+        $this->command->info('');
+        $this->command->info('📊 Ringkasan Data:');
+        $this->command->info('   - Jenjang Pendidikan: 1');
+        $this->command->info('   - Tahun Akademik: ' . count($tahunAkademik));
+        $this->command->info('   - Fakultas: ' . count($fakultasList));
+        $this->command->info('   - Program Studi: ' . count($jurusanList));
+        $this->command->info('   - Mata Kuliah: ' . count($matkulList));
+        $this->command->info('   - Dosen: ' . count($dosenList));
+        $this->command->info('   - Kelas: ' . count($kelasList));
+        $this->command->info('   - Kurikulum: ' . count($kurikulumList));
+        $this->command->info('   - Mahasiswa: ' . count($allKrs));
+        $this->command->info('   - Jadwal Mata Kuliah: ' . count($mataPelajaranKelasList));
+        $this->command->info('   - Data LJK: ' . $ljkCounter);
+        $this->command->info('');
     }
 }

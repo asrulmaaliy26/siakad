@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SiswaDataLJK extends Model
 {
     use HasFactory;
-   protected $table = 'siswa_data_ljk';
+    protected $table = 'siswa_data_ljk';
     // protected $primaryKey = 'id_data_ljk';
 
     protected $fillable = [
@@ -22,8 +22,7 @@ class SiswaDataLJK extends Model
     ];
 
     /* ================= RELATIONS ================= */
-
-    public function krs()
+    public function akademikKrs()
     {
         return $this->belongsTo(AkademikKrs::class, 'id_akademik_krs');
     }

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\MataPelajaranKelas;
 use App\Filament\Resources\MataPelajaranKelas\Pages\CreateMataPelajaranKelas;
 use App\Filament\Resources\MataPelajaranKelas\Pages\EditMataPelajaranKelas;
 use App\Filament\Resources\MataPelajaranKelas\Pages\ListMataPelajaranKelas;
+use App\Filament\Resources\MataPelajaranKelas\Pages\ViewMataPelajaranKelas;
 use App\Filament\Resources\MataPelajaranKelas\Schemas\MataPelajaranKelasForm;
 use App\Filament\Resources\MataPelajaranKelas\Tables\MataPelajaranKelasTable;
 use App\Models\MataPelajaranKelas;
@@ -21,9 +22,11 @@ class MataPelajaranKelasResource extends Resource
     protected static ?string $model = MataPelajaranKelas::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Temp';
 
     protected static ?string $recordTitleAttribute = 'nama';
+    protected static string | UnitEnum | null $navigationGroup = 'Perkuliahan';
+    protected static ?int $navigationSort = 12;
+    protected static ?string $navigationLabel = 'Perkuliahan';
 
     public static function form(Schema $schema): Schema
     {
@@ -47,6 +50,7 @@ class MataPelajaranKelasResource extends Resource
         return [
             'index' => ListMataPelajaranKelas::route('/'),
             'create' => CreateMataPelajaranKelas::route('/create'),
+            'view' => ViewMataPelajaranKelas::route('/{record}'),
             'edit' => EditMataPelajaranKelas::route('/{record}/edit'),
         ];
     }

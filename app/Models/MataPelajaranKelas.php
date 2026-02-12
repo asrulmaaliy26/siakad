@@ -39,14 +39,25 @@ class MataPelajaranKelas extends Model
 
     public function ruangKelas()
     {
-        return $this->belongsTo(RuangKelas::class, 'id_ruang_kelas');
+        return $this->belongsTo(RuangKelas::class, 'ro_ruang_kelas');
     }
+
     public function pertemuanKelas()
     {
         return $this->hasMany(
             PertemuanKelas::class,
-            'id_mata_pelajaran_kelas',   // FK di tabel mata_pelajaran_kelas
-            'id'          // PK di tabel kelas
+            'id_mata_pelajaran_kelas',
+            'id'
         );
+    }
+
+    public function siswaDataLjk()
+    {
+        return $this->hasMany(SiswaDataLJK::class, 'id_mata_pelajaran_kelas');
+    }
+
+    public function absensiSiswa()
+    {
+        return $this->hasMany(AbsensiSiswa::class, 'id_mata_pelajaran_kelas');
     }
 }

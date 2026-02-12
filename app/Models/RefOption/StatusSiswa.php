@@ -30,8 +30,8 @@ class StatusSiswa extends Model
      */
     protected static function booted()
     {
-        static::addGlobalScope('status_mhs', function ($query) {
-            $query->where('nama_grup', 'status_mhs');
+        static::addGlobalScope('status_siswa', function ($query) {
+            $query->where('nama_grup', 'status_siswa');
         });
     }
 

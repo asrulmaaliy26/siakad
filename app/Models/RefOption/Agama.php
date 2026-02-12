@@ -57,7 +57,7 @@ class Agama extends Model
      */
     public function DosenData()
     {
-        return $this->hasMany(\App\Models\DosenData::class, 'id_agama');
+        return $this->hasMany(\App\Models\DosenData::class, 'ro_agama');
     }
 
     /**

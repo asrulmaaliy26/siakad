@@ -21,7 +21,7 @@ class MataPelajaranKelasTable
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('kelas.programKelas.nama')
+                TextColumn::make('kelas.programKelas.nilai')
                     ->sortable()
                     ->toggleable(),
 
@@ -116,6 +116,7 @@ class MataPelajaranKelasTable
                 //
             ])
             ->recordActions([
+                \Filament\Actions\ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

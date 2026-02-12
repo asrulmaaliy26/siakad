@@ -8,7 +8,6 @@ SET FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS `siswa_data_ljk`;
 DROP TABLE IF EXISTS `absensi_siswa`;
-DROP TABLE IF EXISTS `pertemuan_kelas`;
 DROP TABLE IF EXISTS `mata_pelajaran_kelas`;
 DROP TABLE IF EXISTS `akademik_krs`;
 DROP TABLE IF EXISTS `riwayat_pendidikan`;
@@ -387,22 +386,6 @@ CREATE TABLE `akademik_krs` (
   KEY `fk_krs_kelas` (`id_kelas`),
   CONSTRAINT `fk_krs_riwayat` FOREIGN KEY (`id_riwayat_pendidikan`) REFERENCES `riwayat_pendidikan` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_krs_kelas` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ============================================
--- 15. PERTEMUAN KELAS
--- ============================================
-CREATE TABLE `pertemuan_kelas` (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_mata_pelajaran_kelas` bigint(20) UNSIGNED NOT NULL,
-  `pertemuan_ke` int(11) NOT NULL,
-  `tanggal` date DEFAULT NULL,
-  `materi` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_pertemuan_mpk` (`id_mata_pelajaran_kelas`),
-  CONSTRAINT `fk_pertemuan_mpk` FOREIGN KEY (`id_mata_pelajaran_kelas`) REFERENCES `mata_pelajaran_kelas` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================

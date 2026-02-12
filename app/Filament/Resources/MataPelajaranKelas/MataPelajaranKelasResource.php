@@ -7,6 +7,7 @@ use App\Filament\Resources\MataPelajaranKelas\Pages\EditMataPelajaranKelas;
 use App\Filament\Resources\MataPelajaranKelas\Pages\ListMataPelajaranKelas;
 use App\Filament\Resources\MataPelajaranKelas\Pages\ViewMataPelajaranKelas;
 use App\Filament\Resources\MataPelajaranKelas\Schemas\MataPelajaranKelasForm;
+use App\Filament\Resources\MataPelajaranKelas\Schemas\MataPelajaranKelasInfolist;
 use App\Filament\Resources\MataPelajaranKelas\Tables\MataPelajaranKelasTable;
 use App\Models\MataPelajaranKelas;
 use BackedEnum;
@@ -14,8 +15,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use UnitEnum;
-use Illuminate\Database\Eloquent\Builder;
 
 class MataPelajaranKelasResource extends Resource
 {
@@ -24,13 +23,15 @@ class MataPelajaranKelasResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'nama';
-    protected static string | UnitEnum | null $navigationGroup = 'Perkuliahan';
-    protected static ?int $navigationSort = 12;
-    protected static ?string $navigationLabel = 'Perkuliahan';
 
     public static function form(Schema $schema): Schema
     {
         return MataPelajaranKelasForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return MataPelajaranKelasInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -53,16 +54,5 @@ class MataPelajaranKelasResource extends Resource
             'view' => ViewMataPelajaranKelas::route('/{record}'),
             'edit' => EditMataPelajaranKelas::route('/{record}/edit'),
         ];
-    }
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->with([
-                'mataPelajaranKurikulum.MataPelajaranMaster',
-                'mataPelajaranKurikulum.kurikulum.jurusan',
-                'dosen',
-                'kelas.programKelas',
-                'kelas.tahunAkademik',
-            ]);
     }
 }

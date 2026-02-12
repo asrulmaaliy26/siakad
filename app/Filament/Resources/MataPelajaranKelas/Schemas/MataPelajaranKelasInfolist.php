@@ -4,7 +4,7 @@ namespace App\Filament\Resources\MataPelajaranKelas\Schemas;
 
 use Filament\Schemas\Schema;
 
-class MataPelajaranKelasForm
+class MataPelajaranKelasInfolist
 {
     public static function configure(Schema $schema): Schema
     {

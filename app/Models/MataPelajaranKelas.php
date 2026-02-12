@@ -37,6 +37,12 @@ class MataPelajaranKelas extends Model
         return $this->belongsTo(DosenData::class, 'id_dosen_data');
     }
 
+    // Alias untuk konsistensi penamaan
+    public function dosenData()
+    {
+        return $this->dosen();
+    }
+
     public function ruangKelas()
     {
         return $this->belongsTo(RuangKelas::class, 'ro_ruang_kelas');

@@ -56,6 +56,12 @@ class RiwayatPendidikan extends Model
         return $this->belongsTo(SiswaData::class, 'id_siswa_data');
     }
 
+    // Alias untuk konsistensi penamaan
+    public function siswaData()
+    {
+        return $this->siswa();
+    }
+
     public function jurusan()
     {
         return $this->belongsTo(Jurusan::class, 'id_jurusan');
@@ -84,7 +90,7 @@ class RiwayatPendidikan extends Model
     {
         return $this->belongsTo(StatusSiswa::class, 'ro_status_siswa');
     }
-    
+
     public function programSekolah()
     {
         return $this->belongsTo(ProgramSekolah::class, 'ro_program_sekolah');
@@ -99,5 +105,4 @@ class RiwayatPendidikan extends Model
     {
         return $this->belongsTo(JenisKeluar::class, 'ro_jns_keluar');
     }
-
 }

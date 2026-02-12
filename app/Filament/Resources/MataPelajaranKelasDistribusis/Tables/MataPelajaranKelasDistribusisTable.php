@@ -15,7 +15,7 @@ class MataPelajaranKelasDistribusisTable
     {
         return $table
             ->columns([
-                 TextColumn::make(name: 'mataPelajaranKurikulum.mataPelajaranMaster.nama')
+                TextColumn::make(name: 'mataPelajaranKurikulum.mataPelajaranMaster.nama')
                     ->label('Mata Pelajaran')
                     ->numeric()
                     ->sortable()
@@ -115,7 +115,7 @@ class MataPelajaranKelasDistribusisTable
 
                 TextColumn::make('link_kelas')
                     ->label('Link Kelas')
-                    ->url(fn ($record) => $record->link_kelas ?: null)
+                    ->url(fn($record) => $record->link_kelas ?: null)
                     ->openUrlInNewTab()
                     ->toggleable(),
 

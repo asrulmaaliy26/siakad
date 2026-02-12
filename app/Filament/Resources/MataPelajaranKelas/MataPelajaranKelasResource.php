@@ -49,7 +49,8 @@ class MataPelajaranKelasResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\SiswaDataLjkRelationManager::class,
+            RelationManagers\AbsensiSiswaRelationManager::class,
         ];
     }
 

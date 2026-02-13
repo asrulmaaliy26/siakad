@@ -39,7 +39,7 @@ class AkademikKrsResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\SiswaDataLjkRelationManager::class,
         ];
     }
 

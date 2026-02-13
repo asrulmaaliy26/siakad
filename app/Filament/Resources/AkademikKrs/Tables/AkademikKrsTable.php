@@ -4,6 +4,7 @@ namespace App\Filament\Resources\AkademikKrs\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
@@ -164,6 +165,16 @@ class AkademikKrsTable
             ])
             ->headerActions([])
             ->actions([
+                Action::make('view_subjects')
+                    ->label('Mata Pelajaran')
+                    ->icon('heroicon-o-book-open')
+                    ->color('info')
+                    ->modalHeading('Daftar Mata Pelajaran')
+                    ->modalContent(fn($record) => view('filament.resources.akademik-krs.actions.view-subjects', ['record' => $record]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(false)
+                    ->closeModalByClickingAway(false),
+
                 EditAction::make()
                     ->label('Edit')
                     ->icon('heroicon-o-pencil')

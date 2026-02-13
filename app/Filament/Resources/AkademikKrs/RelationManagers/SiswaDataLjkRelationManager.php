@@ -14,6 +14,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use App\Models\MataPelajaranKelas;
+use Illuminate\Database\Eloquent\Builder;
 
 class SiswaDataLjkRelationManager extends RelationManager
 {
@@ -25,11 +26,16 @@ class SiswaDataLjkRelationManager extends RelationManager
             ->components([
                 Select::make('id_mata_pelajaran_kelas')
                     ->label('Mata Pelajaran Kelas')
-                    ->relationship('mataPelajaranKelas', 'id')
+                    ->relationship('mataPelajaranKelas', 'id', modifyQueryUsing: function (Builder $query) {
+                        $query->with(['mataPelajaranKurikulum.mataPelajaranMaster', 'dosenData', 'ruangKelas']);
+                    })
                     ->getOptionLabelFromRecordUsing(function (MataPelajaranKelas $record) {
                         $namaMatkul = $record->mataPelajaranKurikulum->mataPelajaranMaster->nama ?? '-';
+                        $hari = $record->hari ?? '-';
+                        $jam = $record->jam ?? '-';
+                        $dosen = $record->dosenData->nama ?? 'Belum ada Dosen';
                         $ruang = $record->ruangKelas->nama ?? '-';
-                        return "{$namaMatkul} - {$record->hari}, {$record->jam} ({$ruang})";
+                        return "{$namaMatkul} - {$hari}, {$jam} ({$ruang}) - {$dosen}";
                     })
                     ->searchable()
                     ->preload()
@@ -51,12 +57,13 @@ class SiswaDataLjkRelationManager extends RelationManager
                     ->label('Dosen Pengajar')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('mataPelajaranKelas.hari')
-                    ->label('Hari')
-                    ->sortable(),
-                TextColumn::make('mataPelajaranKelas.jam')
-                    ->label('Jam')
-                    ->sortable(),
+                TextColumn::make('jadwal')
+                    ->label('Jadwal')
+                    ->state(function ($record) {
+                        $mpk = $record->mataPelajaranKelas;
+                        return $mpk ? "{$mpk->hari}, {$mpk->jam}" : '-';
+                    })
+                    ->sortable(['hari', 'jam']),
                 TextColumn::make('mataPelajaranKelas.ruangKelas.nama')
                     ->label('Ruang')
                     ->placeholder('-'),
@@ -68,8 +75,13 @@ class SiswaDataLjkRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make()
-                    ->label('Tambah Mata Pelajaran'),
+                \Filament\Actions\Action::make('tambah')
+                    ->label('Tambah Mata Pelajaran')
+                    ->modalHeading('Pilih Mata Pelajaran')
+                    ->modalContent(fn() => view('filament.resources.akademik-krs.actions.view-subjects', ['record' => $this->getOwnerRecord()]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(false)
+                    ->closeModalByClickingAway(false),
             ])
             ->actions([
                 EditAction::make(),

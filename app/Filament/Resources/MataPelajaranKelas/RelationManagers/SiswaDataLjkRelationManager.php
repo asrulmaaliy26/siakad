@@ -20,6 +20,7 @@ use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\SelectColumn;
 
 class SiswaDataLjkRelationManager extends RelationManager
 {
@@ -35,7 +36,7 @@ class SiswaDataLjkRelationManager extends RelationManager
                     ->label('Nama Mahasiswa')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('akademikKrs.riwayatPendidikan.nomor_induk')
+                TextColumn::make('akademikKrs.riwayatPendidikan.siswaData.nomor_induk')
                     ->label('NIM')
                     ->searchable()
                     ->sortable(),
@@ -68,8 +69,24 @@ class SiswaDataLjkRelationManager extends RelationManager
                 TextInputColumn::make('Nilai_Huruf')
                     ->label('Nilai Huruf')
                     ->sortable(),
-                TextInputColumn::make('Status_Nilai')
+                SelectColumn::make('Status_Nilai')
                     ->label('Status Nilai')
+                    ->options([
+                        'L' => 'Lulus',
+                        'TL' => 'Tidak Lulus',
+                    ])
+                    ->selectablePlaceholder(false)
+                    // ->extraAttributes(function ($state) {
+                    //     $bg = match ($state) {
+                    //         'L' => 'bg-success-100 text-success-800',
+                    //         'TL' => 'bg-danger-100 text-danger-800',
+                    //         default => 'bg-gray-100 text-gray-800',
+                    //     };
+
+                    //     return [
+                    //         'class' => "$bg px-3 py-1.5 rounded-lg font-medium text-center inline-block w-full",
+                    //     ];
+                    // })
                     ->sortable(),
             ])
             ->filters([

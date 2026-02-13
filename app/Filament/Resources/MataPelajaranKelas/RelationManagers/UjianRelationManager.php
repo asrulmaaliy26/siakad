@@ -68,7 +68,7 @@ class UjianRelationManager extends RelationManager
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('akademikKrs.riwayatPendidikan.nomor_induk')
+                TextColumn::make('akademikKrs.riwayatPendidikan.siswaData.nomor_induk')
                     ->label('NIM')
                     ->searchable()
                     ->sortable(),

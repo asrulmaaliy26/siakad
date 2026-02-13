@@ -46,7 +46,7 @@ class AbsensiSiswaRelationManager extends RelationManager
                     ->label('Nama Siswa')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('krs.riwayatPendidikan.nomor_induk') // Changed from nis to nomor_induk based on typical schema, user query said sd.nomor_induk
+                TextColumn::make('krs.riwayatPendidikan.siswaData.nomor_induk') // Changed from nis to nomor_induk based on typical schema, user query said sd.nomor_induk
                     ->label('NIM')
                     ->searchable()
                     ->sortable(),

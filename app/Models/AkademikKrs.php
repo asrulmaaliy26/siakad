@@ -15,11 +15,14 @@ class AkademikKrs extends Model
         'semester',
         'jumlah_sks',
         'tgl_krs',
-        'kode_ta',
+        'kode_tahun',
         'status_bayar',
         'syarat_uts',
+        'syarat_uas',
         'syarat_krs',
-        'kwitansi_krs',
+        'syarat_lain',
+        'kwitansi_krs', // berkas / file uploud
+        'berkas_lain', // berkas / file uploud
         'status_aktif',
     ];
 

@@ -8,6 +8,8 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Schemas\Schema;
 
@@ -104,6 +106,15 @@ class MataPelajaranKelasForm
                             ->label('Tanggal UTS (Alternatif)'),
                         TextInput::make('ruang_uts')
                             ->label('Ruang UTS'),
+                        FileUpload::make('soal_uts')
+                            ->label('Upload File Soal UTS')
+                            ->directory('soal-uts')
+                            ->downloadable()
+                            ->openable()
+                            ->columnSpanFull(),
+                        RichEditor::make('ctt_soal_uts')
+                            ->label('Soal UTS (Rich Text)')
+                            ->columnSpanFull(),
                     ]),
 
                 Section::make('Ujian Akhir Semester (UAS)')
@@ -127,6 +138,15 @@ class MataPelajaranKelasForm
                             ->relationship('pengawas', 'nama')
                             ->searchable()
                             ->preload(),
+                        FileUpload::make('soal_uas')
+                            ->label('Upload File Soal UAS')
+                            ->directory('soal-uas')
+                            ->downloadable()
+                            ->openable()
+                            ->columnSpanFull(),
+                        RichEditor::make('ctt_soal_uas')
+                            ->label('Soal UAS (Rich Text)')
+                            ->columnSpanFull(),
                     ]),
             ]);
     }

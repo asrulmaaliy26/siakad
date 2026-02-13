@@ -31,6 +31,8 @@ class MataPelajaranKelas extends Model
         'ruang_uas',
         'link_kelas',
         'passcode',
+        'ctt_soal_uts',
+        'ctt_soal_uas',
     ];
 
     public function mataPelajaranKurikulum()

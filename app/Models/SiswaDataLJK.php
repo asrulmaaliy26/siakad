@@ -14,7 +14,31 @@ class SiswaDataLJK extends Model
     protected $fillable = [
         'id_akademik_krs',
         'id_mata_pelajaran_kelas',
-        'nilai'
+        'nilai',
+        'ljk_simulasi',
+        'ljk_uas',
+        'artikel_uas',
+        'tgl_upload_ljk_uas',
+        'tgl_upload_artikel_uas',
+        'ljk_uts',
+        'artikel_uts',
+        'tgl_upload_ljk_uts',
+        'tgl_upload_artikel_uas',
+        'tugas',
+        'tgl_upload_tugas',
+        'Nilai_UTS',
+        'Nilai_TGS',
+        'Nilai_UAS',
+        'Nilai_Performance',
+        'Nilai_Akhir',
+        'Nilai_Huruf',
+        'Status_Nilai',
+        'Rekom_Nilai',
+        'ket',
+        'transfer',
+        'cekal_kuliah',
+        'ctt_uts',
+        'ctt_uas',
     ];
 
     protected $casts = [

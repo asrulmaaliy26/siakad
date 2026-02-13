@@ -39,10 +39,37 @@ class SiswaDataLjkRelationManager extends RelationManager
                     ->label('NIM')
                     ->searchable()
                     ->sortable(),
-                TextInputColumn::make('nilai')
+                TextInputColumn::make('nilai'),
+                TextInputColumn::make('Nilai_UTS')
+                    ->label('Nilai UTS')
+                    ->type('number')
+                    ->step(0.01)
+                    ->sortable(),
+                TextInputColumn::make('Nilai_TGS')
+                    ->label('Nilai TGS')
+                    ->type('number')
+                    ->step(0.01)
+                    ->sortable(),
+                TextInputColumn::make('Nilai_UAS')
+                    ->label('Nilai UAS')
+                    ->type('number')
+                    ->step(0.01)
+                    ->sortable(),
+                TextInputColumn::make('Nilai_Performance')
+                    ->label('Nilai Performance')
+                    ->type('number')
+                    ->step(0.01)
+                    ->sortable(),
+                TextInputColumn::make('Nilai_Akhir')
                     ->label('Nilai Akhir')
                     ->type('number')
                     ->step(0.01)
+                    ->sortable(),
+                TextInputColumn::make('Nilai_Huruf')
+                    ->label('Nilai Huruf')
+                    ->sortable(),
+                TextInputColumn::make('Status_Nilai')
+                    ->label('Status Nilai')
                     ->sortable(),
             ])
             ->filters([

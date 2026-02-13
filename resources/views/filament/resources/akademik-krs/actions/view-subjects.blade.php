@@ -3,5 +3,5 @@
         Daftar mata pelajaran yang diambil oleh mahasiswa ini.
     </div>
 
-    @livewire('siswa-data-ljk-modal', ['recordId' => $record->id], 'subjects-' . $record->id)
+    @livewire('siswa-data-ljk-modal', ['recordId' => $record->id, 'excludeTaken' => $excludeTaken ?? false], 'subjects-' . $record->id)
 </div>

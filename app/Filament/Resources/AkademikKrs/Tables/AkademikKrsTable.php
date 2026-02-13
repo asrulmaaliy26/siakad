@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\BadgeColumn;
@@ -165,6 +166,7 @@ class AkademikKrsTable
             ])
             ->headerActions([])
             ->actions([
+                ViewAction::make(),
                 Action::make('view_subjects')
                     ->label('Mata Pelajaran')
                     ->icon('heroicon-o-book-open')

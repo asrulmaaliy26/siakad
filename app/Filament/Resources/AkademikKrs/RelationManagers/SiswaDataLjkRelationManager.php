@@ -78,7 +78,7 @@ class SiswaDataLjkRelationManager extends RelationManager
                 \Filament\Actions\Action::make('tambah')
                     ->label('Tambah Mata Pelajaran')
                     ->modalHeading('Pilih Mata Pelajaran')
-                    ->modalContent(fn() => view('filament.resources.akademik-krs.actions.view-subjects', ['record' => $this->getOwnerRecord()]))
+                    ->modalContent(fn() => view('filament.resources.akademik-krs.actions.view-subjects', ['record' => $this->getOwnerRecord(), 'excludeTaken' => true]))
                     ->modalSubmitAction(false)
                     ->modalCancelAction(false)
                     ->closeModalByClickingAway(false),

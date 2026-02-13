@@ -33,10 +33,12 @@ class SiswaDataLjkModal extends Component implements HasForms, HasTable, HasActi
     public int $recordId;
     public array $takenSubjectIds = [];
     public ?int $studentJurusanId = null;
+    public bool $excludeTaken = false;
 
-    public function mount(int $recordId)
+    public function mount(int $recordId, bool $excludeTaken = false)
     {
         $this->recordId = $recordId;
+        $this->excludeTaken = $excludeTaken;
         $this->refreshTakenSubjects();
 
         $krs = AkademikKrs::with('riwayatPendidikan')->find($recordId);
@@ -60,7 +62,9 @@ class SiswaDataLjkModal extends Component implements HasForms, HasTable, HasActi
                     ->with(['mataPelajaranKurikulum.mataPelajaranMaster', 'dosenData', 'ruangKelas'])
             )
             ->modifyQueryUsing(function (Builder $query) {
-                if (!empty($this->takenSubjectIds)) {
+                if ($this->excludeTaken && !empty($this->takenSubjectIds)) {
+                    $query->whereNotIn('id', $this->takenSubjectIds);
+                } elseif (!empty($this->takenSubjectIds)) {
                     $idsString = implode(',', $this->takenSubjectIds);
                     // Order by whether the ID is in the filtered list (putting them first)
                     // 1 = True (In List), 0 = False. DESC sorts 1 first.

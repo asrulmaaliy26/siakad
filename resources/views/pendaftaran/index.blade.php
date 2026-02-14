@@ -222,14 +222,25 @@
                                     <!-- Jenjang Pendidikan Moved to Top -->
 
                                     <div x-show="selectedJenjangName !== 'MA'" class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+
                                         <div>
-                                            <label class="block font-medium text-sm text-gray-700" for="Prodi_Pilihan_1">Prodi Pilihan 1</label>
-                                            <input type="text" name="Prodi_Pilihan_1" id="Prodi_Pilihan_1" value="{{ old('Prodi_Pilihan_1') }}" class="filament-input mt-1" placeholder="Misal: Teknik Informatika">
+                                            <label class="block font-medium text-sm text-gray-700" for="ro_program_sekolah">Program Sekolah</label>
+                                            <select name="ro_program_sekolah" id="ro_program_sekolah" class="filament-input mt-1" required>
+                                                <option value="">-- Pilih Program --</option>
+                                                @foreach($programSekolahs as $program)
+                                                <option value="{{ $program->id }}" {{ old('ro_program_sekolah') == $program->id ? 'selected' : '' }}>{{ $program->nilai }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
 
                                         <div>
-                                            <label class="block font-medium text-sm text-gray-700" for="Prodi_Pilihan_2">Prodi Pilihan 2</label>
-                                            <input type="text" name="Prodi_Pilihan_2" id="Prodi_Pilihan_2" value="{{ old('Prodi_Pilihan_2') }}" class="filament-input mt-1" placeholder="Misal: Sistem Informasi">
+                                            <label class="block font-medium text-sm text-gray-700" for="id_jurusan">Pilihan Jurusan</label>
+                                            <select name="id_jurusan" id="id_jurusan" class="filament-input mt-1">
+                                                <option value="">-- Pilih Jurusan --</option>
+                                                @foreach($jurusans as $jurusan)
+                                                <option value="{{ $jurusan->id }}" {{ old('id_jurusan') == $jurusan->id ? 'selected' : '' }}>{{ $jurusan->nama }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
 
                                         <div>
@@ -245,10 +256,10 @@
                                     <div>
                                         <label class="block font-medium text-sm text-gray-700" for="Jalur_PMB">Jalur Pendaftaran</label>
                                         <select name="Jalur_PMB" id="Jalur_PMB" class="filament-input mt-1">
-                                            <option value="Reguler" {{ old('Jalur_PMB') == 'Reguler' ? 'selected' : '' }}>Reguler</option>
-                                            <option value="Prestasi" {{ old('Jalur_PMB') == 'Prestasi' ? 'selected' : '' }}>Prestasi</option>
-                                            <option value="Beasiswa KIP" {{ old('Jalur_PMB') == 'Beasiswa KIP' ? 'selected' : '' }}>Beasiswa KIP</option>
-                                            <option value="Pindahan" {{ old('Jalur_PMB') == 'Pindahan' ? 'selected' : '' }}>Pindahan / Transfer</option>
+                                            <option value="">-- Pilih Jalur --</option>
+                                            @foreach($jalurPmbs as $jalur)
+                                            <option value="{{ $jalur->id }}" {{ old('Jalur_PMB') == $jalur->id ? 'selected' : '' }}>{{ $jalur->nilai }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div>

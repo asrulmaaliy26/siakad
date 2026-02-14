@@ -22,7 +22,11 @@ class PendaftaranController extends Controller
     public function index()
     {
         $jenjangs = JenjangPendidikan::all();
-        return view('pendaftaran.index', compact('jenjangs'));
+        $jurusans = \App\Models\Jurusan::all();
+        $jalurPmbs = \App\Models\ReferenceOption::where('nama_grup', 'jalur_pmb')->where('status', 1)->get();
+        // Ambil reference option untuk program sekolah
+        $programSekolahs = \App\Models\ReferenceOption::where('nama_grup', 'program_sekolah')->where('status', 1)->get();
+        return view('pendaftaran.index', compact('jenjangs', 'jurusans', 'jalurPmbs', 'programSekolahs'));
     }
 
     /**
@@ -89,9 +93,9 @@ class PendaftaranController extends Controller
             // Pendaftar Data (Extended)
             'nama_pendaftar' => ['nullable', 'string', 'max:255'],
             'Kelas_Program_Kuliah' => ['nullable', 'string', 'max:255'],
-            'Prodi_Pilihan_1' => ['nullable', 'string', 'max:255'],
-            'Prodi_Pilihan_2' => ['nullable', 'string', 'max:255'],
-            'Jalur_PMB' => ['nullable', 'string', 'max:255'],
+            'id_jurusan' => ['nullable', 'exists:jurusan,id'],
+            'ro_program_sekolah' => ['nullable', 'exists:reference_option,id'],
+            'Jalur_PMB' => ['nullable', 'exists:reference_option,id'], // ID Reference Option
             'Jenis_Pembiayaan' => ['nullable', 'string', 'max:255'],
             // Transfer Data
             'NIMKO_Asal' => ['nullable', 'string', 'max:255'],
@@ -275,15 +279,15 @@ class PendaftaranController extends Controller
             try {
                 $pendaftar = SiswaDataPendaftar::create([
                     'id_siswa_data' => $siswaData->id,
+                    'id_jenjang_pendidikan' => $request->id_jenjang_pendidikan,
 
                     // Registration Details
                     'Nama_Lengkap' => $namaLengkap,
                     'Tgl_Daftar' => now()->toDateString(),
-                    'program_sekolah' => 'S1',
+                    'ro_program_sekolah' => $request->ro_program_sekolah,
                     'Kelas_Program_Kuliah' => $request->Kelas_Program_Kuliah,
-                    'Prodi_Pilihan_1' => $request->Prodi_Pilihan_1,
-                    'Prodi_Pilihan_2' => $request->Prodi_Pilihan_2,
-                    'Jalur_PMB' => $request->Jalur_PMB,
+                    'id_jurusan' => $request->id_jurusan,
+                    'Jalur_PMB' => $request->Jalur_PMB, // Must be ID
                     'Jenis_Pembiayaan' => $request->Jenis_Pembiayaan,
 
                     // Transfer Data

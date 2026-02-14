@@ -145,13 +145,10 @@ class SiswaDataPendaftarsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('program_sekolah')
-                    ->label('Program')
-                    ->options([
-                        'MA' => 'MA',
-                        'S1' => 'S1',
-                        'S2' => 'S2',
-                    ])
+                SelectFilter::make('ro_program_sekolah')
+                    ->label('Program Sekolah')
+                    ->relationship('programSekolahRef', 'nilai')
+                    ->preload()
                     ->multiple(),
 
                 SelectFilter::make('status_valid')
@@ -181,12 +178,8 @@ class SiswaDataPendaftarsTable
 
                 SelectFilter::make('Jalur_PMB')
                     ->label('Jalur PMB')
-                    ->options([
-                        'Reguler' => 'Reguler',
-                        'Prestasi' => 'Prestasi',
-                        'Beasiswa KIP' => 'Beasiswa KIP',
-                        'Pindahan' => 'Pindahan / Transfer',
-                    ])
+                    ->relationship('jalurPmbRef', 'nilai')
+                    ->preload()
                     ->multiple(),
 
                 SelectFilter::make('Tahun_Masuk')

@@ -50,7 +50,7 @@ class SiswaDataPendaftarForm
 
                                 Section::make('Program Studi')
                                     ->schema([
-                                        Select::make('program_sekolah')
+                                        Select::make('ro_program_sekolah')
                                             ->label('Program Sekolah')
                                             ->relationship('programSekolahRef', 'nilai', function ($query) {
                                                 return $query->where('nama_grup', 'program_sekolah')
@@ -60,12 +60,12 @@ class SiswaDataPendaftarForm
                                             ->preload()
                                             ->required()
                                             ->reactive()
-                                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                            ->afterStateUpdated(function ($state, callable $set) {
                                                 // Ambil nilai dari reference option
                                                 $refOption = \App\Models\ReferenceOption::find($state);
                                                 if ($refOption) {
-                                                    // Cari jenjang pendidikan berdasarkan nama
-                                                    $jenjang = \App\Models\JenjangPendidikan::where('nama', $refOption->nilai)->first();
+                                                    // Cari jenjang pendidikan berdasarkan nama yang mirip
+                                                    $jenjang = \App\Models\JenjangPendidikan::where('nama', 'LIKE', '%' . $refOption->nilai . '%')->first();
                                                     if ($jenjang) {
                                                         $set('id_jenjang_pendidikan', $jenjang->id);
                                                     }
@@ -77,16 +77,27 @@ class SiswaDataPendaftarForm
                                             ->relationship('jenjangPendidikan', 'nama')
                                             ->searchable()
                                             ->preload()
-                                            ->disabled()
+                                            ->required() // Sebaiknya required agar data konsisten
                                             ->dehydrated(),
+
                                         TextInput::make('Kelas_Program_Kuliah')
                                             ->label('Kelas Program'),
 
-                                        TextInput::make('Prodi_Pilihan_1')
-                                            ->label('Prodi Pilihan 1'),
+                                        Select::make('id_jurusan')
+                                            ->label('Jurusan Diterima')
+                                            ->relationship('jurusan', 'nama')
+                                            ->searchable()
+                                            ->preload(),
 
-                                        TextInput::make('Prodi_Pilihan_2')
-                                            ->label('Prodi Pilihan 2'),
+                                        Select::make('Prodi_Pilihan_1')
+                                            ->label('Prodi Pilihan 1')
+                                            ->options(\App\Models\Jurusan::pluck('nama', 'nama'))
+                                            ->searchable(),
+
+                                        Select::make('Prodi_Pilihan_2')
+                                            ->label('Prodi Pilihan 2')
+                                            ->options(\App\Models\Jurusan::pluck('nama', 'nama'))
+                                            ->searchable(),
 
                                         Select::make('Jalur_PMB')
                                             ->label('Jalur PMB')

@@ -23,9 +23,10 @@ class SiswaDataPendaftar extends Model
         'No_Pendaftaran',
         'Tahun_Masuk',
         'Tgl_Daftar',
-        'program_sekolah', // ID dari reference_option (nama_grup: program_sekolah)
+        'ro_program_sekolah', // ID dari reference_option (nama_grup: program_sekolah)
         'id_jenjang_pendidikan', // FK ke jenjang_pendidikan
         'Kelas_Program_Kuliah',
+        'id_jurusan',
         'Prodi_Pilihan_1',
         'Prodi_Pilihan_2',
         'Jalur_PMB', // ID dari reference_option (nama_grup: jalur_pmb)
@@ -104,7 +105,7 @@ class SiswaDataPendaftar extends Model
     // Relasi ke Reference Option untuk Program Sekolah
     public function programSekolahRef()
     {
-        return $this->belongsTo(ReferenceOption::class, 'program_sekolah', 'id');
+        return $this->belongsTo(ReferenceOption::class, 'ro_program_sekolah', 'id');
     }
 
     // Relasi ke Reference Option untuk Jalur PMB
@@ -117,5 +118,11 @@ class SiswaDataPendaftar extends Model
     public function jenjangPendidikan()
     {
         return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
+    }
+
+    // Relasi ke Jurusan
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class, 'id_jurusan');
     }
 }

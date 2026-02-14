@@ -69,4 +69,10 @@ class SiswaDataOrangTua extends Model
     {
         return $this->belongsTo(SiswaData::class, 'id_siswa_data');
     }
+
+    // Alias untuk konsistensi penamaan
+    public function siswaData()
+    {
+        return $this->siswa();
+    }
 }

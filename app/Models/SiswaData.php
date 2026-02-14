@@ -13,7 +13,6 @@ class SiswaData extends Model
         'nama',
         'nama_lengkap',
         'foto_profil',
-        'id_pendaftaran',
         'jenis_kelamin',
         'golongan_darah',
         'kota_lahir',
@@ -72,5 +71,17 @@ class SiswaData extends Model
             'id',                      // PK siswa_data
             'id'                       // PK riwayat_pendidikan
         );
+    }
+
+    // Relasi 1:1 dengan SiswaDataOrangTua
+    public function orangTua()
+    {
+        return $this->hasOne(SiswaDataOrangTua::class, 'id_siswa_data');
+    }
+
+    // Relasi 1:1 dengan SiswaDataPendaftar
+    public function pendaftar()
+    {
+        return $this->hasOne(SiswaDataPendaftar::class, 'id_siswa_data');
     }
 }

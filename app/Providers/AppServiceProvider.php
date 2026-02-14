@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register observer untuk auto-create RiwayatPendidikan saat status kelulusan = Lulus
+        \App\Models\SiswaDataPendaftar::observe(\App\Observers\SiswaDataPendaftarObserver::class);
     }
 }

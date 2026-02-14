@@ -5,6 +5,7 @@ namespace App\Filament\Resources\SiswaDataPendaftars\Pages;
 use App\Filament\Resources\SiswaDataPendaftars\SiswaDataPendaftarResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs\Tab;
 
 class ListSiswaDataPendaftars extends ListRecords
 {
@@ -14,6 +15,36 @@ class ListSiswaDataPendaftars extends ListRecords
     {
         return [
             CreateAction::make(),
+        ];
+    }
+
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make('Semua Pendaftar'),
+
+            'belum_validasi' => Tab::make('Belum Divalidasi')
+                ->modifyQueryUsing(fn($query) => $query->where('status_valid', '0'))
+                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('status_valid', '0')->count()),
+
+            'sudah_validasi' => Tab::make('Sudah Divalidasi')
+                ->modifyQueryUsing(fn($query) => $query->where('status_valid', '1'))
+                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('status_valid', '1')->count()),
+
+            'proses' => Tab::make('Proses')
+                ->modifyQueryUsing(fn($query) => $query->where('Status_Kelulusan', 'B'))
+                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Kelulusan', 'B')->count())
+                ->badgeColor('warning'),
+
+            'lulus' => Tab::make('Lulus')
+                ->modifyQueryUsing(fn($query) => $query->where('Status_Kelulusan', 'Y'))
+                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Kelulusan', 'Y')->count())
+                ->badgeColor('success'),
+
+            'tidak_lulus' => Tab::make('Tidak Lulus')
+                ->modifyQueryUsing(fn($query) => $query->where('Status_Kelulusan', 'N'))
+                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Kelulusan', 'N')->count())
+                ->badgeColor('danger'),
         ];
     }
 }

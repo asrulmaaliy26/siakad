@@ -58,4 +58,18 @@ class SiswaDataResource extends Resource
             'edit' => EditSiswaData::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            ->where(function ($query) {
+                // Tampilkan siswa yang:
+                // 1. Tidak memiliki data pendaftar (siswa lama/input manual)
+                // 2. ATAU memiliki data pendaftar dengan Status_Kelulusan = 'Y' (Lulus)
+                $query->doesntHave('pendaftar')
+                    ->orWhereHas('pendaftar', function ($q) {
+                        $q->where('Status_Pendaftaran', 'Y');
+                    });
+            });
+    }
 }

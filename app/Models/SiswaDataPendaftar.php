@@ -9,6 +9,12 @@ class SiswaDataPendaftar extends Model
 {
     use HasFactory;
     protected $table = 'siswa_data_pendaftar';
+
+    protected $attributes = [
+        'Status_Kelulusan' => 'B', // Default Proses
+        'Status_Pendaftaran' => 'B', // Default Proses
+    ];
+
     protected $fillable = [
         'nama',
         'id_siswa_data',
@@ -17,11 +23,12 @@ class SiswaDataPendaftar extends Model
         'No_Pendaftaran',
         'Tahun_Masuk',
         'Tgl_Daftar',
-        'program_sekolah',
+        'program_sekolah', // ID dari reference_option (nama_grup: program_sekolah)
+        'id_jenjang_pendidikan', // FK ke jenjang_pendidikan
         'Kelas_Program_Kuliah',
         'Prodi_Pilihan_1',
         'Prodi_Pilihan_2',
-        'Jalur_PMB',
+        'Jalur_PMB', // ID dari reference_option (nama_grup: jalur_pmb)
         'Bukti_Jalur_PMB',
         'Jenis_Pembiayaan',
         'Bukti_Jenis_Pembiayaan',
@@ -86,5 +93,29 @@ class SiswaDataPendaftar extends Model
     public function siswa()
     {
         return $this->belongsTo(SiswaData::class, 'id_siswa_data');
+    }
+
+    // Alias untuk konsistensi penamaan
+    public function siswaData()
+    {
+        return $this->siswa();
+    }
+
+    // Relasi ke Reference Option untuk Program Sekolah
+    public function programSekolahRef()
+    {
+        return $this->belongsTo(ReferenceOption::class, 'program_sekolah', 'id');
+    }
+
+    // Relasi ke Reference Option untuk Jalur PMB
+    public function jalurPmbRef()
+    {
+        return $this->belongsTo(ReferenceOption::class, 'Jalur_PMB', 'id');
+    }
+
+    // Relasi ke Jenjang Pendidikan
+    public function jenjangPendidikan()
+    {
+        return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
     }
 }

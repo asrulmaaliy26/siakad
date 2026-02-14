@@ -117,6 +117,24 @@
             </div>
             @endif
 
+            @if(session('error'))
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-800">Gagal Menyimpan Data!</h3>
+                        <div class="mt-2 text-sm text-red-700">
+                            <p>{{ session('error') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             @if ($errors->any())
             <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
                 <div class="flex">
@@ -137,7 +155,7 @@
             </div>
             @endif
 
-            <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data" x-data="{ activeStep: 1 }">
+            <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data" x-data="{ activeStep: 1, selectedJenjangName: '' }">
                 @csrf
 
                 <!-- STANDOUT JENJANG PENDIDIKAN SELECTION -->
@@ -147,10 +165,12 @@
                         <span class="text-red-500">*</span>
                     </label>
                     <p class="text-sm text-yellow-700 mb-4">Pastikan Anda memilih jenjang pendidikan yang benar sebelum mengisi data lainnya.</p>
-                    <select name="id_jenjang_pendidikan" id="id_jenjang_pendidikan" class="filament-input mt-1 border-yellow-300 focus:border-yellow-500 focus:ring-yellow-500 text-lg py-3 bg-white" required>
-                        <option value="">-- Silakan Pilih Jenjang Pendidikan --</option>
+                    <select name="id_jenjang_pendidikan" id="id_jenjang_pendidikan"
+                        @change="selectedJenjangName = $event.target.options[$event.target.selectedIndex].dataset.nama"
+                        class="filament-input mt-1 border-yellow-300 focus:border-yellow-500 focus:ring-yellow-500 text-lg py-3 bg-white">
+                        <option value="" data-nama="">-- Silakan Pilih Jenjang Pendidikan --</option>
                         @foreach($jenjangs as $jenjang)
-                        <option value="{{ $jenjang->id }}" {{ old('id_jenjang_pendidikan') == $jenjang->id ? 'selected' : '' }}>
+                        <option value="{{ $jenjang->id }}" data-nama="{{ $jenjang->nama }}" {{ old('id_jenjang_pendidikan') == $jenjang->id ? 'selected' : '' }}>
                             {{ $jenjang->nama }} {{ $jenjang->deskripsi ? '('.$jenjang->deskripsi.')' : '' }}
                         </option>
                         @endforeach
@@ -175,15 +195,19 @@
                                 <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Login Akun</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block font-medium text-sm text-gray-700" for="email">Email</label>
-                                        <input type="email" name="email" id="email" class="filament-input mt-1" value="{{ old('email') }}" required placeholder="nama@email.com">
+                                        <label class="block font-medium text-sm text-gray-700" for="nama">Nama <span class="text-red-500">*</span></label>
+                                        <input type="text" name="nama" id="nama" class="filament-input mt-1" value="{{ old('nama') }}" required placeholder="Nama lengkap Anda">
                                     </div>
                                     <div>
-                                        <label class="block font-medium text-sm text-gray-700" for="password">Password</label>
+                                        <label class="block font-medium text-sm text-gray-700" for="username">Username <span class="text-red-500">*</span></label>
+                                        <input type="text" name="username" id="username" class="filament-input mt-1" value="{{ old('username') }}" required placeholder="Username untuk login">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-sm text-gray-700" for="password">Password <span class="text-red-500">*</span></label>
                                         <input type="password" name="password" id="password" class="filament-input mt-1" required>
                                     </div>
                                     <div>
-                                        <label class="block font-medium text-sm text-gray-700" for="password_confirmation">Konfirmasi Password</label>
+                                        <label class="block font-medium text-sm text-gray-700" for="password_confirmation">Konfirmasi Password <span class="text-red-500">*</span></label>
                                         <input type="password" name="password_confirmation" id="password_confirmation" class="filament-input mt-1" required>
                                     </div>
                                 </div>
@@ -197,23 +221,25 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <!-- Jenjang Pendidikan Moved to Top -->
 
-                                    <div>
-                                        <label class="block font-medium text-sm text-gray-700" for="Prodi_Pilihan_1">Prodi Pilihan 1</label>
-                                        <input type="text" name="Prodi_Pilihan_1" id="Prodi_Pilihan_1" value="{{ old('Prodi_Pilihan_1') }}" class="filament-input mt-1" placeholder="Misal: Teknik Informatika">
-                                    </div>
+                                    <div x-show="selectedJenjangName !== 'MA'" class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block font-medium text-sm text-gray-700" for="Prodi_Pilihan_1">Prodi Pilihan 1</label>
+                                            <input type="text" name="Prodi_Pilihan_1" id="Prodi_Pilihan_1" value="{{ old('Prodi_Pilihan_1') }}" class="filament-input mt-1" placeholder="Misal: Teknik Informatika">
+                                        </div>
 
-                                    <div>
-                                        <label class="block font-medium text-sm text-gray-700" for="Prodi_Pilihan_2">Prodi Pilihan 2</label>
-                                        <input type="text" name="Prodi_Pilihan_2" id="Prodi_Pilihan_2" value="{{ old('Prodi_Pilihan_2') }}" class="filament-input mt-1" placeholder="Misal: Sistem Informasi">
-                                    </div>
+                                        <div>
+                                            <label class="block font-medium text-sm text-gray-700" for="Prodi_Pilihan_2">Prodi Pilihan 2</label>
+                                            <input type="text" name="Prodi_Pilihan_2" id="Prodi_Pilihan_2" value="{{ old('Prodi_Pilihan_2') }}" class="filament-input mt-1" placeholder="Misal: Sistem Informasi">
+                                        </div>
 
-                                    <div>
-                                        <label class="block font-medium text-sm text-gray-700" for="Kelas_Program_Kuliah">Kelas Program</label>
-                                        <select name="Kelas_Program_Kuliah" id="Kelas_Program_Kuliah" class="filament-input mt-1">
-                                            <option value="Reguler Pagi" {{ old('Kelas_Program_Kuliah') == 'Reguler Pagi' ? 'selected' : '' }}>Reguler Pagi</option>
-                                            <option value="Reguler Sore" {{ old('Kelas_Program_Kuliah') == 'Reguler Sore' ? 'selected' : '' }}>Reguler Sore</option>
-                                            <option value="Karyawan" {{ old('Kelas_Program_Kuliah') == 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
-                                        </select>
+                                        <div>
+                                            <label class="block font-medium text-sm text-gray-700" for="Kelas_Program_Kuliah">Kelas Program</label>
+                                            <select name="Kelas_Program_Kuliah" id="Kelas_Program_Kuliah" class="filament-input mt-1">
+                                                <option value="Reguler Pagi" {{ old('Kelas_Program_Kuliah') == 'Reguler Pagi' ? 'selected' : '' }}>Reguler Pagi</option>
+                                                <option value="Reguler Sore" {{ old('Kelas_Program_Kuliah') == 'Reguler Sore' ? 'selected' : '' }}>Reguler Sore</option>
+                                                <option value="Karyawan" {{ old('Kelas_Program_Kuliah') == 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div>
@@ -257,16 +283,16 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block font-medium text-sm text-gray-700" for="nama_lengkap">Nama Lengkap (Sesuai Ijazah)</label>
-                                <input type="text" name="nama_lengkap" id="nama_lengkap" value="{{ old('nama_lengkap') }}" class="filament-input mt-1" required>
+                                <input type="text" name="nama_lengkap" id="nama_lengkap" value="{{ old('nama_lengkap') }}" class="filament-input mt-1">
                             </div>
                             <div>
-                                <label class="block font-medium text-sm text-gray-700" for="nama_panggilan">Nama Panggilan</label>
-                                <input type="text" name="nama_panggilan" id="nama_panggilan" value="{{ old('nama_panggilan') }}" class="filament-input mt-1">
+                                <label class="block font-medium text-sm text-gray-700" for="email">Email</label>
+                                <input type="email" name="email" id="email" value="{{ old('email') }}" class="filament-input mt-1" placeholder="email@example.com">
                             </div>
 
                             <div>
                                 <label class="block font-medium text-sm text-gray-700" for="jenis_kelamin">Jenis Kelamin</label>
-                                <select name="jenis_kelamin" id="jenis_kelamin" class="filament-input mt-1" required>
+                                <select name="jenis_kelamin" id="jenis_kelamin" class="filament-input mt-1">
                                     <option value="">-- Pilih --</option>
                                     <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
                                     <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
@@ -276,17 +302,17 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block font-medium text-sm text-gray-700" for="tempat_lahir">Tempat Lahir</label>
-                                    <input type="text" name="tempat_lahir" id="tempat_lahir" value="{{ old('tempat_lahir') }}" class="filament-input mt-1" required>
+                                    <input type="text" name="tempat_lahir" id="tempat_lahir" value="{{ old('tempat_lahir') }}" class="filament-input mt-1">
                                 </div>
                                 <div>
                                     <label class="block font-medium text-sm text-gray-700" for="tanggal_lahir">Tanggal Lahir</label>
-                                    <input type="date" name="tanggal_lahir" id="tanggal_lahir" value="{{ old('tanggal_lahir') }}" class="filament-input mt-1" required>
+                                    <input type="date" name="tanggal_lahir" id="tanggal_lahir" value="{{ old('tanggal_lahir') }}" class="filament-input mt-1">
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block font-medium text-sm text-gray-700" for="agama">Agama</label>
-                                <select name="agama" id="agama" class="filament-input mt-1" required>
+                                <select name="agama" id="agama" class="filament-input mt-1">
                                     <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
                                     <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
                                     <option value="Katolik" {{ old('agama') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
@@ -341,7 +367,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="md:col-span-2">
                                 <label class="block font-medium text-sm text-gray-700" for="alamat">Alamat Lengkap (Jalan, Gg, Blok)</label>
-                                <textarea name="alamat" id="alamat" rows="2" class="filament-input mt-1" required placeholder="Contoh: Jl. Merdeka No. 10">{{ old('alamat') }}</textarea>
+                                <textarea name="alamat" id="alamat" rows="2" class="filament-input mt-1" placeholder="Contoh: Jl. Merdeka No. 10">{{ old('alamat') }}</textarea>
                             </div>
                             <div class="grid grid-cols-3 gap-4 md:col-span-2">
                                 <div>
@@ -383,7 +409,7 @@
                             </div>
                             <div>
                                 <label class="block font-medium text-sm text-gray-700" for="no_telepon">No. Handphone / WA</label>
-                                <input type="text" name="no_telepon" id="no_telepon" value="{{ old('no_telepon') }}" class="filament-input mt-1" required>
+                                <input type="text" name="no_telepon" id="no_telepon" value="{{ old('no_telepon') }}" class="filament-input mt-1">
                             </div>
                             <div>
                                 <label class="block font-medium text-sm text-gray-700" for="jenis_domisili">Status Tempat Tinggal</label>
@@ -456,7 +482,7 @@
                             </div>
                         </div>
 
-                        <div x-data="{ isTransfer: false }">
+                        <div x-data="{ isTransfer: false }" x-show="selectedJenjangName !== 'MA'">
                             <div class="flex items-center mb-4">
                                 <input id="is_transfer" type="checkbox" x-model="isTransfer" class="rounded border-gray-300 text-lime-600 shadow-sm focus:border-lime-300 focus:ring focus:ring-lime-200 focus:ring-opacity-50">
                                 <label for="is_transfer" class="ml-2 block text-sm text-gray-900 font-medium">Saya Mahasiswa Pindahan / Transfer</label>
@@ -632,7 +658,7 @@
 
                             <div>
                                 <label class="block font-medium text-sm text-gray-700" for="nama_pendaftar">Nama Pendaftar (Wajib Diisi)</label>
-                                <input type="text" name="nama_pendaftar" id="nama_pendaftar" value="{{ old('nama_pendaftar') }}" class="filament-input mt-1" required placeholder="Nama orang yang mendaftarkan">
+                                <input type="text" name="nama_pendaftar" id="nama_pendaftar" value="{{ old('nama_pendaftar') }}" class="filament-input mt-1" placeholder="Nama orang yang mendaftarkan">
                             </div>
 
                             <div>

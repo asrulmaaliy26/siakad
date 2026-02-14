@@ -19,8 +19,12 @@ class SiswaDataPendaftarResource extends Resource
 {
     protected static ?string $model = SiswaDataPendaftar::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Temp';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
+    protected static string | UnitEnum | null $navigationGroup = 'Pendaftaran';
+    protected static ?string $navigationLabel = 'Data Pendaftar';
+    protected static ?string $modelLabel = 'Data Pendaftar';
+    protected static ?string $pluralModelLabel = 'Data Pendaftar';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

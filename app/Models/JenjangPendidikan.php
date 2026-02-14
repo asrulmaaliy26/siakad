@@ -20,4 +20,9 @@ class JenjangPendidikan extends Model
     {
         return $this->hasMany(RiwayatPendidikan::class, 'id_jenjang_pendidikan');
     }
+
+    public function pendaftar()
+    {
+        return $this->hasMany(SiswaDataPendaftar::class, 'id_jenjang_pendidikan');
+    }
 }

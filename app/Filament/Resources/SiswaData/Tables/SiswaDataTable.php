@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
 
 class SiswaDataTable
 {
@@ -39,7 +40,14 @@ class SiswaDataTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('status_siswa')
+                    ->label('Status Siswa')
+                    ->options([
+                        'Aktif' => 'Aktif',
+                        'Tidak Aktif' => 'Tidak Aktif',
+                        'Lulus' => 'Lulus',
+                        'Keluar' => 'Keluar',
+                    ]),
             ])
             ->recordActions([
                 ViewAction::make(),

@@ -17,6 +17,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DatePicker;
 
+use Illuminate\Database\Eloquent\Model;
+
 class RiwayatPendidikanRelationManager extends RelationManager
 {
     protected static string $relationship = 'riwayatPendidikan';
@@ -29,17 +31,17 @@ class RiwayatPendidikanRelationManager extends RelationManager
             Select::make('id_jenjang_pendidikan')
                 ->label('Jenjang Pendidikan')
                 ->relationship('jenjangPendidikan', 'nama'), // kolom display dari JenjangPendidikan
-            
+
 
             Select::make('id_jurusan')
                 ->label('Jurusan')
                 ->relationship('jurusan', 'nama'), // kolom display dari Jurusan
-            
+
 
             Select::make('ro_status_siswa')
                 ->label('Status Siswa')
                 ->relationship('statusSiswa', 'nilai'), // kolom display dari StatusSiswa
-            
+
 
             // kalo mau pake model yang kaya di bawah harus menambahkan relation di
             // Select::make('ro_program_sekolah')
@@ -117,12 +119,12 @@ class RiwayatPendidikanRelationManager extends RelationManager
             TextInput::make('pembiayaan')
                 ->label('Pembiayaan'),
 
-            Select::make('status')
-                ->label('Status')
-                ->options([
-                    'Y' => 'Aktif',
-                    'N' => 'Tidak Aktif',
-                ]),
+            // Select::make('status')
+            //     ->label('Status')
+            //     ->options([
+            //         'Y' => 'Aktif',
+            //         'N' => 'Tidak Aktif',
+            //     ]),
 
             // Upload foto profil
             FileUpload::make('foto_profil')
@@ -135,6 +137,7 @@ class RiwayatPendidikanRelationManager extends RelationManager
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('angkatan'),
                 Tables\Columns\TextColumn::make('nomor_induk'),
                 Tables\Columns\TextColumn::make('jurusan.nama'),
@@ -146,7 +149,25 @@ class RiwayatPendidikanRelationManager extends RelationManager
                 CreateAction::make(),
             ])
             ->actions([
-                EditAction::make(),
+                EditAction::make()
+                    ->using(function (Model $record, array $data): Model {
+
+                        // Ambil data asli sebelum edit
+                        $oldRecord = $record->fresh();
+
+                        // Copy data lama untuk history
+                        $history = $oldRecord->replicate();
+                        $history->status = 'N';
+                        $history->save();
+
+                        // Update data baru
+                        $data['status'] = 'Y';
+                        $record->update($data);
+
+                        return $record;
+                    }),
+
+
                 DeleteAction::make(),
             ]);
     }

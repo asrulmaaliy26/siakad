@@ -10,7 +10,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Collection;
+use Filament\Notifications\Notification;
 use Filament\Actions\ViewAction;
+use Filament\Actions\BulkAction;
 use App\Models\Kelas;
 use App\Models\MataPelajaranKelas;
 
@@ -48,22 +51,68 @@ class MataPelajaranKelasRelationManager extends RelationManager
                     ->label('Guru Pengampu')
                     ->searchable(),
                 // Perbaikan: Ambil tahun akademik dari kelas -> tahunAkademik
-                Tables\Columns\TextColumn::make('kelas.tahunAkademik.nama')
-                    ->label('Tahun Akademik')
-                    ->getStateUsing(function ($record) {
-                        return $record->kelas?->tahunAkademik?->nama . ' - ' .
-                            $record->kelas?->tahunAkademik?->periode ?? '-';
-                    })
+                // Tables\Columns\TextColumn::make('kelas.tahunAkademik.nama')
+                //     ->label('Tahun Akademik')
+                //     ->getStateUsing(function ($record) {
+                //         return $record->kelas?->tahunAkademik?->nama . ' - ' .
+                //             $record->kelas?->tahunAkademik?->periode ?? '-';
+                //     })
+                //     ->badge()
+                //     ->color('success')
+                //     ->sortable(query: function ($query, $direction) {
+                //         // Custom sorting melalui relasi
+                //         return $query->orderBy(
+                //             Kelas::select('id_tahun_akademik')
+                //                 ->whereColumn('kelas.id', 'mata_pelajaran_kelas.id_kelas')
+                //                 ->limit(1),
+                //             $direction
+                //         );
+                //     }),
+                Tables\Columns\TextColumn::make('status_ujian_display')
+                    ->label('Status Ujian')
                     ->badge()
-                    ->color('success')
-                    ->sortable(query: function ($query, $direction) {
-                        // Custom sorting melalui relasi
-                        return $query->orderBy(
-                            Kelas::select('id_tahun_akademik')
-                                ->whereColumn('kelas.id', 'mata_pelajaran_kelas.id_kelas')
-                                ->limit(1),
-                            $direction
-                        );
+                    ->getStateUsing(function ($record) {
+                        $pekanUjian = $this->getOwnerRecord();
+                        $jenisUjian = strtolower($pekanUjian->jenis_ujian ?? '');
+
+                        $status = 0;
+                        if (str_contains($jenisUjian, 'uts')) {
+                            $status = $record->status_uts;
+                        } elseif (str_contains($jenisUjian, 'uas')) {
+                            $status = $record->status_uas;
+                        }
+
+                        return $status == 'Y' ? 'Aktif' : 'Tidak Aktif';
+                    })
+                    ->color(fn(string $state): string => match ($state) {
+                        'Aktif' => 'success',
+                        'Tidak Aktif' => 'danger',
+                        default => 'gray',
+                    }),
+                Tables\Columns\TextColumn::make('soal_check')
+                    ->label('Soal')
+                    ->badge()
+                    ->getStateUsing(function ($record) {
+                        $pekanUjian = $this->getOwnerRecord();
+                        $jenisUjian = strtolower($pekanUjian->jenis_ujian ?? '');
+
+                        $file = null;
+                        $note = null;
+
+                        if (str_contains($jenisUjian, 'uts')) {
+                            $file = $record->soal_uts;
+                            $note = $record->ctt_soal_uts;
+                        } elseif (str_contains($jenisUjian, 'uas')) {
+                            $file = $record->soal_uas;
+                            $note = $record->ctt_soal_uas;
+                        }
+
+                        return \App\Helpers\UjianHelper::hasSubmission($file, $note) ? 'Lihat Soal' : '-';
+                    })
+                    ->color(fn(string $state): string => match ($state) {
+                        'Lihat Soal' => 'info',
+                        '-' => 'gray',
+                        default => 'gray',
                     }),
             ])
             ->filters([
@@ -93,7 +142,50 @@ class MataPelajaranKelasRelationManager extends RelationManager
                 ViewAction::make(),
             ])
             ->bulkActions([
-                // Tidak perlu bulk actions
+                BulkAction::make('update_status')
+                    ->label('Set Status Ujian')
+                    ->icon('heroicon-o-check-circle')
+                    ->form([
+                        Forms\Components\Select::make('status')
+                            ->label('Status')
+                            ->options([
+                                'Y' => 'Aktif',
+                                'N' => 'Tidak Aktif',
+                            ])
+                            ->required(),
+                    ])
+                    ->action(function (Collection $records, array $data, $livewire) {
+                        $pekanUjian = $livewire->getOwnerRecord();
+                        // Asumsi jenis_ujian mengandung string 'UTS' atau 'UAS' (case-insensitive)
+                        $jenisUjian = strtolower($pekanUjian->jenis_ujian ?? '');
+
+                        $column = null;
+                        if (str_contains($jenisUjian, 'uts')) {
+                            $column = 'status_uts';
+                        } elseif (str_contains($jenisUjian, 'uas')) {
+                            $column = 'status_uas';
+                        }
+
+                        if ($column) {
+                            $records->each(function ($record) use ($column, $data) {
+                                $record->update([
+                                    $column => $data['status'],
+                                ]);
+                            });
+
+                            Notification::make()
+                                ->title('Status updated successfully')
+                                ->success()
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->title('Gagal Update Status')
+                                ->body('Jenis ujian pada Pekan Ujian tidak terdeteksi sebagai UTS atau UAS. Jenis: ' . $pekanUjian->jenis_ujian)
+                                ->danger()
+                                ->send();
+                        }
+                    })
+                    ->deselectRecordsAfterCompletion(),
             ]);
     }
 

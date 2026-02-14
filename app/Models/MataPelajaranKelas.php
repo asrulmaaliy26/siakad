@@ -23,6 +23,8 @@ class MataPelajaranKelas extends Model
         'jam',
         'uts',
         'uas',
+        'soal_uts',
+        'soal_uas',
         'tgl_uts',
         'tgl_uas',
         'status_uts',

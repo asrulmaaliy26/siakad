@@ -28,4 +28,26 @@ class PekanUjian extends Model
     {
         return $this->belongsTo(TahunAkademik::class, 'id_tahun_akademik');
     }
+
+    // Relasi ke Mata Pelajaran Kelas
+    // Note: Relasi ini kompleks (PekanUjian -> TahunAkademik <- Kelas <- MataPelajaranKelas).
+    // Tidak bisa menggunakan hasManyThrough standar karena arah relasi yang tidak linear.
+    // Logic query akan di-handle di MataPelajaranKelasRelationManager::getRelationship().
+    public function mataPelajaranKelas(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        // Return dummy relation to satisfy interfaces if needed, 
+        // valid logic is in RelationManager override.
+        return $this->hasMany(MataPelajaranKelas::class, 'id_kelas', 'id');
+    }
+
+    // Alternatif: Jika relasi lebih sederhana (langsung)
+    public function mataPelajaranKelasLangsung()
+    {
+        return $this->belongsToMany(
+            MataPelajaranKelas::class,
+            'pekan_ujian_mata_pelajaran', // Nama tabel pivot (jika ada)
+            'id_pekan_ujian',
+            'id_mata_pelajaran_kelas'
+        )->withTimestamps();
+    }
 }

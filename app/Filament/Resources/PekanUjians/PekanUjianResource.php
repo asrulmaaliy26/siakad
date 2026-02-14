@@ -9,6 +9,7 @@ use App\Filament\Resources\PekanUjians\Pages\ViewPekanUjian;
 use App\Filament\Resources\PekanUjians\Schemas\PekanUjianForm;
 use App\Filament\Resources\PekanUjians\Schemas\PekanUjianInfolist;
 use App\Filament\Resources\PekanUjians\Tables\PekanUjiansTable;
+use App\Filament\Resources\PekanUjians\RelationManagers\MataPelajaranKelasRelationManager;
 use App\Models\PekanUjian;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -47,6 +48,7 @@ class PekanUjianResource extends Resource
     {
         return [
             //
+            RelationManagers\MataPelajaranKelasRelationManager::class,
         ];
     }
 

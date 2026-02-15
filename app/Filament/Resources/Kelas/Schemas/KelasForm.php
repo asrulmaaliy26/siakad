@@ -20,16 +20,21 @@ class KelasForm
                     ->searchable()
                     ->required(),
                 // TextInput::make('nama'),
-                    // ->numeric(),
+                // ->numeric(),
                 TextInput::make('semester'),
                 Select::make('id_tahun_akademik')
                     ->label('Tahun Akademik')
                     ->options(TahunAkademik::pluck('nama', 'id'))
                     ->searchable(),
-                Select::make('id_jenjang_pendidikan')
-                    ->label('Jenjang Pendidikan')
-                    ->options(JenjangPendidikan::pluck('nama', 'id'))
-                    ->searchable(),
+                Select::make('id_jurusan')
+                    ->label('Jurusan')
+                    ->options(\App\Models\Jurusan::pluck('nama', 'id'))
+                    ->searchable()
+                    ->required(),
+                // Select::make('id_jenjang_pendidikan') // Removed as per request
+                //     ->label('Jenjang Pendidikan')
+                //     ->options(JenjangPendidikan::pluck('nama', 'id'))
+                //     ->searchable(),
                 Select::make('status_aktif')
                     ->options(['Y' => 'Y', 'N' => 'N']),
             ]);

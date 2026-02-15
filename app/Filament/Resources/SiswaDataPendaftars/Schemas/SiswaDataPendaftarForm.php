@@ -58,27 +58,19 @@ class SiswaDataPendaftarForm
                                             })
                                             ->searchable()
                                             ->preload()
-                                            ->required()
-                                            ->reactive()
-                                            ->afterStateUpdated(function ($state, callable $set) {
-                                                // Ambil nilai dari reference option
-                                                $refOption = \App\Models\ReferenceOption::find($state);
-                                                if ($refOption) {
-                                                    // Cari jenjang pendidikan berdasarkan nama yang mirip
-                                                    $jenjang = \App\Models\JenjangPendidikan::where('nama', 'LIKE', '%' . $refOption->nilai . '%')->first();
-                                                    if ($jenjang) {
-                                                        $set('id_jenjang_pendidikan', $jenjang->id);
-                                                    }
-                                                }
-                                            }),
+                                            ->required(),
+                                        // ->reactive()
+                                        // ->afterStateUpdated(function ($state, callable $set) {
+                                        //     // Logic removed as id_jenjang_pendidikan is removed
+                                        // }),
 
-                                        Select::make('id_jenjang_pendidikan')
-                                            ->label('Jenjang Pendidikan')
-                                            ->relationship('jenjangPendidikan', 'nama')
-                                            ->searchable()
-                                            ->preload()
-                                            ->required() // Sebaiknya required agar data konsisten
-                                            ->dehydrated(),
+                                        // Select::make('id_jenjang_pendidikan') // Removed
+                                        //     ->label('Jenjang Pendidikan')
+                                        //     ->relationship('jenjangPendidikan', 'nama')
+                                        //     ->searchable()
+                                        //     ->preload()
+                                        //     ->required() // Sebaiknya required agar data konsisten
+                                        //     ->dehydrated(),
 
                                         TextInput::make('Kelas_Program_Kuliah')
                                             ->label('Kelas Program'),

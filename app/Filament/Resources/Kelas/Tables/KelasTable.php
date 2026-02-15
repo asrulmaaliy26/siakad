@@ -32,7 +32,7 @@ class KelasTable
                 TextColumn::make('jurusan.nama')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('jenjangPendidikan.nama')
+                TextColumn::make('jurusan.jenjangPendidikan.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('tahunAkademik.nama')
@@ -70,11 +70,18 @@ class KelasTable
                     )
                     ->searchable(),
 
-                SelectFilter::make('id_jenjang_pendidikan')
+                SelectFilter::make('jenjang_pendidikan') // Changed name to avoid conflict with missing column
                     ->label('Jenjang Pendidikan')
                     ->options(
                         JenjangPendidikan::pluck('nama', 'id')
                     )
+                    ->query(function ($query, array $data) {
+                        return $query->when($data['value'], function ($query, $value) {
+                            $query->whereHas('jurusan', function ($query) use ($value) {
+                                $query->where('id_jenjang_pendidikan', $value);
+                            });
+                        });
+                    })
                     ->searchable(),
 
                 SelectFilter::make('id_jurusan')

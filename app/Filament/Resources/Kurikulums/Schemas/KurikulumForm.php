@@ -24,10 +24,10 @@ class KurikulumForm
                     ->label('Tahun Akademik')
                     ->options(TahunAkademik::pluck('nama', 'id'))
                     ->searchable(),
-                Select::make('id_jenjang_pendidikan')
-                    ->label('Jenjang Pendidikan')
-                    ->options(JenjangPendidikan::pluck('nama', 'id'))
-                    ->searchable(),
+                // Select::make('id_jenjang_pendidikan') // Removed as per request
+                //     ->label('Jenjang Pendidikan')
+                //     ->options(JenjangPendidikan::pluck('nama', 'id'))
+                //     ->searchable(),
                 Select::make('status_aktif')
                     ->options(['Y' => 'Y', 'N' => 'N']),
             ]);

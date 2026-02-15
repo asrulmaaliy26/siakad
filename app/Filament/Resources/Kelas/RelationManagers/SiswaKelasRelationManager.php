@@ -64,12 +64,20 @@ class SiswaKelasRelationManager extends RelationManager
                 ->reactive()
 
                 // Saat dropdown dibuka (tanpa search)
-                ->options(function (callable $get, RelationManager $livewire) {
+                ->options(function (callable $get, RelationManager $livewire, $state) {
                     $kelas = $livewire->getOwnerRecord();
+                    // Ensure relation is loaded
+                    $kelas->loadMissing('jurusan');
+                    $jenjangId = $kelas->jurusan?->id_jenjang_pendidikan;
 
                     $query = RiwayatPendidikan::query()
-                        ->with('siswa')
-                        ->where('id_jenjang_pendidikan', $kelas->id_jenjang_pendidikan);
+                        ->with('siswa');
+
+                    if ($jenjangId) {
+                        $query->whereHas('jurusan', function ($q) use ($jenjangId) {
+                            $q->where('id_jenjang_pendidikan', $jenjangId);
+                        });
+                    }
 
                     if ($get('id_jurusan')) {
                         $query->where('id_jurusan', $get('id_jurusan'));
@@ -88,13 +96,20 @@ class SiswaKelasRelationManager extends RelationManager
                 // Saat search
                 ->getSearchResultsUsing(function (string $search, callable $get, RelationManager $livewire) {
                     $kelas = $livewire->getOwnerRecord();
+                    $kelas->loadMissing('jurusan');
+                    $jenjangId = $kelas->jurusan?->id_jenjang_pendidikan;
 
                     $query = RiwayatPendidikan::query()
                         ->with('siswa')
-                        ->where('id_jenjang_pendidikan', $kelas->id_jenjang_pendidikan)
                         ->whereHas('siswa', function ($q) use ($search) {
                             $q->where('nama', 'like', "%{$search}%");
                         });
+
+                    if ($jenjangId) {
+                        $query->whereHas('jurusan', function ($q) use ($jenjangId) {
+                            $q->where('id_jenjang_pendidikan', $jenjangId);
+                        });
+                    }
 
                     if ($get('id_jurusan')) {
                         $query->where('id_jurusan', $get('id_jurusan'));

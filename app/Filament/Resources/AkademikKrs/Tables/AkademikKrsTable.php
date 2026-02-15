@@ -14,6 +14,7 @@ use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Support\Colors\Color;
+use Filament\Tables\Columns\Column;
 
 class AkademikKrsTable
 {
@@ -27,7 +28,8 @@ class AkademikKrsTable
                     ->label('Mahasiswa')
                     ->searchable()
                     ->sortable()
-                    ->weight('semibold'),
+                    ->weight('semibold')
+                    ->color('primary'),
 
                 TextColumn::make('riwayatPendidikan.siswaData.nomor_induk')
                     ->label('NIM')
@@ -35,7 +37,10 @@ class AkademikKrsTable
                     ->sortable()
                     ->color('gray')
                     ->copyable()
-                    ->copyMessage('NIM berhasil disalin'),
+                    ->copyMessage('NIM berhasil disalin')
+                    ->copyMessageDuration(1500)
+                    ->icon('heroicon-o-clipboard')
+                    ->iconPosition('after'),
 
                 // Data KRS
                 TextColumn::make('semester')
@@ -43,16 +48,20 @@ class AkademikKrsTable
                     ->sortable()
                     ->badge()
                     ->color('info')
-                    ->formatStateUsing(fn($state) => "Semester {$state}"),
+                    ->formatStateUsing(fn($state) => "Semester {$state}")
+                    ->icon('heroicon-o-academic-cap')
+                    ->iconPosition('before'),
 
                 TextColumn::make('jumlah_sks')
                     ->label('SKS')
                     ->sortable()
                     ->badge()
                     ->color(fn($state) => $state >= 20 ? 'success' : ($state >= 15 ? 'warning' : 'danger'))
-                    ->formatStateUsing(fn($state) => "{$state} SKS"),
+                    ->formatStateUsing(fn($state) => "{$state} SKS")
+                    ->icon('heroicon-o-calculator')
+                    ->iconPosition('before'),
 
-                // Status Bayar dengan Badge
+                // Status Bayar dengan SelectColumn yang mendukung dark mode
                 SelectColumn::make('status_bayar')
                     ->label('Status Bayar')
                     ->options([
@@ -62,76 +71,94 @@ class AkademikKrsTable
                     ->selectablePlaceholder(false)
                     ->sortable()
                     ->extraAttributes(function ($state) {
-                        $colors = [
-                            'Y' => 'bg-emerald-100 text-emerald-800 border-emerald-200 font-medium px-3 py-1.5 rounded-lg text-center',
-                            'N' => 'bg-rose-100 text-rose-800 border-rose-200 font-medium px-3 py-1.5 rounded-lg text-center',
+                        $classes = [
+                            'Y' => 'status-badge status-success',
+                            'N' => 'status-badge status-danger',
                         ];
-                        return ['class' => $colors[$state] ?? 'bg-gray-100 text-gray-800'];
+                        return ['class' => $classes[$state] ?? 'status-badge status-default'];
                     }),
 
-                // Syarat UTS dengan Badge
+                // Syarat UTS dengan SelectColumn
                 SelectColumn::make('syarat_uts')
                     ->label('Syarat UTS')
                     ->options([
-                        'Y' => '✅ Terpenuhi',
-                        'N' => '❌ Belum',
+                        'Y' => 'Terpenuhi',
+                        'N' => 'Belum',
                     ])
                     ->selectablePlaceholder(false)
                     ->extraAttributes(function ($state) {
-                        $colors = [
-                            'Y' => 'bg-emerald-100 text-emerald-800 border-emerald-200 font-medium px-3 py-1.5 rounded-lg text-center',
-                            'N' => 'bg-amber-100 text-amber-800 border-amber-200 font-medium px-3 py-1.5 rounded-lg text-center',
+                        $classes = [
+                            'Y' => 'status-badge status-success',
+                            'N' => 'status-badge status-warning',
                         ];
-                        return ['class' => $colors[$state] ?? 'bg-gray-100 text-gray-800'];
+                        return ['class' => $classes[$state] ?? 'status-badge status-default'];
                     }),
 
-                // Syarat UAS dengan Badge
+                // Syarat UAS dengan SelectColumn
                 SelectColumn::make('syarat_uas')
                     ->label('Syarat UAS')
                     ->options([
-                        'Y' => '✅ Terpenuhi',
-                        'N' => '❌ Belum',
+                        'Y' => 'Terpenuhi',
+                        'N' => 'Belum',
                     ])
                     ->selectablePlaceholder(false)
                     ->extraAttributes(function ($state) {
-                        $colors = [
-                            'Y' => 'bg-emerald-100 text-emerald-800 border-emerald-200 font-medium px-3 py-1.5 rounded-lg text-center',
-                            'N' => 'bg-amber-100 text-amber-800 border-amber-200 font-medium px-3 py-1.5 rounded-lg text-center',
+                        $classes = [
+                            'Y' => 'status-badge status-success',
+                            'N' => 'status-badge status-warning',
                         ];
-                        return ['class' => $colors[$state] ?? 'bg-gray-100 text-gray-800'];
+                        return ['class' => $classes[$state] ?? 'status-badge status-default'];
                     }),
 
-                // Syarat KRS dengan Badge
+                // Syarat KRS dengan SelectColumn
                 SelectColumn::make('syarat_krs')
                     ->label('Syarat KRS')
                     ->options([
-                        'Y' => '✅ Terpenuhi',
-                        'N' => '❌ Belum',
+                        'Y' => 'Terpenuhi',
+                        'N' => 'Belum',
                     ])
                     ->selectablePlaceholder(false)
                     ->extraAttributes(function ($state) {
-                        $colors = [
-                            'Y' => 'bg-emerald-100 text-emerald-800 border-emerald-200 font-medium px-3 py-1.5 rounded-lg text-center',
-                            'N' => 'bg-amber-100 text-amber-800 border-amber-200 font-medium px-3 py-1.5 rounded-lg text-center',
+                        $classes = [
+                            'Y' => 'status-badge status-success',
+                            'N' => 'status-badge status-warning',
                         ];
-                        return ['class' => $colors[$state] ?? 'bg-gray-100 text-gray-800'];
+                        return ['class' => $classes[$state] ?? 'status-badge status-default'];
                     }),
 
-                // Status Aktif dengan Badge
+                // Status Aktif dengan SelectColumn
                 SelectColumn::make('status_aktif')
                     ->label('Status Aktif')
                     ->options([
-                        'Y' => '🟢 Aktif',
-                        'N' => '🔴 Tidak Aktif',
+                        'Y' => 'Aktif',
+                        'N' => 'Tidak Aktif',
                     ])
                     ->selectablePlaceholder(false)
                     ->extraAttributes(function ($state) {
-                        $colors = [
-                            'Y' => 'bg-emerald-100 text-emerald-800 border-emerald-200 font-medium px-3 py-1.5 rounded-lg text-center',
-                            'N' => 'bg-slate-100 text-slate-800 border-slate-200 font-medium px-3 py-1.5 rounded-lg text-center',
+                        $classes = [
+                            'Y' => 'status-badge status-active',
+                            'N' => 'status-badge status-inactive',
                         ];
-                        return ['class' => $colors[$state] ?? 'bg-gray-100 text-gray-800'];
+                        return ['class' => $classes[$state] ?? 'status-badge status-default'];
                     }),
+
+                // Created At
+                TextColumn::make('created_at')
+                    ->label('Dibuat')
+                    ->dateTime('d M Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
+
+                // Updated At
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui')
+                    ->dateTime('d M Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
 
             ])
             ->filters([
@@ -147,7 +174,8 @@ class AkademikKrsTable
                         '8' => 'Semester 8',
                     ])
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->native(false),
 
                 SelectFilter::make('tahun_akademik')
                     ->label('Tahun Akademik')
@@ -155,45 +183,77 @@ class AkademikKrsTable
                         '2023/2024' => '2023/2024',
                         '2024/2025' => '2024/2025',
                     ])
-                    ->searchable(),
+                    ->searchable()
+                    ->native(false),
 
                 SelectFilter::make('status_bayar')
                     ->label('Status Bayar')
                     ->options([
-                        'Y' => '✅ Lunas',
-                        'N' => '❌ Belum Lunas',
-                    ]),
+                        'Y' => 'Lunas',
+                        'N' => 'Belum Lunas',
+                    ])
+                    ->native(false),
+
+                SelectFilter::make('status_aktif')
+                    ->label('Status Aktif')
+                    ->options([
+                        'Y' => 'Aktif',
+                        'N' => 'Tidak Aktif',
+                    ])
+                    ->native(false),
             ])
             ->headerActions([])
             ->actions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->label('Lihat')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->modalHeading('Detail KRS')
+                    ->modalWidth('7xl'),
+
                 Action::make('view_subjects')
                     ->label('Mata Pelajaran')
                     ->icon('heroicon-o-book-open')
-                    ->color('info')
+                    ->color('warning')
                     ->modalHeading('Daftar Mata Pelajaran')
                     ->modalContent(fn($record) => view('filament.resources.akademik-krs.actions.view-subjects', ['record' => $record]))
                     ->modalSubmitAction(false)
                     ->modalCancelAction(false)
-                    ->closeModalByClickingAway(false),
+                    ->closeModalByClickingAway(false)
+                    ->modalWidth('7xl'),
 
                 EditAction::make()
                     ->label('Edit')
                     ->icon('heroicon-o-pencil')
-                    ->color('primary'),
+                    ->color('primary')
+                    ->modalHeading('Edit KRS')
+                    ->modalWidth('2xl'),
 
                 DeleteAction::make()
                     ->label('Hapus')
                     ->icon('heroicon-o-trash')
                     ->color('danger')
-                    ->requiresConfirmation(),
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus KRS')
+                    ->modalDescription('Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Ya, Hapus')
+                    ->modalCancelActionLabel('Batal'),
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
                     ->label('Hapus Terpilih')
                     ->icon('heroicon-o-trash')
                     ->color('danger')
-                    ->requiresConfirmation(),
-            ]);
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus Data Terpilih')
+                    ->modalDescription('Apakah Anda yakin ingin menghapus data yang dipilih? Tindakan ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Ya, Hapus')
+                    ->modalCancelActionLabel('Batal'),
+            ])
+            ->striped()
+            ->defaultSort('created_at', 'desc')
+            ->poll('60s')
+            ->deferLoading()
+            ->persistFiltersInSession();
     }
 }

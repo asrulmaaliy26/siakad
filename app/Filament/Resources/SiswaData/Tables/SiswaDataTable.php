@@ -57,18 +57,17 @@ class SiswaDataTable
 
                             if (
                                 !$pendaftar->id_jurusan ||
-                                !$pendaftar->ro_program_sekolah ||
-                                !$pendaftar->id_jenjang_pendidikan
+                                !$pendaftar->ro_program_sekolah
                             ) {
                                 \Filament\Notifications\Notification::make()
                                     ->title('Data Belum Lengkap')
-                                    ->body('Jurusan, Program Sekolah, atau Jenjang Pendidikan belum terisi di data pendaftar.')
+                                    ->body('Jurusan atau Program Sekolah belum terisi di data pendaftar.')
                                     ->danger()
                                     ->send();
                             } else {
                                 // Cek apakah sudah ada riwayat pendidikan yang sama agar tidak duplikat
                                 $exists = \App\Models\RiwayatPendidikan::where('id_siswa_data', $record->id)
-                                    ->where('id_jenjang_pendidikan', $pendaftar->id_jenjang_pendidikan)
+                                    // ->where('id_jenjang_pendidikan', $pendaftar->id_jenjang_pendidikan) // Removed
                                     ->where('id_jurusan', $pendaftar->id_jurusan)
                                     ->where('ro_program_sekolah', $pendaftar->ro_program_sekolah)
                                     ->exists();
@@ -76,7 +75,7 @@ class SiswaDataTable
                                 if (!$exists) {
                                     \App\Models\RiwayatPendidikan::create([
                                         'id_siswa_data' => $record->id,
-                                        'id_jenjang_pendidikan' => $pendaftar->id_jenjang_pendidikan,
+                                        // 'id_jenjang_pendidikan' => $pendaftar->id_jenjang_pendidikan, // Removed
                                         'id_jurusan' => $pendaftar->id_jurusan,
                                         'ro_program_sekolah' => $pendaftar->ro_program_sekolah,
                                         'th_masuk' => $pendaftar->Tahun_Masuk ?? date('Y'),

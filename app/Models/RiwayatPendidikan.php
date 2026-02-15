@@ -19,7 +19,7 @@ class RiwayatPendidikan extends Model
     protected $table = 'riwayat_pendidikan';
     protected $fillable = [
         'id_siswa_data',
-        'id_jenjang_pendidikan',
+        // 'id_jenjang_pendidikan', // Derived from Jurusan
         'id_jurusan',
         'ro_program_sekolah',
         'nomor_induk',
@@ -66,10 +66,10 @@ class RiwayatPendidikan extends Model
     {
         return $this->belongsTo(Jurusan::class, 'id_jurusan');
     }
-    public function jenjangPendidikan()
-    {
-        return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
-    }
+    // public function jenjangPendidikan()
+    // {
+    //     return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
+    // }
     public function akademikKrs()
     {
         return $this->hasMany(AkademikKrs::class, 'id_riwayat_pendidikan');

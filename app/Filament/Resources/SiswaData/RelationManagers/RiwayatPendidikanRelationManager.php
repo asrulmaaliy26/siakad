@@ -28,9 +28,9 @@ class RiwayatPendidikanRelationManager extends RelationManager
     {
         return $form->schema([
             // Relasi dan pilihan
-            Select::make('id_jenjang_pendidikan')
-                ->label('Jenjang Pendidikan')
-                ->relationship('jenjangPendidikan', 'nama'), // kolom display dari JenjangPendidikan
+            // Select::make('id_jenjang_pendidikan')
+            //     ->label('Jenjang Pendidikan')
+            //     ->relationship('jenjangPendidikan', 'nama'), // kolom display dari JenjangPendidikan
 
 
             Select::make('id_jurusan')

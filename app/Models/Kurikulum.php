@@ -13,7 +13,7 @@ class Kurikulum extends Model
         'name',
         'id_jurusan',
         'id_tahun_akademik',
-        'id_jenjang_pendidikan',
+        // 'id_jenjang_pendidikan', // Derived from Jurusan
         'status_aktif'
     ];
     public function jurusan()
@@ -24,10 +24,10 @@ class Kurikulum extends Model
     {
         return $this->belongsTo(TahunAkademik::class, 'id_tahun_akademik');
     }
-    public function jenjangPendidikan()
-    {
-        return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
-    }
+    // public function jenjangPendidikan()
+    // {
+    //     return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
+    // }
 
     public function mataPelajaranKurikulum()
     {

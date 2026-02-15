@@ -24,7 +24,7 @@ class SiswaDataPendaftar extends Model
         'Tahun_Masuk',
         'Tgl_Daftar',
         'ro_program_sekolah', // ID dari reference_option (nama_grup: program_sekolah)
-        'id_jenjang_pendidikan', // FK ke jenjang_pendidikan
+        // 'id_jenjang_pendidikan', // FK ke jenjang_pendidikan, dikelola via Jurusan
         'Kelas_Program_Kuliah',
         'id_jurusan',
         'Prodi_Pilihan_1',
@@ -115,10 +115,10 @@ class SiswaDataPendaftar extends Model
     }
 
     // Relasi ke Jenjang Pendidikan
-    public function jenjangPendidikan()
-    {
-        return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
-    }
+    // public function jenjangPendidikan()
+    // {
+    //     return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
+    // }
 
     // Relasi ke Jurusan
     public function jurusan()

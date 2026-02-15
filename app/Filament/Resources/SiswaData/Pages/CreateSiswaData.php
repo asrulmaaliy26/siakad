@@ -61,7 +61,6 @@ class CreateSiswaData extends CreateRecord
         \App\Models\SiswaDataPendaftar::firstOrCreate(
             ['id_siswa_data' => $record->id],
             [
-                'nama' => $record->nama,
                 'Status_Pendaftar' => 'Y', // Menambahkan status pendaftar dengan nilai 'Y'
             ]
         );

@@ -13,21 +13,17 @@ class Kelas extends Model
     protected $fillable = [
         'ro_program_kelas',
         'semester',
-        'id_jenjang_pendidikan',
+        // 'id_jenjang_pendidikan', // Removed as per request, derived from Jurusan
         'id_tahun_akademik',
         'id_jurusan',
         'status_aktif'
     ];
 
-    // public function programKelas()
+    // Relationship removed, access via $kelas->jurusan->jenjangPendidikan
+    // public function jenjangPendidikan()
     // {
-    //     return $this->belongsTo(ProgramKelas::class, 'id_program_kelas');
+    //     return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
     // }
-
-    public function jenjangPendidikan()
-    {
-        return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
-    }
 
     public function tahunAkademik()
     {

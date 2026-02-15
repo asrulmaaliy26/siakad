@@ -153,24 +153,44 @@ class SiswaDataPendaftarForm
                                     ->schema([
                                         FileUpload::make('Legalisir_Ijazah')
                                             ->label('Legalisir Ijazah')
-                                            ->openable()
-                                            ->directory('dokumen/ijazah'),
+                                            ->disk('public')
+                                            ->directory('dokumen/ijazah')
+                                            ->visibility('public')
+                                            ->preserveFilenames()
+                                            ->maxSize(10240)
+                                            ->downloadable()
+                                            ->openable(),
 
                                         FileUpload::make('Legalisir_SKHU')
                                             ->label('Legalisir SKHU')
-                                            ->openable()
-                                            ->directory('dokumen/skhu'),
+                                            ->disk('public')
+                                            ->directory('dokumen/skhu')
+                                            ->visibility('public')
+                                            ->preserveFilenames()
+                                            ->maxSize(10240)
+                                            ->downloadable()
+                                            ->openable(),
 
                                         FileUpload::make('Copy_KTP')
                                             ->label('Copy KTP')
-                                            ->openable()
-                                            ->directory('dokumen/ktp'),
+                                            ->disk('public')
+                                            ->directory('dokumen/ktp')
+                                            ->visibility('public')
+                                            ->preserveFilenames()
+                                            ->maxSize(10240)
+                                            ->downloadable()
+                                            ->openable(),
 
                                         FileUpload::make('File_Foto_Berwarna')
                                             ->label('Pas Foto Berwarna')
                                             ->image()
-                                            ->openable()
-                                            ->directory('foto'),
+                                            ->disk('public')
+                                            ->directory('foto')
+                                            ->visibility('public')
+                                            ->preserveFilenames()
+                                            ->maxSize(10240)
+                                            ->downloadable()
+                                            ->openable(),
                                     ])
                                     ->columns(2),
                             ]),

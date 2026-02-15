@@ -92,11 +92,21 @@ class AkademikKrsForm
                     ->label('Bukti Pembayaran / Kwitansi')
                     ->directory('krs-kwitansi')
                     ->image()
+                    ->disk('public')
+                    ->visibility('public')
+                    ->preserveFilenames()
+                    ->maxSize(10240)
+                    ->downloadable()
                     ->openable(),
 
                 \Filament\Forms\Components\FileUpload::make('berkas_lain')
                     ->label('Berkas Pendukung Lain')
                     ->directory('krs-berkas')
+                    ->disk('public')
+                    ->visibility('public')
+                    ->preserveFilenames()
+                    ->maxSize(10240)
+                    ->downloadable()
                     ->openable(),
 
                 // Timestamps

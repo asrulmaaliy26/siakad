@@ -129,7 +129,14 @@ class RiwayatPendidikanRelationManager extends RelationManager
             // Upload foto profil
             FileUpload::make('foto_profil')
                 ->label('Foto Profil')
-                ->image(),
+                ->image()
+                ->disk('public')
+                ->directory('foto-profil-riwayat') // Adjust directory as suitable
+                ->visibility('public')
+                ->preserveFilenames()
+                ->maxSize(10240)
+                ->downloadable()
+                ->openable(),
         ]);
     }
 

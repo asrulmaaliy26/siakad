@@ -31,6 +31,11 @@ class SiswaDataForm
                             ->image()
                             ->disk('public')
                             ->directory(fn($get) => 'foto-siswa/' . Str::slug($get('nama') ?? 'tanpa-nama'))
+                            ->visibility('public')
+                            ->preserveFilenames()
+                            ->maxSize(10240)
+                            ->downloadable()
+                            ->openable()
                             ->reactive()
 
                             // Hapus file saat klik ❌

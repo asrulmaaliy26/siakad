@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Filament\Notifications\Notification;
 use Filament\Actions\ViewAction;
 use Filament\Actions\BulkAction;
+use Filament\Actions\Action;
 use App\Models\Kelas;
 use App\Models\MataPelajaranKelas;
 
@@ -163,7 +164,25 @@ class MataPelajaranKelasRelationManager extends RelationManager
                 // Tidak perlu tambah data karena ini hanya menampilkan
             ])
             ->actions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->label('Lihat Soal')
+                    ->modalHeading(fn($record) => 'Detail Soal - ' . $record->mataPelajaranKurikulum->mataPelajaranMaster->nama)
+                    ->modalContent(function ($record, $livewire) {
+                        $pekanUjian = $livewire->getOwnerRecord();
+                        $jenisUjian = strtolower($pekanUjian->jenis_ujian ?? '');
+
+                        $type = 'uts'; // default
+                        if (str_contains($jenisUjian, 'uas')) {
+                            $type = 'uas';
+                        }
+
+                        return view('filament.resources.pekan-ujians.actions.view-soal', [
+                            'record' => $record,
+                            'type' => $type
+                        ]);
+                    })
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn() => \Filament\Actions\Action::make('tutup')->label('Tutup')->close()),
             ])
             ->bulkActions([
                 BulkAction::make('update_status')

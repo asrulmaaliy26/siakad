@@ -102,13 +102,17 @@ class MataPelajaranKelasForm
                             ->inline(false),
                         DateTimePicker::make('uts')
                             ->label('Waktu Pelaksanaan UTS'),
-                        DatePicker::make('tgl_uts')
-                            ->label('Tanggal UTS (Alternatif)'),
+
                         TextInput::make('ruang_uts')
                             ->label('Ruang UTS'),
                         FileUpload::make('soal_uts')
                             ->label('Upload File Soal UTS')
+                            ->disk('public')
                             ->directory('soal-uts')
+                            ->visibility('public')
+                            ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/*'])
+                            ->preserveFilenames()
+                            ->maxSize(10240)
                             ->downloadable()
                             ->openable()
                             ->columnSpanFull(),
@@ -129,8 +133,7 @@ class MataPelajaranKelasForm
                             ->inline(false),
                         DateTimePicker::make('uas')
                             ->label('Waktu Pelaksanaan UAS'),
-                        DatePicker::make('tgl_uas')
-                            ->label('Tanggal UAS (Alternatif)'),
+
                         TextInput::make('ruang_uas')
                             ->label('Ruang UAS'),
                         Select::make('id_pengawas')
@@ -140,7 +143,12 @@ class MataPelajaranKelasForm
                             ->preload(),
                         FileUpload::make('soal_uas')
                             ->label('Upload File Soal UAS')
+                            ->disk('public')
                             ->directory('soal-uas')
+                            ->visibility('public')
+                            ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/*'])
+                            ->preserveFilenames()
+                            ->maxSize(10240)
                             ->downloadable()
                             ->openable()
                             ->columnSpanFull(),

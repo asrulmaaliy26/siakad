@@ -153,19 +153,23 @@ class SiswaDataPendaftarForm
                                     ->schema([
                                         FileUpload::make('Legalisir_Ijazah')
                                             ->label('Legalisir Ijazah')
+                                            ->openable()
                                             ->directory('dokumen/ijazah'),
 
                                         FileUpload::make('Legalisir_SKHU')
                                             ->label('Legalisir SKHU')
+                                            ->openable()
                                             ->directory('dokumen/skhu'),
 
                                         FileUpload::make('Copy_KTP')
                                             ->label('Copy KTP')
+                                            ->openable()
                                             ->directory('dokumen/ktp'),
 
                                         FileUpload::make('File_Foto_Berwarna')
                                             ->label('Pas Foto Berwarna')
                                             ->image()
+                                            ->openable()
                                             ->directory('foto'),
                                     ])
                                     ->columns(2),

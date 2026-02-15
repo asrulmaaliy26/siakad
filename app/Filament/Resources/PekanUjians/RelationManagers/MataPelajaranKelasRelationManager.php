@@ -133,7 +133,31 @@ class MataPelajaranKelasRelationManager extends RelationManager
                     ->label('Guru')
                     ->relationship('dosenData', 'nama')
                     ->searchable()
-                    ->preload()
+                    ->preload(),
+                Tables\Filters\SelectFilter::make('jurusan')
+                    ->label('Jurusan')
+                    ->relationship('kelas.jurusan', 'nama')
+                    ->searchable()
+                    ->preload(),
+                Tables\Filters\SelectFilter::make('semester')
+                    ->label('Semester')
+                    ->options([
+                        '1' => 'Semester 1',
+                        '2' => 'Semester 2',
+                        '3' => 'Semester 3',
+                        '4' => 'Semester 4',
+                        '5' => 'Semester 5',
+                        '6' => 'Semester 6',
+                        '7' => 'Semester 7',
+                        '8' => 'Semester 8',
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        return $query->when($data['value'], function (Builder $query, $value) {
+                            $query->whereHas('kelas', function (Builder $query) use ($value) {
+                                $query->where('semester', $value);
+                            });
+                        });
+                    }),
             ])
             ->headerActions([
                 // Tidak perlu tambah data karena ini hanya menampilkan

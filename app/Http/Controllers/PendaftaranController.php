@@ -144,7 +144,7 @@ class PendaftaranController extends Controller
             'nomor_seri_ijazah_slta' => ['nullable', 'string', 'max:50'],
 
             // Jenjang Selection
-            'id_jenjang_pendidikan' => ['nullable', 'exists:jenjang_pendidikan,id'],
+            'id_jenjang_pendidikan' => ['required', 'exists:jenjang_pendidikan,id'],
         ], [
             // Custom error messages in Indonesian
             'nama.required' => 'Nama wajib diisi.',
@@ -284,6 +284,9 @@ class PendaftaranController extends Controller
                     // Registration Details
                     'Nama_Lengkap' => $namaLengkap,
                     'Tgl_Daftar' => now()->toDateString(),
+                    'Tahun_Masuk' => now()->month <= 7
+                        ? now()->year . 'genap'
+                        : now()->year . 'ganjil',
                     'ro_program_sekolah' => $request->ro_program_sekolah,
                     'Kelas_Program_Kuliah' => $request->Kelas_Program_Kuliah,
                     'id_jurusan' => $request->id_jurusan,

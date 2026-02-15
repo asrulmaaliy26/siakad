@@ -50,4 +50,27 @@ class PekanUjian extends Model
             'id_mata_pelajaran_kelas'
         )->withTimestamps();
     }
+    protected function statusAkses(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => $value === 'Y',
+            set: fn($value) => $value ? 'Y' : 'N',
+        );
+    }
+
+    protected function statusBayar(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => $value === 'Y',
+            set: fn($value) => $value ? 'Y' : 'N',
+        );
+    }
+
+    protected function statusUjian(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => $value === 'Y', // Assuming 'Y' is meant to be Active/True
+            set: fn($value) => $value ? 'Y' : 'N', // If true, set 'Y', else 'N'
+        );
+    }
 }

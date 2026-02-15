@@ -10,6 +10,9 @@ use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
+use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Columns\ToggleColumn;
+
 class PekanUjiansTable
 {
     public static function configure(Table $table): Table
@@ -21,40 +24,29 @@ class PekanUjiansTable
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('jenis_ujian')
+                SelectColumn::make('jenis_ujian')
                     ->label('Jenis Ujian')
+                    ->options([
+                        'UTS' => 'UTS',
+                        'UAS' => 'UAS',
+                    ])
                     ->sortable()
-                    ->searchable()
-                    ->badge()
-                    ->colors([
-                        'primary' => 'UTS',
-                        'warning' => 'UAS',
-                        'danger' => 'Remedial',
-                    ]),
+                    ->searchable(),
 
-                TextColumn::make('status_akses')
+                ToggleColumn::make('status_akses')
                     ->label('Status Akses')
-                    ->badge()
-                    ->colors([
-                        'success' => 'Buka',
-                        'danger' => 'Tutup',
-                    ]),
+                    ->onColor('success')
+                    ->offColor('danger'),
 
-                TextColumn::make('status_bayar')
+                ToggleColumn::make('status_bayar')
                     ->label('Syarat Pembayaran')
-                    ->badge()
-                    ->colors([
-                        'success' => 'Bebas',
-                        'warning' => 'Wajib',
-                    ]),
+                    ->onColor('success')
+                    ->offColor('warning'),
 
-                TextColumn::make('status_ujian')
+                ToggleColumn::make('status_ujian')
                     ->label('Status Aktif')
-                    ->badge()
-                    ->colors([
-                        'success' => 'Aktif',
-                        'gray' => 'Tidak Aktif',
-                    ]),
+                    ->onColor('success')
+                    ->offColor('gray'),
 
                 TextColumn::make('informasi')
                     ->label('Informasi')

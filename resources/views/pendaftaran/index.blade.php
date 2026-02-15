@@ -167,7 +167,7 @@
                     <p class="text-sm text-yellow-700 mb-4">Pastikan Anda memilih jenjang pendidikan yang benar sebelum mengisi data lainnya.</p>
                     <select name="id_jenjang_pendidikan" id="id_jenjang_pendidikan"
                         @change="selectedJenjangName = $event.target.options[$event.target.selectedIndex].dataset.nama"
-                        class="filament-input mt-1 border-yellow-300 focus:border-yellow-500 focus:ring-yellow-500 text-lg py-3 bg-white">
+                        class="filament-input mt-1 border-yellow-300 focus:border-yellow-500 focus:ring-yellow-500 text-lg py-3 bg-white" required>
                         <option value="" data-nama="">-- Silakan Pilih Jenjang Pendidikan --</option>
                         @foreach($jenjangs as $jenjang)
                         <option value="{{ $jenjang->id }}" data-nama="{{ $jenjang->nama }}" {{ old('id_jenjang_pendidikan') == $jenjang->id ? 'selected' : '' }}>
@@ -225,7 +225,7 @@
 
                                         <div>
                                             <label class="block font-medium text-sm text-gray-700" for="ro_program_sekolah">Program Sekolah</label>
-                                            <select name="ro_program_sekolah" id="ro_program_sekolah" class="filament-input mt-1" required>
+                                            <select name="ro_program_sekolah" id="ro_program_sekolah" class="filament-input mt-1">
                                                 <option value="">-- Pilih Program --</option>
                                                 @foreach($programSekolahs as $program)
                                                 <option value="{{ $program->id }}" {{ old('ro_program_sekolah') == $program->id ? 'selected' : '' }}>{{ $program->nilai }}</option>

@@ -17,19 +17,21 @@ class SiswaDataTable
     {
         return $table
             ->columns([
-                TextColumn::make('riwayatPendidikan.angkatan')
+                TextColumn::make('riwayatPendidikanAktif.angkatan')
                     ->label('Angkatan')
                     ->searchable(),
                 TextColumn::make('nama')
                     ->searchable(),
-                TextColumn::make('riwayatPendidikan.nomor_induk')
+                TextColumn::make('riwayatPendidikanAktif.nomor_induk')
                     ->label('Nomor Induk')
                     ->searchable(),
-                TextColumn::make('riwayatPendidikan.programSekolah.nilai')
-                    ->searchable(),
-                TextColumn::make('riwayatPendidikan.jurusan.nama')
-                    ->searchable(),
-                TextColumn::make('riwayatPendidikan.statusSiswa.nilai')
+                TextColumn::make('riwayatPendidikanAktif.programSekolah.nilai')
+                    ->searchable()
+                    ->label('Program Sekolah'),
+                TextColumn::make('riwayatPendidikanAktif.jurusan.nama')
+                    ->searchable()
+                    ->label('Jurusan'),
+                TextColumn::make('riwayatPendidikanAktif.statusSiswa.nilai')
                     ->label('Status Pendidikan')
                     ->searchable(),
                 SelectColumn::make('status_siswa')

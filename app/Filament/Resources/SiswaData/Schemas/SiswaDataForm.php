@@ -55,6 +55,26 @@ class SiswaDataForm
                         TextInput::make('nama')
                             ->label('Nama Panggilan'),
                         TextInput::make('nama_lengkap'),
+                        TextInput::make('user_id')
+                            ->label('User ID (Auto-Generated)')
+                            ->disabled()
+                            ->dehydrated(false), // Don't save this field, user_id is set in controller
+
+                        // Fields for creating User Account
+                        TextInput::make('username_account')
+                            ->label('Username (Login System)')
+                            ->placeholder('Isi jika ingin custom username, kosongkan untuk auto-generate dari Nama'),
+
+                        TextInput::make('email_account')
+                            ->label('Email (Login System)')
+                            ->email()
+                            ->placeholder('Isi jika ingin custom email, kosongkan untuk auto-generate'),
+
+                        TextInput::make('password_account')
+                            ->label('Password (Login System)')
+                            ->password()
+                            ->revealable()
+                            ->placeholder('Default: password'),
                     ])
                     ->collapsible(),
                 Tabs::make('SiswaDataTabs')
@@ -62,6 +82,7 @@ class SiswaDataForm
                         Tabs\Tab::make('Data Pribadi')
                             ->columns(2)
                             ->schema([
+
                                 Select::make('jenis_kelamin')
                                     ->options(['L' => 'Laki-laki', 'P' => 'Perempuan']),
                                 Select::make('agama')

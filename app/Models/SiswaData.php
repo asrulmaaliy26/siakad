@@ -53,6 +53,7 @@ class SiswaData extends Model
         'penerima_kps',
         'no_kps',
         'kebutuhan_khusus',
+        'user_id',
     ];
 
 

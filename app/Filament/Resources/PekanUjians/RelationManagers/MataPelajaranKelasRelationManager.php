@@ -182,6 +182,7 @@ class MataPelajaranKelasRelationManager extends RelationManager
                         ]);
                     })
                     ->modalSubmitAction(false)
+                    ->modalWidth('7xl')
                     ->modalCancelAction(fn() => \Filament\Actions\Action::make('tutup')->label('Tutup')->close()),
             ])
             ->bulkActions([

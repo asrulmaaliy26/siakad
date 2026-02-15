@@ -244,14 +244,13 @@
 
 <!-- Tambahkan CSS untuk meningkatkan tampilan select di dark mode -->
 <style>
-    @media (prefers-color-scheme: dark) {
-        select option {
-            background-color: #1f2937;
-            color: #f3f4f6;
-        }
+    /* Custom style for dark mode select options */
+    .dark select option {
+        background-color: #1f2937;
+        color: #f3f4f6;
     }
 
-    /* Custom scrollbar untuk dark mode */
+    /* Custom scrollbar for dark mode content */
     .dark .overflow-y-auto::-webkit-scrollbar {
         width: 8px;
         height: 8px;

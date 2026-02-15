@@ -10,22 +10,6 @@
     $extension = $filePath ? pathinfo($filePath, PATHINFO_EXTENSION) : null;
     @endphp
 
-    <!-- Header dengan Tombol Tutup -->
-    <div class="flex items-center justify-between mb-2">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-                Detail Soal - {{ $record->matkul ?? 'Mata Kuliah' }}
-            </h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Informasi lengkap soal ujian dan daftar mahasiswa</p>
-        </div>
-        <button
-            onclick="window.close()"
-            class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
-            <x-heroicon-o-x-mark class="w-5 h-5 mr-2" />
-            Tutup
-        </button>
-    </div>
-
     <!-- Info Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Jenis Ujian Card -->
@@ -187,58 +171,9 @@
     </div>
     @endif
 
-    <!-- Daftar Mahasiswa -->
-    <div class="w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <x-heroicon-o-users class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                <h3 class="font-medium text-gray-900 dark:text-white text-sm">Daftar Mahasiswa</h3>
-            </div>
-            <span class="bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs px-2 py-1 rounded-full">
-                {{ $record->siswaDataLjk->count() }} Mahasiswa
-            </span>
-        </div>
-
-        <div class="p-6">
-            @if($record->siswaDataLjk->count() > 0)
-            <div class="space-y-4">
-                <div>
-                    <label for="student-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Pilih Mahasiswa untuk Detail Lebih Lanjut:
-                    </label>
-                    <select id="student-select"
-                        class="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                        <option value="" class="dark:bg-gray-700">-- Pilih Mahasiswa --</option>
-                        @foreach($record->siswaDataLjk as $ljk)
-                        @if($ljk->akademikKrs && $ljk->akademikKrs->riwayatPendidikan && $ljk->akademikKrs->riwayatPendidikan->siswaData)
-                        <option value="{{ $ljk->akademikKrs->riwayatPendidikan->siswaData->id }}" class="dark:bg-gray-700">
-                            {{ $ljk->akademikKrs->riwayatPendidikan->siswaData->nama }}
-                            ({{ $ljk->akademikKrs->riwayatPendidikan->nomor_induk }})
-                        </option>
-                        @endif
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Quick Stats -->
-                <div class="grid grid-cols-2 gap-3 mt-4">
-                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Total Terdaftar</p>
-                        <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $record->siswaDataLjk->count() }}</p>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Sudah Mengumpulkan</p>
-                        <p class="text-lg font-semibold text-green-600 dark:text-green-400">0</p>
-                    </div>
-                </div>
-            </div>
-            @else
-            <div class="text-center py-8">
-                <x-heroicon-o-user-group class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-                <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada mahasiswa yang terdaftar</p>
-            </div>
-            @endif
-        </div>
+    <!-- Input LJK Mahasiswa (Livewire Component) -->
+    <div class="mt-6">
+        @livewire('filament.resources.pekan-ujians.components.input-ljk-minimal', ['record' => $record, 'type' => $type], key('input-ljk-' . $record->id))
     </div>
 </div>
 

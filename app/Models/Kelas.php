@@ -8,7 +8,7 @@ use App\Models\RefOption\ProgramKelas;
 
 class Kelas extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
     protected $table = 'kelas';
     protected $fillable = [
         'ro_program_kelas',

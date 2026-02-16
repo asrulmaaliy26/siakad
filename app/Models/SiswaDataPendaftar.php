@@ -7,8 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SiswaDataPendaftar extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
+
     protected $table = 'siswa_data_pendaftar';
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        // Path: siswa_data_pendaftar -> jurusan -> id_jenjang_pendidikan
+        return $query->whereHas('jurusan', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
 
     protected $attributes = [
         'Status_Kelulusan' => 'B', // Default Proses

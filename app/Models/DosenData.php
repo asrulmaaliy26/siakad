@@ -11,8 +11,17 @@ use App\Models\RefOption\StatusDosen;
 
 class DosenData extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
+
     protected $table = 'dosen_data';
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        // Path: dosen_data -> jurusan -> id_jenjang_pendidikan
+        return $query->whereHas('jurusan', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
     protected $fillable = [
         'foto_profil',
         'nama',
@@ -62,5 +71,4 @@ class DosenData extends Model
     {
         return $this->belongsTo(Agama::class, 'ro_agama');
     }
-
 }

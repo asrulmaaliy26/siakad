@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Jurusan extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
     protected $table = 'jurusan';
     protected $fillable = ['nama', 'id_fakultas', 'id_jenjang_pendidikan'];
 

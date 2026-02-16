@@ -7,8 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MataPelajaranKurikulum extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
+
     protected $table = 'mata_pelajaran_kurikulum';
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        // Path: mata_pelajaran_kurikulum -> kurikulum -> id_jenjang_pendidikan
+        return $query->whereHas('kurikulum', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
     protected $fillable = [
         'id_kurikulum',
         'id_mata_pelajaran_master',

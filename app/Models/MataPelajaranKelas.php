@@ -8,8 +8,17 @@ use App\Models\RefOption\RuangKelas;
 
 class MataPelajaranKelas extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
+
     protected $table = 'mata_pelajaran_kelas';
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        // Path: mata_pelajaran_kelas -> kelas -> id_jenjang_pendidikan
+        return $query->whereHas('kelas', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
     protected $fillable = [
         'id_mata_pelajaran_kurikulum',
         'id_kelas',

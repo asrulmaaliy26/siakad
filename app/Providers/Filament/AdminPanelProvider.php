@@ -69,6 +69,10 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::GLOBAL_SEARCH_AFTER,
+                fn(): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'global-jenjang-switch\')')
+            )
             ->viteTheme('resources/css/filament/admin/theme.css');
     }
 }

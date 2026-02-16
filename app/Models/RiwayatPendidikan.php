@@ -15,7 +15,16 @@ use App\Models\RefOption\JenisKeluar;
 
 class RiwayatPendidikan extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        // Path: riwayat_pendidikan -> jurusan -> id_jenjang_pendidikan
+        return $query->whereHas('jurusan', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
+
     protected $table = 'riwayat_pendidikan';
     protected $fillable = [
         'id_siswa_data',

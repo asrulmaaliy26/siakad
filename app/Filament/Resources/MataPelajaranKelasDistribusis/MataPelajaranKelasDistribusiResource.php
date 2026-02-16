@@ -24,7 +24,17 @@ class MataPelajaranKelasDistribusiResource extends Resource
     protected static ?string $recordTitleAttribute = 'nama';
     protected static string | UnitEnum | null $navigationGroup = 'Perkuliahan';
     protected static ?int $navigationSort = 11;
-    protected static ?string $navigationLabel = 'Distribusi Mata Kuliah ✓';
+    // protected static ?string $navigationLabel = 'Distribusi Mata Kuliah ✓';
+
+    public static function getNavigationLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::mataPelajaran() . ' Distribusi ✓';
+    }
+
+    public static function getModelLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::mataPelajaran() . ' Distribusi';
+    }
 
     public static function form(Schema $schema): Schema
     {

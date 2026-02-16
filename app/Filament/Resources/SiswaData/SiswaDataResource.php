@@ -26,7 +26,17 @@ class SiswaDataResource extends Resource
     // protected static string | UnitEnum | null $navigationGroup = 'Master Data Siswa';
     protected static string | UnitEnum | null $navigationGroup = 'Master Data';
 
-    protected static ?string $navigationLabel = 'Siswa/Mahasiswa ✓';
+    // protected static ?string $navigationLabel = 'Siswa/Mahasiswa ✓';
+
+    public static function getNavigationLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::pesertaDidik() . ' ✓';
+    }
+
+    public static function getModelLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::pesertaDidik();
+    }
 
     protected static ?int $navigationSort = 16;
 

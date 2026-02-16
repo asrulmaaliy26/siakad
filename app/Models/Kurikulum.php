@@ -9,9 +9,16 @@ class Kurikulum extends Model
 {
     use HasFactory, \App\Traits\HasJenjangScope;
 
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        return $query->whereHas('jurusan', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
+
     protected $table = 'kurikulum';
     protected $fillable = [
-        'name',
+        'nama',
         'id_jurusan',
         'id_tahun_akademik',
         // 'id_jenjang_pendidikan', // Derived from Jurusan

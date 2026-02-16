@@ -9,6 +9,13 @@ use App\Models\RefOption\ProgramKelas;
 class Kelas extends Model
 {
     use HasFactory, \App\Traits\HasJenjangScope;
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        return $query->whereHas('jurusan', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
     protected $table = 'kelas';
     protected $fillable = [
         'ro_program_kelas',

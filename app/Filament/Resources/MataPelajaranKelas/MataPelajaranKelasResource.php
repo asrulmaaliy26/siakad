@@ -28,8 +28,17 @@ class MataPelajaranKelasResource extends Resource
     protected static ?string $recordTitleAttribute = 'nama';
     protected static string | UnitEnum | null $navigationGroup = 'Perkuliahan';
     protected static ?int $navigationSort = 12;
-    protected static ?string $navigationLabel = 'Perkuliahan';
+    // protected static ?string $navigationLabel = 'Perkuliahan';
 
+    public static function getNavigationLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::mataPelajaranKelas();
+    }
+
+    public static function getModelLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::mataPelajaranKelas();
+    }
 
     public static function form(Schema $schema): Schema
     {

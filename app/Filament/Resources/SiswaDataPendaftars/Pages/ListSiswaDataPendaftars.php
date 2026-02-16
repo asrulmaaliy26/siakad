@@ -32,18 +32,18 @@ class ListSiswaDataPendaftars extends ListRecords
                 ->badge(fn() => \App\Models\SiswaDataPendaftar::where('status_valid', '1')->count()),
 
             'proses' => Tab::make('Proses')
-                ->modifyQueryUsing(fn($query) => $query->where('Status_Kelulusan', 'B'))
-                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Kelulusan', 'B')->count())
+                ->modifyQueryUsing(fn($query) => $query->where('Status_Pendaftaran', 'B'))
+                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Pendaftaran', 'B')->count())
                 ->badgeColor('warning'),
 
             'lulus' => Tab::make('Lulus')
-                ->modifyQueryUsing(fn($query) => $query->where('Status_Kelulusan', 'Y'))
-                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Kelulusan', 'Y')->count())
+                ->modifyQueryUsing(fn($query) => $query->where('Status_Pendaftaran', 'Y'))
+                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Pendaftaran', 'Y')->count())
                 ->badgeColor('success'),
 
             'tidak_lulus' => Tab::make('Tidak Lulus')
-                ->modifyQueryUsing(fn($query) => $query->where('Status_Kelulusan', 'N'))
-                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Kelulusan', 'N')->count())
+                ->modifyQueryUsing(fn($query) => $query->where('Status_Pendaftaran', 'N'))
+                ->badge(fn() => \App\Models\SiswaDataPendaftar::where('Status_Pendaftaran', 'N')->count())
                 ->badgeColor('danger'),
         ];
     }

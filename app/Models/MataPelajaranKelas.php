@@ -14,8 +14,8 @@ class MataPelajaranKelas extends Model
 
     public function scopeByJenjang($query, $jenjangId)
     {
-        // Path: mata_pelajaran_kelas -> kelas -> id_jenjang_pendidikan
-        return $query->whereHas('kelas', function ($q) use ($jenjangId) {
+        // Path: mata_pelajaran_kelas -> kelas -> jurusan -> id_jenjang_pendidikan
+        return $query->whereHas('kelas.jurusan', function ($q) use ($jenjangId) {
             $q->where('id_jenjang_pendidikan', $jenjangId);
         });
     }

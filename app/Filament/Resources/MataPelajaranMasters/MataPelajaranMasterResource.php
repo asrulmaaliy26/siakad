@@ -21,7 +21,17 @@ class MataPelajaranMasterResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static string | UnitEnum | null $navigationGroup = 'Master Data';
-    protected static ?string $navigationLabel = 'Mata Pelajaran ✓';
+    // protected static ?string $navigationLabel = 'Mata Pelajaran ✓';
+
+    public static function getNavigationLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::mataPelajaran() . ' ✓';
+    }
+
+    public static function getModelLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::mataPelajaran();
+    }
     protected static ?int $navigationSort = 12;
 
     public static function form(Schema $schema): Schema

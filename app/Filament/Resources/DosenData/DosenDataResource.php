@@ -25,7 +25,17 @@ class DosenDataResource extends Resource
     protected static ?int $navigationSort = 15;
 
     protected static ?string $recordTitleAttribute = 'nama';
-    protected static ?string $navigationLabel = 'Guru  ✓';
+    // protected static ?string $navigationLabel = 'Guru  ✓';
+
+    public static function getNavigationLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::pengajar() . ' ✓';
+    }
+
+    public static function getModelLabel(): string
+    {
+        return \App\Helpers\SiakadTerm::pengajar();
+    }
 
     public static function form(Schema $schema): Schema
     {

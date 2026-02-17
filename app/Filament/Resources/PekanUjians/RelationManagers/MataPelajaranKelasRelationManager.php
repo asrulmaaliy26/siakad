@@ -69,27 +69,14 @@ class MataPelajaranKelasRelationManager extends RelationManager
                 //             $direction
                 //         );
                 //     }),
-                Tables\Columns\TextColumn::make('status_ujian_display')
+                Tables\Columns\ToggleColumn::make(
+                    str_contains(strtolower($this->getOwnerRecord()->jenis_ujian ?? ''), 'uas')
+                        ? 'status_uas'
+                        : 'status_uts'
+                )
                     ->label('Status Ujian')
-                    ->badge()
-                    ->getStateUsing(function ($record) {
-                        $pekanUjian = $this->getOwnerRecord();
-                        $jenisUjian = strtolower($pekanUjian->jenis_ujian ?? '');
-
-                        $status = 0;
-                        if (str_contains($jenisUjian, 'uts')) {
-                            $status = $record->status_uts;
-                        } elseif (str_contains($jenisUjian, 'uas')) {
-                            $status = $record->status_uas;
-                        }
-
-                        return $status == 'Y' ? 'Aktif' : 'Tidak Aktif';
-                    })
-                    ->color(fn(string $state): string => match ($state) {
-                        'Aktif' => 'success',
-                        'Tidak Aktif' => 'danger',
-                        default => 'gray',
-                    }),
+                    ->onColor('success')
+                    ->offColor('danger'),
                 Tables\Columns\TextColumn::make('soal_check')
                     ->label('Soal')
                     ->badge()
@@ -166,6 +153,11 @@ class MataPelajaranKelasRelationManager extends RelationManager
             ->actions([
                 ViewAction::make()
                     ->label('Lihat Soal')
+                    ->visible(function ($record) {
+                        $jenisUjian = strtolower($this->getOwnerRecord()->jenis_ujian ?? '');
+                        $column = str_contains($jenisUjian, 'uas') ? 'status_uas' : 'status_uts';
+                        return $record->{$column};
+                    })
                     ->modalHeading(fn($record) => 'Detail Soal - ' . $record->mataPelajaranKurikulum->mataPelajaranMaster->nama)
                     ->modalContent(function ($record, $livewire) {
                         $pekanUjian = $livewire->getOwnerRecord();

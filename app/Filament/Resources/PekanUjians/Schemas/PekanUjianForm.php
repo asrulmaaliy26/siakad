@@ -22,7 +22,8 @@ class PekanUjianForm
                             ->relationship('tahunAkademik', 'nama')
                             ->required()
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->getOptionLabelFromRecordUsing(fn($record) => "{$record->nama} - {$record->periode}"),
 
                         Select::make('jenis_ujian')
                             ->label('Jenis Ujian')

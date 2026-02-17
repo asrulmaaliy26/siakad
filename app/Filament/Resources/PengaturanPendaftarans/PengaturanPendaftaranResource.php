@@ -133,7 +133,8 @@ class PengaturanPendaftaranResource extends Resource
                                             ->searchable()
                                             ->preload()
                                             ->required()
-                                            ->helperText('Pilih tahun akademik untuk periode pendaftaran ini'),
+                                            ->helperText('Pilih tahun akademik untuk periode pendaftaran ini')
+                                            ->getOptionLabelFromRecordUsing(fn($record) => "{$record->nama} - {$record->periode}"),
 
                                         Textarea::make('pengumuman')
                                             ->label('Pengumuman')

@@ -108,4 +108,19 @@ class MataPelajaranKelas extends Model
         $jumlahPertemuan = $this->pertemuanKelas()->count();
         return ($jumlahPertemuan / $totalPertemuan) * 100;
     }
+    protected function statusUts(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => $value === 'Y',
+            set: fn($value) => ($value === true || $value === 'Y' || $value === 1) ? 'Y' : 'N',
+        );
+    }
+
+    protected function statusUas(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => $value === 'Y',
+            set: fn($value) => ($value === true || $value === 'Y' || $value === 1) ? 'Y' : 'N',
+        );
+    }
 }

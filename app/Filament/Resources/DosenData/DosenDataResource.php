@@ -50,7 +50,7 @@ class DosenDataResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\Resources\DosenData\RelationManagers\DosenDokumenRelationManager::class,
         ];
     }
 

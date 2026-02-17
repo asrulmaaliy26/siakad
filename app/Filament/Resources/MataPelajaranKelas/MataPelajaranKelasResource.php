@@ -61,6 +61,7 @@ class MataPelajaranKelasResource extends Resource
             RelationManagers\AbsensiSiswaRelationManager::class,
             RelationManagers\UjianRelationManager::class,
             RelationManagers\SiswaDataLjkRelationManager::class,
+            RelationManagers\JurnalPengajaranRelationManager::class,
         ];
     }
 

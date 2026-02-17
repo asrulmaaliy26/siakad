@@ -71,4 +71,9 @@ class DosenData extends Model
     {
         return $this->belongsTo(Agama::class, 'ro_agama');
     }
+
+    public function dokumen()
+    {
+        return $this->hasMany(DosenDokumen::class, 'id_dosen');
+    }
 }

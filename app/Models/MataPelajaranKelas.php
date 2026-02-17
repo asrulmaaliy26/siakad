@@ -91,6 +91,11 @@ class MataPelajaranKelas extends Model
         return $this->hasMany(AbsensiSiswa::class, 'id_mata_pelajaran_kelas');
     }
 
+    public function jurnalPengajaran()
+    {
+        return $this->hasMany(JurnalPengajaran::class, 'id_mata_pelajaran_kelas');
+    }
+
     // Accessors
     public function getNilaiRataRataAttribute()
     {

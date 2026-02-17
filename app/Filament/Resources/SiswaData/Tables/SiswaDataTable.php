@@ -124,6 +124,51 @@ class SiswaDataTable
                 BulkActionGroup::make([
                     \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make(),
                     DeleteBulkAction::make(),
+                    \Filament\Actions\BulkAction::make('aktifkan_serentak')
+                        ->label('Aktifkan Terpilih')
+                        ->icon('heroicon-o-check-circle')
+                        ->requiresConfirmation()
+                        ->action(function (\Illuminate\Database\Eloquent\Collection $records) {
+                            $successCount = 0;
+                            $skippedCount = 0;
+
+                            foreach ($records as $record) {
+                                // Update status on record
+                                $record->status_siswa = 'aktif';
+                                $record->save();
+
+                                $pendaftar = $record->pendaftar;
+
+                                if (!$pendaftar || !$pendaftar->id_jurusan || !$pendaftar->ro_program_sekolah) {
+                                    $skippedCount++;
+                                    continue;
+                                }
+
+                                $exists = \App\Models\RiwayatPendidikan::where('id_siswa_data', $record->id)
+                                    ->where('id_jurusan', $pendaftar->id_jurusan)
+                                    ->where('ro_program_sekolah', $pendaftar->ro_program_sekolah)
+                                    ->exists();
+
+                                if (!$exists) {
+                                    \App\Models\RiwayatPendidikan::create([
+                                        'id_siswa_data' => $record->id,
+                                        'id_jurusan' => $pendaftar->id_jurusan,
+                                        'ro_program_sekolah' => $pendaftar->ro_program_sekolah,
+                                        'th_masuk' => $pendaftar->Tahun_Masuk ?? date('Y'),
+                                        'angkatan' => $pendaftar->Tahun_Masuk ?? date('Y'),
+                                        'tanggal_mulai' => now(),
+                                        'status' => 'Aktif',
+                                    ]);
+                                    $successCount++;
+                                }
+                            }
+
+                            \Filament\Notifications\Notification::make()
+                                ->title('Aktivasi Massal Selesai')
+                                ->body("{$successCount} siswa diaktifkan. {$skippedCount} dilewati (data tidak lengkap).")
+                                ->success()
+                                ->send();
+                        }),
                 ]),
             ])
             // ->toolbarActions([])

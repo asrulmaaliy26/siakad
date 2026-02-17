@@ -30,7 +30,7 @@ class SiswaDataForm
                             ->label('Foto Profil')
                             ->image()
                             ->disk('public')
-                            ->directory(fn($get) => 'foto-siswa/' . Str::slug($get('nama') ?? 'tanpa-nama'))
+                            ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'foto_profil', 'siswa', $get))
                             ->visibility('public')
                             ->preserveFilenames()
                             ->maxSize(10240)

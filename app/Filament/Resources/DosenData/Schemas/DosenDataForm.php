@@ -25,8 +25,10 @@ class DosenDataForm
                 FileUpload::make('foto_profil')
                     ->label('Foto Profil')
                     ->image()
-                    ->directory(fn ($get) => 'foto-dosen/' . str()->slug($get('nama') ?? 'tanpa-nama'))
-                    ->deleteUploadedFileUsing(fn ($file) => true),
+                    ->disk('public')
+                    ->visibility('public')
+                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'foto_profil', 'dosen', $get))
+                    ->deleteUploadedFileUsing(fn($file) => true),
                 // IDENTITAS
                 TextInput::make('nama')
                     ->label('Nama Lengkap')

@@ -90,7 +90,7 @@ class AkademikKrsForm
                 // Uploads
                 \Filament\Forms\Components\FileUpload::make('kwitansi_krs')
                     ->label('Bukti Pembayaran / Kwitansi')
-                    ->directory('krs-kwitansi')
+                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'kwitansi_krs', 'siswa', $get))
                     ->image()
                     ->disk('public')
                     ->visibility('public')
@@ -101,7 +101,7 @@ class AkademikKrsForm
 
                 \Filament\Forms\Components\FileUpload::make('berkas_lain')
                     ->label('Berkas Pendukung Lain')
-                    ->directory('krs-berkas')
+                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'berkas_lain', 'siswa', $get))
                     ->disk('public')
                     ->visibility('public')
                     ->preserveFilenames()

@@ -68,14 +68,14 @@ class SiswaDataLJKForm
                         FileUpload::make('ljk_uts')
                             ->label('Lembar Jawab UTS')
                             ->disk('public')
-                            ->directory('ljk-uts')
+                            ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'ljk_uts', 'siswa', $get))
                             ->visibility('public')
                             ->downloadable()
                             ->openable(),
                         FileUpload::make('artikel_uts')
                             ->label('Artikel UTS')
                             ->disk('public')
-                            ->directory('artikel-uts')
+                            ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'artikel_uts', 'siswa', $get))
                             ->visibility('public'),
                         DatePicker::make('tgl_upload_ljk_uts')->label('Tgl Upload LJK UTS'),
                         RichEditor::make('ctt_uts')->label('Catatan UTS'),
@@ -87,14 +87,14 @@ class SiswaDataLJKForm
                         FileUpload::make('ljk_uas')
                             ->label('Lembar Jawab UAS')
                             ->disk('public')
-                            ->directory('ljk-uas')
+                            ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'ljk_uas', 'siswa', $get))
                             ->visibility('public')
                             ->downloadable()
                             ->openable(),
                         FileUpload::make('artikel_uas')
                             ->label('Artikel UAS')
                             ->disk('public')
-                            ->directory('artikel-uas')
+                            ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'artikel_uas', 'siswa', $get))
                             ->visibility('public'),
                         DatePicker::make('tgl_upload_ljk_uas')->label('Tgl Upload LJK UAS'),
                         DatePicker::make('tgl_upload_artikel_uas')->label('Tgl Upload Artikel UAS'),
@@ -107,7 +107,7 @@ class SiswaDataLJKForm
                         FileUpload::make('tugas')
                             ->label('File Tugas')
                             ->disk('public')
-                            ->directory('tugas')
+                            ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'tugas', 'siswa', $get))
                             ->visibility('public'),
                         DatePicker::make('tgl_upload_tugas')->label('Tgl Upload Tugas'),
                     ]),

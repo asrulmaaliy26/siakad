@@ -32,7 +32,8 @@ class UjianRelationManager extends RelationManager
                         FileUpload::make('ljk_uts')
                             ->label('Upload LJK UTS')
                             ->disk('public')
-                            ->directory('ljk-uts')
+                            ->visibility('public')
+                            ->directory(fn ($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'ljk_uts', 'siswa', $get))
                             ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
                             ->downloadable()
                             ->openable(),
@@ -46,7 +47,8 @@ class UjianRelationManager extends RelationManager
                         FileUpload::make('ljk_uas')
                             ->label('Upload LJK UAS')
                             ->disk('public')
-                            ->directory('ljk-uas')
+                            ->visibility('public')
+                            ->directory(fn ($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'ljk_uas', 'siswa', $get))
                             ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
                             ->downloadable()
                             ->openable(),

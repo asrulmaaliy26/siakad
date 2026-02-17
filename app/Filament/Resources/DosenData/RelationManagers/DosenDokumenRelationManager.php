@@ -48,7 +48,7 @@ class DosenDokumenRelationManager extends RelationManager
                     ->required()
                     ->disk('public')
                     ->visibility('public')
-                    ->directory('dosen-dokumen')
+                    ->directory(fn($record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'dosen_dokumen', 'dosen'))
                     ->storeFileNamesIn('file_name')
                     ->downloadable()
                     ->openable()

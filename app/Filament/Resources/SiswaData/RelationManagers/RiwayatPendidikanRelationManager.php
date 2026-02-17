@@ -131,7 +131,7 @@ class RiwayatPendidikanRelationManager extends RelationManager
                 ->label('Foto Profil')
                 ->image()
                 ->disk('public')
-                ->directory('foto-profil-riwayat') // Adjust directory as suitable
+                ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'foto_profil', 'siswa', $get))
                 ->visibility('public')
                 ->preserveFilenames()
                 ->maxSize(10240)

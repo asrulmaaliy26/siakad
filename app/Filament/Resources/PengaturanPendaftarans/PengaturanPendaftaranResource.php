@@ -78,6 +78,8 @@ class PengaturanPendaftaranResource extends Resource
                                         FileUpload::make('foto_header')
                                             ->label('Foto Header')
                                             ->image()
+                                            ->disk('public')
+                                            ->visibility('public')
                                             ->directory('pendaftaran/header')
                                             ->maxSize(2048)
                                             ->helperText('Foto header untuk halaman pendaftaran (max 2MB)'),
@@ -85,6 +87,8 @@ class PengaturanPendaftaranResource extends Resource
                                         FileUpload::make('foto_banner')
                                             ->label('Foto Banner')
                                             ->image()
+                                            ->disk('public')
+                                            ->visibility('public')
                                             ->directory('pendaftaran/banner')
                                             ->maxSize(2048)
                                             ->helperText('Foto banner untuk halaman pendaftaran (max 2MB)'),

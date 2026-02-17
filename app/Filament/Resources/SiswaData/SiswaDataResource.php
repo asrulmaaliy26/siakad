@@ -64,6 +64,7 @@ class SiswaDataResource extends Resource
         return [
             'index' => ListSiswaData::route('/'),
             'create' => CreateSiswaData::route('/create'),
+            'download-files' => \App\Filament\Resources\SiswaData\SiswaDataResource\Pages\DownloadPublicFiles::route('/download-files'),
             'view' => ViewSiswaData::route('/{record}'),
             'edit' => EditSiswaData::route('/{record}/edit'),
         ];

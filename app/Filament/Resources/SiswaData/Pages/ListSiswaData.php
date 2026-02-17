@@ -4,7 +4,9 @@ namespace App\Filament\Resources\SiswaData\Pages;
 
 use App\Filament\Resources\SiswaData\SiswaDataResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\Action;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Pages\ListRecords;
 
@@ -27,6 +29,11 @@ class ListSiswaData extends ListRecords
     {
         return [
             CreateAction::make(),
+            Action::make('download_arsip')
+                ->label('Download Arsip')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('success')
+                ->url(fn(): string => SiswaDataResource::getUrl('download-files')),
         ];
     }
 }

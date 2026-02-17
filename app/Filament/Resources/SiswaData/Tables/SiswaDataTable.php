@@ -10,6 +10,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Columns\SelectColumn;
+use Filament\Actions\Action;
+use Filament\Support\Icons\Heroicon;
+use App\Filament\Resources\SiswaData\SiswaDataResource;
 
 class SiswaDataTable
 {
@@ -115,6 +118,11 @@ class SiswaDataTable
                         'aktif' => 'Aktif',
                         'tidak aktif' => 'Tidak Aktif',
                     ]),
+                SelectFilter::make('jenjang_pendidikan')
+                    ->label('Jenjang Pendidikan')
+                    ->relationship('riwayatPendidikanAktif.jurusan.jenjangPendidikan', 'nama')
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -173,7 +181,12 @@ class SiswaDataTable
             ])
             // ->toolbarActions([])
             ->headerActions([
-                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make(),
+                // Action::make('download_arsip')
+                //     ->label('Download Arsip')
+                //     ->icon('heroicon-o-arrow-down-tray')
+                //     ->color('success')
+                //     ->url(fn(): string => SiswaDataResource::getUrl('download-files')),
             ]);
     }
 }

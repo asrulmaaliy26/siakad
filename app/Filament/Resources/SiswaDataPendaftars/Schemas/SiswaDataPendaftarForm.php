@@ -146,7 +146,7 @@ class SiswaDataPendaftarForm
                                         FileUpload::make('Legalisir_Ijazah')
                                             ->label('Legalisir Ijazah')
                                             ->disk('public')
-                                            ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'Legalisir_Ijazah', 'siswa', $get))
+                                            ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPendaftarPath($get, $record, 'Legalisir_Ijazah'))
                                             ->visibility('public')
                                             ->preserveFilenames()
                                             ->maxSize(10240)

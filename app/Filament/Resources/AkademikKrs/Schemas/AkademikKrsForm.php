@@ -21,17 +21,16 @@ class AkademikKrsForm
                     ->preload()
                     ->required(),
 
-                Select::make('id_kelas')
-                    ->relationship('kelas.programKelas', 'nilai')
-                    ->label('Kelas')
-                    ->searchable()
-                    ->preload(),
+                // Select::make('id_kelas')
+                //     ->relationship('kelas.programKelas', 'nilai')
+                //     ->label('Kelas')
+                //     ->searchable()
+                //     ->preload(),
 
                 // Data KRS
-                TextInput::make('semester')
-                    ->label('Semester')
-                    ->numeric()
-                    ->required(),
+                // TextInput::make('semester')
+                //     ->label('Semester')
+                //     ->numeric(),
 
                 TextInput::make('jumlah_sks')
                     ->label('Jumlah SKS')
@@ -76,8 +75,8 @@ class AkademikKrsForm
                     ])
                     ->default('N'),
 
-                TextInput::make('syarat_lain')
-                    ->label('Syarat Lain'),
+                // TextInput::make('syarat_lain')
+                //     ->label('Syarat Lain'),
 
                 Select::make('status_aktif')
                     ->label('Status Aktif')
@@ -90,7 +89,7 @@ class AkademikKrsForm
                 // Uploads
                 \Filament\Forms\Components\FileUpload::make('kwitansi_krs')
                     ->label('Bukti Pembayaran / Kwitansi')
-                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'kwitansi_krs', 'siswa', $get))
+                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadKrsPath($get, $record, 'kwitansi_krs'))
                     ->image()
                     ->disk('public')
                     ->visibility('public')
@@ -101,7 +100,7 @@ class AkademikKrsForm
 
                 \Filament\Forms\Components\FileUpload::make('berkas_lain')
                     ->label('Berkas Pendukung Lain')
-                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'berkas_lain', 'siswa', $get))
+                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadKrsPath($get, $record, 'berkas_lain'))
                     ->disk('public')
                     ->visibility('public')
                     ->preserveFilenames()

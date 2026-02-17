@@ -37,7 +37,7 @@ class InputLjkMinimal extends Component implements HasForms
                 FileUpload::make($this->type == 'uas' ? 'ljk_uas' : 'ljk_uts')
                     ->label('File LJK ' . strtoupper($this->type))
                     ->disk('public')
-                    ->directory(fn($record) => \App\Helpers\UploadPathHelper::uploadPath($record, $this->type == 'uas' ? 'ljk_uas' : 'ljk_uts', 'siswa'))
+                    ->directory(fn($record) => \App\Helpers\UploadPathHelper::uploadUjianPath($record, $this->type == 'uas' ? 'ljk_uas' : 'ljk_uts', 'siswa'))
                     ->visibility('public')
                     ->acceptedFileTypes(['application/pdf', 'image/*'])
                     ->maxSize(10240)

@@ -27,7 +27,7 @@ class DosenDataForm
                     ->image()
                     ->disk('public')
                     ->visibility('public')
-                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadPath($record, 'foto_profil', 'dosen', $get))
+                    ->directory(fn($get, $record) => \App\Helpers\UploadPathHelper::uploadDosenPath($record, 'foto_profil', $get))
                     ->deleteUploadedFileUsing(fn($file) => true),
                 // IDENTITAS
                 TextInput::make('nama')

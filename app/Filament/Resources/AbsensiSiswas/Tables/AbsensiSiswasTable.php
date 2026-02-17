@@ -86,8 +86,12 @@ class AbsensiSiswasTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make(),
                     DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()
             ]);
     }
 }

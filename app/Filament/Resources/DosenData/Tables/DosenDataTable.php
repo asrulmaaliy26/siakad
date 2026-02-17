@@ -16,6 +16,7 @@ use App\Models\RefOption\StatusDosen;
 use App\Models\RefOption\Agama;
 use Filament\Actions\ViewAction;
 
+
 class DosenDataTable
 {
     public static function configure(Table $table): Table
@@ -106,8 +107,12 @@ class DosenDataTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make(),
                     DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make(),
             ]);
     }
 }

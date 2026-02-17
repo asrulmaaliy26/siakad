@@ -240,6 +240,7 @@ class AkademikKrsTable
                     ->modalCancelActionLabel('Batal'),
             ])
             ->bulkActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make(),
                 DeleteBulkAction::make()
                     ->label('Hapus Terpilih')
                     ->icon('heroicon-o-trash')
@@ -254,6 +255,9 @@ class AkademikKrsTable
             ->defaultSort('created_at', 'desc')
             ->poll('60s')
             ->deferLoading()
-            ->persistFiltersInSession();
+            ->persistFiltersInSession()
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()
+            ]);
     }
 }

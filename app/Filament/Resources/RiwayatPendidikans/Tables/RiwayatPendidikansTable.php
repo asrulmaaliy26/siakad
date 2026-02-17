@@ -66,10 +66,15 @@ class RiwayatPendidikansTable
                 EditAction::make(),
                 VIewAction::make(),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
+                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make(),
                     DeleteBulkAction::make(),
                 ]),
+            ])
+            ->toolbarActions([])
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()
             ]);
     }
 }

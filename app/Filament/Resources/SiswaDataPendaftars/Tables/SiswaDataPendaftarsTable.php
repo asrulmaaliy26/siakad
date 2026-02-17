@@ -44,7 +44,7 @@ class SiswaDataPendaftarsTable
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('jenjangPendidikan.nama')
+                TextColumn::make('jurusan.jenjangPendidikan.nama')
                     ->label('Jenjang')
                     ->badge()
                     ->color('primary')
@@ -204,10 +204,14 @@ class SiswaDataPendaftarsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make(),
                     DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()
+            ])
             ->striped()
             ->paginated([10, 25, 50, 100]);
     }

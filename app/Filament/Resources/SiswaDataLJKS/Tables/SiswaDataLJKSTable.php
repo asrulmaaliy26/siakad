@@ -18,38 +18,115 @@ class SiswaDataLJKSTable
             ->columns([
                 TextColumn::make('index')
                     ->label('No')
-                    ->rowIndex(),
+                    ->rowIndex()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('akademikKrs.riwayatPendidikan.siswa.nama')
                     ->label('Nama Peserta')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
 
                 TextColumn::make('akademikKrs.riwayatPendidikan.nomor_induk')
                     ->label('NIM')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
 
                 TextColumn::make('mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.nama')
                     ->label('Mata Kuliah')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(20)
+                    ->toggleable(),
 
-                TextColumn::make('mataPelajaranKelas.dosen.nama')
+                TextColumn::make('mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.bobot')
+                    ->label('Bobot')
+                    ->searchable()
+                    ->sortable()
+                    ->limit(20)
+                    ->toggleable(),
+
+                TextColumn::make('mataPelajaranKelas.dosenData.nama')
                     ->label('Dosen')
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(20)
+                    ->toggleable(),
 
-                TextColumn::make('nilai')
-                    ->label('Nilai')
-                    ->numeric(decimalPlaces: 2)
-                    ->sortable(),
+                TextColumn::make('Nilai_UTS')->label('UTS')->sortable()->toggleable(),
+                TextColumn::make('Nilai_UAS')->label('UAS')->sortable()->toggleable(),
+                TextColumn::make('Nilai_TGS')->label('Tugas 1')->sortable()->toggleable(),
+                TextColumn::make('Nilai_TGS_2')->label('Tugas 2')->sortable()->toggleable(),
+                TextColumn::make('Nilai_TGS_3')->label('Tugas 3')->sortable()->toggleable(),
+                TextColumn::make('Nilai_Performance')->label('Perf')->sortable()->toggleable(),
+
+                TextColumn::make('Nilai_Akhir')
+                    ->label('Akhir')
+                    ->sortable()
+                    ->weight('bold')
+                    ->toggleable(),
+
+                TextColumn::make('Nilai_Huruf')
+                    ->label('Grade')
+                    ->badge()
+                    ->color(fn($state) => match ($state) {
+                        'A' => 'success',
+                        'B' => 'info',
+                        'C' => 'warning',
+                        'D', 'E' => 'danger',
+                        default => 'gray',
+                    })
+                    ->toggleable(),
+
+                TextColumn::make('Status_Nilai')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn($state) => $state === 'Lulus' ? 'success' : 'danger')
+                    ->toggleable(),
+
+                TextColumn::make('ljk_uts')
+                    ->label('LJK UTS')
+                    ->formatStateUsing(fn($state) => $state ? 'Ada' : '-')
+                    ->color(fn($state) => $state ? 'success' : 'gray')
+                    ->url(fn($record) => $record->ljk_uts ? asset('storage/' . $record->ljk_uts) : null)
+                    ->openUrlInNewTab()
+                    ->toggleable(),
+
+                TextColumn::make('ljk_uas')
+                    ->label('LJK UAS')
+                    ->formatStateUsing(fn($state) => $state ? 'Ada' : '-')
+                    ->color(fn($state) => $state ? 'success' : 'gray')
+                    ->url(fn($record) => $record->ljk_uas ? asset('storage/' . $record->ljk_uas) : null)
+                    ->openUrlInNewTab()
+                    ->toggleable(),
+
+                TextColumn::make('cekal_kuliah')
+                    ->label('Cekal')
+                    ->badge()
+                    ->formatStateUsing(fn($state) => $state === 'Y' ? 'YA' : 'TDK')
+                    ->color(fn($state) => $state === 'Y' ? 'danger' : 'success')
+                    ->toggleable(),
+
+                TextColumn::make('transfer')
+                    ->label('Transfer')
+                    ->badge()
+                    ->formatStateUsing(fn($state) => $state === 'Y' ? 'YA' : 'TDK')
+                    ->color(fn($state) => $state === 'Y' ? 'info' : 'gray')
+                    ->toggleable(),
 
                 TextColumn::make('created_at')
                     ->label('Tanggal Input')
                     ->date('d/m/Y')
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                SelectFilter::make('id_akademik_krs')
+                    ->label('Mahasiswa')
+                    ->relationship('akademikKrs', 'id')
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->riwayatPendidikan->siswa->nama . ' (' . $record->riwayatPendidikan->nomor_induk . ')')
+                    ->searchable()
+                    ->preload(),
+
                 SelectFilter::make('id_mata_pelajaran_kelas')
                     ->label('Mata Pelajaran Kelas')
                     ->relationship('mataPelajaranKelas', 'id')
@@ -61,6 +138,19 @@ class SiswaDataLJKSTable
                     })
                     ->searchable()
                     ->preload(),
+
+                SelectFilter::make('dosen')
+                    ->label('Dosen Pengajar')
+                    ->relationship('mataPelajaranKelas.dosenData', 'nama')
+                    ->searchable()
+                    ->preload(),
+
+                SelectFilter::make('cekal_kuliah')
+                    ->label('Status Cekal')
+                    ->options([
+                        'Y' => 'Dicekal',
+                        'N' => 'Tidak Dicekal',
+                    ]),
             ])
             ->recordActions([
                 EditAction::make(),

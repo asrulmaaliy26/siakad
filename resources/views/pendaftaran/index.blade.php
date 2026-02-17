@@ -155,7 +155,14 @@
             </div>
             @endif
 
-            <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data" x-data="{ activeStep: 1, selectedJenjangName: '' }">
+            <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data"
+                x-data="{ 
+                    activeStep: 1, 
+                    selectedJenjangName: {{ json_encode(old('id_jenjang_pendidikan') ? $jenjangs->find(old('id_jenjang_pendidikan'))?->nama : '') }}, 
+                    selectedJenjangId: {{ json_encode(old('id_jenjang_pendidikan')) }},
+                    selectedJurusanId: {{ json_encode(old('id_jurusan')) }},
+                    jurusans: {{ json_encode($jurusans->map(fn($j) => ['id' => $j->id, 'nama' => $j->nama, 'id_jenjang_pendidikan' => $j->id_jenjang_pendidikan])) }}
+                }">
                 @csrf
 
                 <!-- STANDOUT JENJANG PENDIDIKAN SELECTION -->
@@ -165,7 +172,7 @@
                         <span class="text-red-500">*</span>
                     </label>
                     <p class="text-sm text-yellow-700 mb-4">Pastikan Anda memilih jenjang pendidikan yang benar sebelum mengisi data lainnya.</p>
-                    <select name="id_jenjang_pendidikan" id="id_jenjang_pendidikan"
+                    <select name="id_jenjang_pendidikan" id="id_jenjang_pendidikan" x-model="selectedJenjangId"
                         @change="selectedJenjangName = $event.target.options[$event.target.selectedIndex].dataset.nama"
                         class="filament-input mt-1 border-yellow-300 focus:border-yellow-500 focus:ring-yellow-500 text-lg py-3 bg-white" required>
                         <option value="" data-nama="">-- Silakan Pilih Jenjang Pendidikan --</option>
@@ -221,36 +228,40 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <!-- Jenjang Pendidikan Moved to Top -->
 
-                                    <div x-show="selectedJenjangName !== 'MA'" class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- Program Sekolah (Visible for ALL) -->
+                                    <div>
+                                        <label class="block font-medium text-sm text-gray-700" for="ro_program_sekolah">Program Sekolah</label>
+                                        <select name="ro_program_sekolah" id="ro_program_sekolah" class="filament-input mt-1">
+                                            <option value="">-- Pilih Program --</option>
+                                            @foreach($programSekolahs as $program)
+                                            <option value="{{ $program->id }}" {{ old('ro_program_sekolah') == $program->id ? 'selected' : '' }}>{{ $program->nilai }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                        <div>
-                                            <label class="block font-medium text-sm text-gray-700" for="ro_program_sekolah">Program Sekolah</label>
-                                            <select name="ro_program_sekolah" id="ro_program_sekolah" class="filament-input mt-1">
-                                                <option value="">-- Pilih Program --</option>
-                                                @foreach($programSekolahs as $program)
-                                                <option value="{{ $program->id }}" {{ old('ro_program_sekolah') == $program->id ? 'selected' : '' }}>{{ $program->nilai }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                    <!-- Jurusan (Visible for ALL) -->
+                                    <div>
+                                        <label class="block font-medium text-sm text-gray-700" for="id_jurusan">Pilihan Jurusan</label>
+                                        <select name="id_jurusan" id="id_jurusan" class="filament-input mt-1" x-model="selectedJurusanId">
+                                            <option value="">-- Pilih Jurusan --</option>
+                                            <template x-for="jurusan in jurusans.filter(j => j.id_jenjang_pendidikan == selectedJenjangId)">
+                                                <option :value="jurusan.id" x-text="jurusan.nama" :selected="jurusan.id == selectedJurusanId"></option>
+                                            </template>
+                                            <template x-if="selectedJenjangId && jurusans.filter(j => j.id_jenjang_pendidikan == selectedJenjangId).length === 0">
+                                                <option disabled>-- Tidak ada jurusan untuk jenjang ini --</option>
+                                            </template>
+                                        </select>
+                                    </div>
 
-                                        <div>
-                                            <label class="block font-medium text-sm text-gray-700" for="id_jurusan">Pilihan Jurusan</label>
-                                            <select name="id_jurusan" id="id_jurusan" class="filament-input mt-1">
-                                                <option value="">-- Pilih Jurusan --</option>
-                                                @foreach($jurusans as $jurusan)
-                                                <option value="{{ $jurusan->id }}" {{ old('id_jurusan') == $jurusan->id ? 'selected' : '' }}>{{ $jurusan->nama }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label class="block font-medium text-sm text-gray-700" for="Kelas_Program_Kuliah">Kelas Program</label>
-                                            <select name="Kelas_Program_Kuliah" id="Kelas_Program_Kuliah" class="filament-input mt-1">
-                                                <option value="Reguler Pagi" {{ old('Kelas_Program_Kuliah') == 'Reguler Pagi' ? 'selected' : '' }}>Reguler Pagi</option>
-                                                <option value="Reguler Sore" {{ old('Kelas_Program_Kuliah') == 'Reguler Sore' ? 'selected' : '' }}>Reguler Sore</option>
-                                                <option value="Karyawan" {{ old('Kelas_Program_Kuliah') == 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
-                                            </select>
-                                        </div>
+                                    <!-- Kelas Program (Visible for ALL) -->
+                                    <!-- <div x-show="selectedJenjangName !== 'MA'"></div> -->
+                                    <div>
+                                        <label class="block font-medium text-sm text-gray-700" for="Kelas_Program_Kuliah">Kelas Program</label>
+                                        <select name="Kelas_Program_Kuliah" id="Kelas_Program_Kuliah" class="filament-input mt-1">
+                                            <option value="Reguler Pagi" {{ old('Kelas_Program_Kuliah') == 'Reguler Pagi' ? 'selected' : '' }}>Reguler Pagi</option>
+                                            <option value="Reguler Sore" {{ old('Kelas_Program_Kuliah') == 'Reguler Sore' ? 'selected' : '' }}>Reguler Sore</option>
+                                            <option value="Karyawan" {{ old('Kelas_Program_Kuliah') == 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
+                                        </select>
                                     </div>
 
                                     <div>

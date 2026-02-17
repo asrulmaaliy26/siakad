@@ -7,8 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SiswaDataLJK extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
+
     protected $table = 'siswa_data_ljk';
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        // Path: siswa_data_ljk -> mata_pelajaran_kelas -> kelas -> jurusan -> id_jenjang_pendidikan
+        return $query->whereHas('mataPelajaranKelas.kelas.jurusan', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
+
     // protected $primaryKey = 'id_data_ljk';
 
     protected $fillable = [

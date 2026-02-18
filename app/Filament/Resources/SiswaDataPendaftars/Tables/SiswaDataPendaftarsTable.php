@@ -10,6 +10,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use Illuminate\Support\Facades\Auth;
 
 class SiswaDataPendaftarsTable
 {
@@ -78,7 +81,8 @@ class SiswaDataPendaftarsTable
                         '1' => '✅ Sudah Divalidasi',
                     ])
                     ->selectablePlaceholder(false)
-                    ->sortable(),
+                    ->sortable()
+                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                 TextColumn::make('reff')
                     ->label('Referral')
@@ -95,7 +99,9 @@ class SiswaDataPendaftarsTable
                         'Y' => '✅ Diterima',
                         'N' => '❌ Ditolak',
                     ])
-                    ->sortable(),
+                    ->sortable()
+
+                    ->disabled(fn() => Auth::user()->hasRole('murid') && !Auth::user()->hasAnyRole(['super_admin', 'admin'])),
 
                 SelectColumn::make('Status_Kelulusan')
                     ->label('Status Kelulusan')
@@ -104,7 +110,8 @@ class SiswaDataPendaftarsTable
                         'Y' => '🎓 Lulus',
                         'N' => '❌ Tidak Lulus',
                     ])
-                    ->sortable(),
+                    ->sortable()
+                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                 TextColumn::make('Diterima_di_Prodi')
                     ->label('Diterima di Prodi')
@@ -204,13 +211,13 @@ class SiswaDataPendaftarsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make(),
+                    ExportBulkAction::make(),
                     DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
             ->headerActions([
-                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()
+                ExportAction::make()
             ])
             ->striped()
             ->paginated([10, 25, 50, 100]);

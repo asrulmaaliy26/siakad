@@ -61,4 +61,19 @@ class PekanUjianResource extends Resource
             'edit' => EditPekanUjian::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = \Filament\Facades\Filament::auth()->user();
+
+        // Optional: Filter Pekan Ujian itself if needed for students
+        // if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+        //     $query->whereHas('tahunAkademik.kelas.mataPelajaranKelas.siswaDataLjk.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+        //         $q->where('user_id', $user->id);
+        //     });
+        // }
+
+        return $query;
+    }
 }

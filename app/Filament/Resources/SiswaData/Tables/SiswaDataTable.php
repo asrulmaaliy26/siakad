@@ -101,7 +101,8 @@ class SiswaDataTable
                                 }
                             }
                         }
-                    }),
+                    })
+                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -176,7 +177,8 @@ class SiswaDataTable
                                 ->body("{$successCount} siswa diaktifkan. {$skippedCount} dilewati (data tidak lengkap).")
                                 ->success()
                                 ->send();
-                        }),
+                        })
+                        ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
                 ]),
             ])
             // ->toolbarActions([])

@@ -11,7 +11,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class MataPelajaranKelasPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:MataPelajaranKelas');
@@ -35,6 +35,11 @@ class MataPelajaranKelasPolicy
     public function delete(AuthUser $authUser, MataPelajaranKelas $mataPelajaranKelas): bool
     {
         return $authUser->can('Delete:MataPelajaranKelas');
+    }
+
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:MataPelajaranKelas');
     }
 
     public function restore(AuthUser $authUser, MataPelajaranKelas $mataPelajaranKelas): bool
@@ -66,5 +71,4 @@ class MataPelajaranKelasPolicy
     {
         return $authUser->can('Reorder:MataPelajaranKelas');
     }
-
 }

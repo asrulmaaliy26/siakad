@@ -78,11 +78,18 @@ class MataPelajaranKelasResource extends Resource
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         $query = parent::getEloquentQuery();
-        $user = auth()->user();
+        $user = \Filament\Facades\Filament::auth()->user();
 
         // Jika user memiliki role 'pengajar' dan bukan super_admin/admin
         if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
             $query->whereHas('dosenData', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+
+        // Jika user memiliki role 'murid' dan bukan super_admin/admin
+        if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+            $query->whereHas('siswaDataLjk.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             });
         }

@@ -26,6 +26,8 @@ class SiswaDataPendaftarResource extends Resource
     protected static ?string $pluralModelLabel = 'Data Pendaftar';
     protected static ?int $navigationSort = 1;
 
+
+
     public static function form(Schema $schema): Schema
     {
         return SiswaDataPendaftarForm::configure($schema);
@@ -50,5 +52,20 @@ class SiswaDataPendaftarResource extends Resource
             'create' => CreateSiswaDataPendaftar::route('/create'),
             'edit' => EditSiswaDataPendaftar::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        // Jika user memiliki role 'murid' dan bukan super_admin/admin
+        if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+            $query->whereHas('siswa', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+
+        return $query;
     }
 }

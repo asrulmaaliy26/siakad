@@ -33,7 +33,8 @@ class ListSiswaData extends ListRecords
                 ->label('Download Arsip')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
-                ->url(fn(): string => SiswaDataResource::getUrl('download-files')),
+                ->url(fn(): string => SiswaDataResource::getUrl('download-files'))
+                ->disabled(fn() => !\Filament\Facades\Filament::auth()->user()?->hasAnyRole(['super_admin', 'admin'])),
         ];
     }
 }

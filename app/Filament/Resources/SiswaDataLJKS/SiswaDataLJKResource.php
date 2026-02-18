@@ -65,6 +65,13 @@ class SiswaDataLJKResource extends Resource
             });
         }
 
+        // Jika user memiliki role 'murid' dan bukan super_admin/admin
+        if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+            $query->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+
         return $query;
     }
 }

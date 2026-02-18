@@ -11,7 +11,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class SiswaDataPendaftarPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:SiswaDataPendaftar');
@@ -35,6 +35,11 @@ class SiswaDataPendaftarPolicy
     public function delete(AuthUser $authUser, SiswaDataPendaftar $siswaDataPendaftar): bool
     {
         return $authUser->can('Delete:SiswaDataPendaftar');
+    }
+
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:SiswaDataPendaftar');
     }
 
     public function restore(AuthUser $authUser, SiswaDataPendaftar $siswaDataPendaftar): bool
@@ -66,5 +71,4 @@ class SiswaDataPendaftarPolicy
     {
         return $authUser->can('Reorder:SiswaDataPendaftar');
     }
-
 }

@@ -29,17 +29,24 @@ class MataPelajaranKelasRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->query(
-                MataPelajaranKelas::query()
+            ->query(function () {
+                $user = \Filament\Facades\Filament::auth()->user();
+                return MataPelajaranKelas::query()
                     ->whereHas('kelas', function (Builder $query) {
                         // Filter: Hanya tampilkan mata pelajaran kelas yang berada di tahun akademik yang sama dengan Pekan Ujian
                         $query->where('id_tahun_akademik', $this->getOwnerRecord()->id_tahun_akademik);
                     })
                     ->when(
-                        auth()->user()->hasRole('pengajar') && !auth()->user()->hasAnyRole(['super_admin', 'admin']),
-                        fn(Builder $query) => $query->whereHas('dosenData', fn(Builder $q) => $q->where('user_id', auth()->id()))
+                        $user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin']),
+                        fn(Builder $query) => $query->whereHas('dosenData', fn(Builder $q) => $q->where('user_id', $user->id))
                     )
-            )
+                    ->when(
+                        $user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin']),
+                        fn(Builder $query) => $query->whereHas('siswaDataLjk.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                            $q->where('user_id', $user->id);
+                        })
+                    );
+            })
             ->recordTitleAttribute('id_mata_pelajaran_kelas')
             ->columns([
                 Tables\Columns\TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.nama')
@@ -80,7 +87,8 @@ class MataPelajaranKelasRelationManager extends RelationManager
                 )
                     ->label('Status Ujian')
                     ->onColor('success')
-                    ->offColor('danger'),
+                    ->offColor('danger')
+                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole('murid') && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole(['super_admin', 'admin'])),
                 Tables\Columns\TextColumn::make('soal_check')
                     ->label('Soal')
                     ->badge()

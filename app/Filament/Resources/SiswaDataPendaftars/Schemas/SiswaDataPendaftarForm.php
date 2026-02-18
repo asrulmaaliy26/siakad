@@ -6,6 +6,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
@@ -24,27 +25,38 @@ class SiswaDataPendaftarForm
                                 Section::make('Informasi Pendaftaran')
                                     ->schema([
                                         Select::make('id_siswa_data')
-                                            ->label('Siswa')
+                                            ->label('Pilih Siswa')
                                             ->relationship('siswa', 'nama')
                                             ->searchable()
                                             ->preload()
-                                            ->required(),
+                                            ->visible(fn($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord),
 
-                                        TextInput::make('Nama_Lengkap')
-                                            ->label('Nama Lengkap')
-                                            ->maxLength(255),
+                                        Group::make()
+                                            ->relationship('siswa')
+                                            ->schema([
+                                                TextInput::make('nama')
+                                                    ->label('Nama Siswa (Data Utama)')
+                                                    ->required(),
+                                                TextInput::make('nama_lengkap')
+                                                    ->label('Nama Lengkap (Data Utama)')
+                                                    ->maxLength(255),
+                                            ])
+                                            ->visible(fn($livewire) => !($livewire instanceof \Filament\Resources\Pages\CreateRecord)),
 
                                         TextInput::make('No_Pendaftaran')
                                             ->label('No. Pendaftaran')
-                                            ->maxLength(255),
+                                            ->maxLength(255)
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                                         TextInput::make('Tahun_Masuk')
                                             ->label('Tahun Masuk')
-                                            ->maxLength(4),
+                                            ->maxLength(4)
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                                         DatePicker::make('Tgl_Daftar')
                                             ->label('Tanggal Daftar')
-                                            ->default(now()),
+                                            ->default(now())
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
                                     ])
                                     ->columns(2),
 
@@ -57,8 +69,9 @@ class SiswaDataPendaftarForm
                                                     ->where('status', 1);
                                             })
                                             ->searchable()
+                                            // ->required()
                                             ->preload()
-                                            ->required(),
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
                                         // ->reactive()
                                         // ->afterStateUpdated(function ($state, callable $set) {
                                         //     // Logic removed as id_jenjang_pendidikan is removed
@@ -76,10 +89,11 @@ class SiswaDataPendaftarForm
                                             ->label('Kelas Program'),
 
                                         Select::make('id_jurusan')
-                                            ->label('Jurusan Diterima')
+                                            ->label('Jurusan')
                                             ->relationship('jurusan', 'nama')
                                             ->searchable()
-                                            ->preload(),
+                                            ->preload()
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                                         Select::make('Prodi_Pilihan_1')
                                             ->label('Prodi Pilihan 1')
@@ -98,7 +112,8 @@ class SiswaDataPendaftarForm
                                                     ->where('status', 1);
                                             })
                                             ->searchable()
-                                            ->preload(),
+                                            ->preload()
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                                         Select::make('Jenis_Pembiayaan')
                                             ->label('Jenis Pembiayaan')
@@ -106,7 +121,8 @@ class SiswaDataPendaftarForm
                                                 'Mandiri' => 'Mandiri',
                                                 'Beasiswa' => 'Beasiswa',
                                                 'Lainnya' => 'Lainnya',
-                                            ]),
+                                            ])
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
                                     ])
                                     ->columns(2),
                             ]),
@@ -199,7 +215,8 @@ class SiswaDataPendaftarForm
                                                 '1' => 'Sudah Divalidasi',
                                             ])
                                             ->default('0')
-                                            ->required(),
+                                            ->required()
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                                         Select::make('Status_Pendaftaran')
                                             ->label('Status Pendaftaran')
@@ -209,7 +226,8 @@ class SiswaDataPendaftarForm
                                                 'N' => '❌ Ditolak',
                                             ])
                                             ->default('B')
-                                            ->required(),
+                                            ->required()
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                                         Select::make('Status_Kelulusan')
                                             ->label('Status Kelulusan')
@@ -219,7 +237,8 @@ class SiswaDataPendaftarForm
                                                 'N' => '❌ Tidak Lulus',
                                             ])
                                             ->default('B')
-                                            ->required(),
+                                            ->required()
+                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                                         TextInput::make('Diterima_di_Prodi')
                                             ->label('Diterima di Prodi'),

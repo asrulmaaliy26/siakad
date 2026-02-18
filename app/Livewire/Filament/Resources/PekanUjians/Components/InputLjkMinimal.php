@@ -27,6 +27,15 @@ class InputLjkMinimal extends Component implements HasForms
     {
         $this->record = $record;
         $this->type = $type;
+
+        $user = \Filament\Facades\Filament::auth()->user();
+        if ($user && $user->hasRole('murid')) {
+            $siswa = \App\Models\SiswaData::where('user_id', $user->id)->first();
+            if ($siswa) {
+                $this->selectedStudentId = $siswa->id;
+                $this->updatedSelectedStudentId();
+            }
+        }
     }
 
     public function form(Schema $form): Schema
@@ -78,7 +87,8 @@ class InputLjkMinimal extends Component implements HasForms
         $ljk = $this->getSelectedLjkRecord();
         if (!$ljk) return;
 
-        $ljk->update($this->form->getState());
+        $state = $this->form->getState();
+        $ljk->update($state);
 
         Notification::make()
             ->title('Data LJK Berhasil Disimpan')

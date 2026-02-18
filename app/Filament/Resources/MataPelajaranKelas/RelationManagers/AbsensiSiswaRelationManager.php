@@ -332,7 +332,8 @@ class AbsensiSiswaRelationManager extends RelationManager
                             ->title('Sesi absensi berhasil dibuat')
                             ->success()
                             ->send();
-                    }),
+                    })
+                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
             ])
             ->actions([
                 EditAction::make()

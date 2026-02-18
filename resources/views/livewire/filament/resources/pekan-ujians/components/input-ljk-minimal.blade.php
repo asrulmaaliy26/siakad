@@ -1,4 +1,9 @@
-<div class="space-y-6">
+    @php
+    $user = \Filament\Facades\Filament::auth()->user();
+    $isMurid = $user && $user->hasRole('murid');
+    @endphp
+
+    @if(!$isMurid)
     <!-- Daftar Mahasiswa Dropdown -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
         <label for="student-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -17,6 +22,7 @@
             @endforeach
         </select>
     </div>
+    @endif
 
     @if($selectedStudentId && $this->getSelectedLjkRecord())
     @php
@@ -25,7 +31,8 @@
     $nim = $selectedLjk->akademikKrs->riwayatPendidikan->nomor_induk;
     @endphp
 
-    <!-- Selected Student Info -->
+    @if(!$isMurid)
+    <!-- Selected Student Info (Only for Admin/Pengajar) -->
     <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg">
         <div class="flex">
             <div class="flex-shrink-0">
@@ -41,6 +48,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Form Input LJK -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
@@ -57,4 +65,4 @@
         </form>
     </div>
     @endif
-</div>
+    </div>

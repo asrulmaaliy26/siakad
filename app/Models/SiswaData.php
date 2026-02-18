@@ -80,8 +80,8 @@ class SiswaData extends Model
     public function riwayatPendidikanAktif()
     {
         return $this->hasOne(RiwayatPendidikan::class, 'id_siswa_data')
-            ->where('status', 'Y') // Assuming 'Y' is the active status based on recent edits
-            ->latest(); // Get the most recent one if multiple exist (though ideally only one active)
+            ->whereIn('status', ['Y', 'Aktif']) // Mendukung 'Y' (lama) dan 'Aktif' (baru)
+            ->latest(); // Ambil yang terbaru jika ada lebih dari satu
     }
 
     public function akademikKrs()

@@ -22,6 +22,7 @@ class MataPelajaranKelasForm
         return $schema
             ->components([
                 Section::make('Informasi Dasar')
+                    ->collapsed()
                     ->columns(2)
                     ->schema([
                         Select::make('id_mata_pelajaran_kurikulum')
@@ -66,6 +67,7 @@ class MataPelajaranKelasForm
                     ]),
 
                 Section::make('Jadwal Rutin')
+                    // ->collapsed()
                     ->columns(2)
                     ->schema([
                         Select::make('hari')

@@ -28,6 +28,13 @@ class SiswaDataLjkRelationManager extends RelationManager
                     ->label('Mata Pelajaran Kelas')
                     ->relationship('mataPelajaranKelas', 'id', modifyQueryUsing: function (Builder $query) {
                         $query->with(['mataPelajaranKurikulum.mataPelajaranMaster', 'dosenData', 'ruangKelas']);
+
+                        $user = auth()->user();
+                        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+                            $query->whereHas('dosenData', function ($q) use ($user) {
+                                $q->where('user_id', $user->id);
+                            });
+                        }
                     })
                     ->getOptionLabelFromRecordUsing(function (MataPelajaranKelas $record) {
                         $namaMatkul = $record->mataPelajaranKurikulum->mataPelajaranMaster->nama ?? '-';
@@ -92,5 +99,21 @@ class SiswaDataLjkRelationManager extends RelationManager
                     DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    protected function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+            $query->whereHas('mataPelajaranKelas', function ($q) use ($user) {
+                $q->whereHas('dosenData', function ($dq) use ($user) {
+                    $dq->where('user_id', $user->id);
+                });
+            });
+        }
+
+        return $query;
     }
 }

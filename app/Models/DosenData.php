@@ -41,7 +41,13 @@ class DosenData extends Model
         'status_kawin',
         'ro_status_dosen',
         'ro_agama',
+        'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function mataPelajaranKelas()
     {

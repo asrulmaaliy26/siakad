@@ -37,6 +37,11 @@ class CreateSiswaData extends CreateRecord
             'password' => \Illuminate\Support\Facades\Hash::make($password),
         ]);
 
+        // Assign Role 'murid'
+        if (\Spatie\Permission\Models\Role::where('name', 'murid')->exists()) {
+            $user->assignRole('murid');
+        }
+
         // 5. Assign user_id to SiswaData
         $data['user_id'] = $user->id;
 

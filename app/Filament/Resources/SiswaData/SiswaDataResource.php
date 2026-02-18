@@ -72,15 +72,22 @@ class SiswaDataResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getEloquentQuery()
+        $query = parent::getEloquentQuery()
             ->where(function ($query) {
                 // Tampilkan siswa yang:
                 // 1. Tidak memiliki data pendaftar (siswa lama/input manual)
-                // 2. ATAU memiliki data pendaftar dengan Status_Kelulusan = 'Y' (Lulus)
+                // 2. ATAU memiliki data pendaftar dengan Status_Pendaftaran = 'Y' 
                 $query->doesntHave('pendaftar')
                     ->orWhereHas('pendaftar', function ($q) {
                         $q->where('Status_Pendaftaran', 'Y');
                     });
             });
+
+        $user = auth()->user();
+        if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 }

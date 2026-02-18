@@ -106,6 +106,14 @@ class MataPelajaranKelasRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $user = auth()->user();
+                if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+                    $query->whereHas('dosenData', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
+                }
+            })
             ->columns([
                 TextColumn::make('mataPelajaranKurikulum.mataPelajaranMaster.nama')
                     ->label('Mata Pelajaran')

@@ -63,4 +63,17 @@ class DosenDataResource extends Resource
             'edit' => EditDosenData::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        // Jika user memiliki role 'pengajar' dan bukan super_admin/admin
+        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
+    }
 }

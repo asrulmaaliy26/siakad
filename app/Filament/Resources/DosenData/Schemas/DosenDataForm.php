@@ -109,6 +109,36 @@ class DosenDataForm
                     ->label('Agama')
                     ->options(Agama::pluck('nilai', 'id'))
                     ->searchable(),
+
+                TextInput::make('user_id')
+                    ->label('User ID')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->placeholder('Belum terhubung ke Akun Login')
+                    ->visible(fn($record) => $record?->user_id !== null),
+
+                // Fields for creating User Account - only if user_id is null
+                \Filament\Schemas\Components\Section::make('Buat Akun Login (Pengajar)')
+                    ->description('Dosen ini belum memiliki akun login. Isi data di bawah untuk membuatnya secara otomatis.')
+                    ->schema([
+                        TextInput::make('username_account')
+                            ->label('Username')
+                            ->placeholder('Auto-generate dari Nama jika kosong'),
+
+                        TextInput::make('email_account')
+                            ->label('Email')
+                            ->email()
+                            ->placeholder('Auto-generate jika kosong'),
+
+                        TextInput::make('password_account')
+                            ->label('Password')
+                            ->password()
+                            ->revealable()
+                            ->placeholder('Default: password'),
+                    ])
+                    ->visible(fn($record) => $record === null || $record->user_id === null)
+                    ->columns(1)
+                    ->collapsible(),
             ]);
     }
 }

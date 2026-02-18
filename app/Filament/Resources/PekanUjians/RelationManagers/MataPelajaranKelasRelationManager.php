@@ -35,6 +35,10 @@ class MataPelajaranKelasRelationManager extends RelationManager
                         // Filter: Hanya tampilkan mata pelajaran kelas yang berada di tahun akademik yang sama dengan Pekan Ujian
                         $query->where('id_tahun_akademik', $this->getOwnerRecord()->id_tahun_akademik);
                     })
+                    ->when(
+                        auth()->user()->hasRole('pengajar') && !auth()->user()->hasAnyRole(['super_admin', 'admin']),
+                        fn(Builder $query) => $query->whereHas('dosenData', fn(Builder $q) => $q->where('user_id', auth()->id()))
+                    )
             )
             ->recordTitleAttribute('id_mata_pelajaran_kelas')
             ->columns([

@@ -107,4 +107,9 @@ class SiswaData extends Model
     {
         return $this->hasOne(SiswaDataPendaftar::class, 'id_siswa_data');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

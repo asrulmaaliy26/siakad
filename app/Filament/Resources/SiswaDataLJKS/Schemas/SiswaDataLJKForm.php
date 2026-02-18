@@ -31,7 +31,14 @@ class SiswaDataLJKForm
                             ->required(),
                         Select::make('id_mata_pelajaran_kelas')
                             ->label('Mata Kuliah')
-                            ->relationship('mataPelajaranKelas', 'id')
+                            ->relationship('mataPelajaranKelas', 'id', modifyQueryUsing: function ($query) {
+                                $user = auth()->user();
+                                if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+                                    $query->whereHas('dosenData', function ($q) use ($user) {
+                                        $q->where('user_id', $user->id);
+                                    });
+                                }
+                            })
                             ->getOptionLabelFromRecordUsing(fn($record) => $record->mataPelajaranKurikulum->mataPelajaranMaster->nama . ' - ' . ($record->kelas->programKelas->nilai ?? '-'))
                             ->searchable()
                             ->preload()

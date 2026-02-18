@@ -50,4 +50,21 @@ class SiswaDataLJKResource extends Resource
             'edit' => EditSiswaDataLJK::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        // Jika user memiliki role 'pengajar' dan bukan super_admin/admin
+        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+            $query->whereHas('mataPelajaranKelas', function ($q) use ($user) {
+                $q->whereHas('dosenData', function ($dq) use ($user) {
+                    $dq->where('user_id', $user->id);
+                });
+            });
+        }
+
+        return $query;
+    }
 }

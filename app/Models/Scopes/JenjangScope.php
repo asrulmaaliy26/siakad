@@ -17,6 +17,12 @@ class JenjangScope implements Scope
         $activeJenjangId = Session::get('active_jenjang_id');
 
         if ($activeJenjangId) {
+            // Check if this jenjang is 'UMUM' (General/All)
+            $jenjang = \App\Models\JenjangPendidikan::find($activeJenjangId);
+            if ($jenjang && (strtoupper($jenjang->nama) === 'UMUM' || strtoupper($jenjang->type) === 'UMUM')) {
+                return;
+            }
+
             // Check if model has a specific scope defined.
             // Note: Elquent allows defining scopeByJenjang($query, $value).
             // We can call it here on the builder instance.

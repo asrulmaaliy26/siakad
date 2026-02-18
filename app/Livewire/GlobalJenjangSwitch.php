@@ -37,7 +37,7 @@ class GlobalJenjangSwitch extends Component
     public function render()
     {
         return view('livewire.global-jenjang-switch', [
-            'jenjangs' => JenjangPendidikan::all(),
+            'jenjangs' => JenjangPendidikan::orderByRaw("CASE WHEN nama = 'UMUM' OR type = 'UMUM' THEN 0 ELSE 1 END")->get(),
         ]);
     }
 }

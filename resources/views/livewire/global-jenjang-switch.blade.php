@@ -1,4 +1,5 @@
 <div class="flex items-center">
+    @if(\Filament\Facades\Filament::auth()->user()?->hasRole('super_admin'))
     <div class="relative group">
         <label for="jenjang_switch" class="sr-only">Pilih Jenjang</label>
         <div class="flex items-center space-x-2 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 p-1">
@@ -21,4 +22,5 @@
             </select>
         </div>
     </div>
+    @endif
 </div>

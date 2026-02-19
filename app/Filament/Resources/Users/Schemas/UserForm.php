@@ -24,7 +24,31 @@ class UserForm
                     ->dehydrated(fn($state) => filled($state))
                     ->required(fn($operation) => $operation === 'create'),
                 \Filament\Forms\Components\Select::make('roles')
-                    ->relationship('roles', 'name')
+                    ->relationship('roles', 'name', function ($query) {
+                        $user = \Filament\Facades\Filament::auth()->user();
+                        $activeJenjangId = \Illuminate\Support\Facades\Session::get('active_jenjang_id');
+                        $jenjang = \App\Models\JenjangPendidikan::find($activeJenjangId);
+
+                        // Jika bukan super_admin, dilarang melihat/memberikan role super_admin
+                        if ($user && !$user->hasRole('super_admin')) {
+                            $query->where('name', '!=', 'super_admin');
+                        }
+
+                        // Jika jenjang UMUM atau tidak ada jenjang aktif (dan user adalah super_admin), tampilkan semua role sisa
+                        if (!$jenjang || strtoupper($jenjang->nama) === 'UMUM' || strtoupper($jenjang->type) === 'UMUM') {
+                            return $query;
+                        }
+
+                        // Filter: Sembunyikan role yang tidak sesuai dengan jenjang aktif, 
+                        // TAPI tetap tampilkan role Global (NULL) dan role jenjang UMUM.
+                        return $query->where(function ($q) use ($activeJenjangId) {
+                            $q->whereNull('jenjang_id')
+                                ->orWhere('jenjang_id', $activeJenjangId)
+                                ->orWhereHas('jenjang', function ($jq) {
+                                    $jq->where('nama', 'UMUM')->orWhere('type', 'UMUM');
+                                });
+                        });
+                    })
                     ->multiple()
                     ->preload()
                     ->searchable(),

@@ -36,7 +36,12 @@ class SyncJenjangRoles extends Command
             $role = Role::firstOrCreate([
                 'name' => $roleName,
                 'guard_name' => 'web'
+            ], [
+                'jenjang_id' => $jenjang->id
             ]);
+
+            // Ensure jenjang_id is set for existing roles
+            $role->update(['jenjang_id' => $jenjang->id]);
 
             $this->line('Role synced: ' . $roleName);
         }

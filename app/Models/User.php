@@ -17,13 +17,9 @@ class User extends Authenticatable implements FilamentUser
 
     public function scopeByJenjang($query, $jenjangId)
     {
-        $jenjang = \App\Models\JenjangPendidikan::find($jenjangId);
-        $activeSlug = $jenjang ? \Illuminate\Support\Str::slug($jenjang->nama) : 'unknown';
-
-        return $query->where(function ($q) use ($jenjangId, $activeSlug) {
+        return $query->where(function ($q) use ($jenjangId) {
             // Case 1: User has SiswaData -> check jenjang in SiswaData
             $q->whereHas('siswaData', function ($sub) use ($jenjangId) {
-                // We use withoutGlobalScopes to ensure we are filtering accurately here
                 $sub->withoutGlobalScopes()->where(function ($ss) use ($jenjangId) {
                     $ss->whereHas('pendaftar.jurusan', function ($j) use ($jenjangId) {
                         $j->where('id_jenjang_pendidikan', $jenjangId);
@@ -39,21 +35,28 @@ class User extends Authenticatable implements FilamentUser
                         $subJurusan->where('id_jenjang_pendidikan', $jenjangId);
                     });
                 })
-                // Case 3: User has NEITHER SiswaData nor DosenData record at all (Universal User like Admin)
-                ->orWhere(function ($sub) use ($activeSlug) {
+                // Case 3: Role-based filtering (Admin/Staf/Lainnya)
+                ->orWhere(function ($sub) use ($jenjangId) {
+                    // Hanya filter jika user BUKAN Siswa/Dosen
                     $sub->whereDoesntHave('siswaData', function ($sq) {
                         $sq->withoutGlobalScopes();
                     })
                         ->whereDoesntHave('dosenData', function ($dq) {
                             $dq->withoutGlobalScopes();
                         })
-                        ->where(function ($adminCheck) use ($activeSlug) {
-                            // If they have any "admin_jenjang_" role, it MUST match the active slug
-                            $adminCheck->whereDoesntHave('roles', function ($rq) {
-                                $rq->where('name', 'like', 'admin_jenjang_%');
-                            })
-                                ->orWhereHas('roles', function ($rq) use ($activeSlug) {
-                                    $rq->where('name', 'admin_jenjang_' . $activeSlug);
+                        ->where(function ($adminCheck) use ($jenjangId) {
+                            // User TAMPIL jika:
+                            // A. Tidak punya role sama sekali 
+                            // B. Punya role Global (jenjang_id IS NULL)
+                            // C. Punya role yang jenjang_id-nya cocok dengan jenjang aktif
+                            // D. Punya role yang terhubung ke Jenjang "UMUM"
+                            $adminCheck->whereDoesntHave('roles')
+                                ->orWhereHas('roles', function ($rq) use ($jenjangId) {
+                                    $rq->whereNull('jenjang_id')
+                                        ->orWhere('jenjang_id', $jenjangId)
+                                        ->orWhereHas('jenjang', function ($jq) {
+                                            $jq->where('nama', 'UMUM')->orWhere('type', 'UMUM');
+                                        });
                                 });
                         });
                 });

@@ -40,6 +40,11 @@ class JenjangObserver
         Role::firstOrCreate([
             'name' => $roleName,
             'guard_name' => 'web'
+        ], [
+            'jenjang_id' => $jenjang->id
         ]);
+
+        // If role exists but jenjang_id is not set, update it
+        Role::where('name', $roleName)->update(['jenjang_id' => $jenjang->id]);
     }
 }

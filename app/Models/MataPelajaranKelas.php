@@ -8,7 +8,7 @@ use App\Models\RefOption\RuangKelas;
 
 class MataPelajaranKelas extends Model
 {
-    use HasFactory, \App\Traits\HasJenjangScope;
+    use HasFactory, \App\Traits\HasJenjangScope, \App\Traits\HasActiveAcademicYear;
 
     protected $table = 'mata_pelajaran_kelas';
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JurnalPengajaran extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasActiveAcademicYear;
 
     protected $table = 'dosen_jurnal_pengajaran';
 

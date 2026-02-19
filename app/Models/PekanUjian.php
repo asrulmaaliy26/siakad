@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PekanUjian extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasActiveAcademicYear;
 
     protected $table = 'pekan_ujian';
 

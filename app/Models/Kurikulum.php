@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kurikulum extends Model
 {
-    use HasFactory, \App\Traits\HasJenjangScope;
+    use HasFactory, \App\Traits\HasJenjangScope, \App\Traits\HasActiveAcademicYear;
 
     public function scopeByJenjang($query, $jenjangId)
     {

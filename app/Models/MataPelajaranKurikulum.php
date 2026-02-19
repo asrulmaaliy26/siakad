@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MataPelajaranKurikulum extends Model
 {
-    use HasFactory, \App\Traits\HasJenjangScope;
+    use HasFactory, \App\Traits\HasJenjangScope, \App\Traits\HasActiveAcademicYear;
 
     protected $table = 'mata_pelajaran_kurikulum';
 

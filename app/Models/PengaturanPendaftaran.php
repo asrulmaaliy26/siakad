@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PengaturanPendaftaran extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasActiveAcademicYear;
 
     protected $table = 'pengaturan_pendaftaran';
 

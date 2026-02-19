@@ -8,7 +8,7 @@ use App\Models\RefOption\ProgramKelas;
 
 class Kelas extends Model
 {
-    use HasFactory, \App\Traits\HasJenjangScope;
+    use HasFactory, \App\Traits\HasJenjangScope, \App\Traits\HasActiveAcademicYear;
 
     public function scopeByJenjang($query, $jenjangId)
     {

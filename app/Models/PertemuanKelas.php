@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PertemuanKelas extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasActiveAcademicYear;
     protected $table = 'pertemuan_kelas';
     protected $fillable = [
         'id_mata_pelajaran_kelas',

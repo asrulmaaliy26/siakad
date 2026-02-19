@@ -15,8 +15,10 @@ class TahunAkademikForm
                 TextInput::make('nama'),
                 Select::make('periode')
                     ->options(['Genap' => 'Genap', 'Ganjil' => 'Ganjil']),
-                Select::make('status')
-                    ->options(['Y' => 'Y', 'N' => 'N']),
+                \Filament\Forms\Components\Toggle::make('status')
+                    ->label('Status Aktif')
+                    ->formatStateUsing(fn($state) => $state === 'Y')
+                    ->dehydrateStateUsing(fn($state) => $state ? 'Y' : 'N'),
             ]);
     }
 }

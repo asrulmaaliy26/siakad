@@ -60,7 +60,7 @@ class SiswaDataLJKForm
                     ->schema([
                         TextInput::make('Nilai_UTS')->numeric()->maxValue(100)->label('Nilai UTS'),
                         TextInput::make('Nilai_UAS')->numeric()->maxValue(100)->label('Nilai UAS'),
-                        TextInput::make('Nilai_TGS')->numeric()->maxValue(100)->label('Nilai Tugas'),
+                        TextInput::make('Nilai_TGS_1')->numeric()->maxValue(100)->label('Nilai Tugas'),
                         TextInput::make('Nilai_Performance')->numeric()->maxValue(100)->label('Nilai Performance'),
                         TextInput::make('Nilai_Akhir')->numeric()->label('Nilai Akhir')->readOnly(), // Biasanya calculated
                         TextInput::make('Nilai_Huruf')->label('Nilai Huruf'),

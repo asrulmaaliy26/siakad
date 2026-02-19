@@ -46,7 +46,7 @@ class SiswaDataLjkRelationManager extends RelationManager
                     ->type('number')
                     ->step(0.01)
                     ->sortable(),
-                TextInputColumn::make('Nilai_TGS')
+                TextInputColumn::make('Nilai_TGS_1')
                     ->label('Nilai TGS')
                     ->type('number')
                     ->step(0.01)

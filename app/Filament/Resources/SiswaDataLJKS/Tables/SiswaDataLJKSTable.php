@@ -54,7 +54,7 @@ class SiswaDataLJKSTable
 
                 TextColumn::make('Nilai_UTS')->label('UTS')->sortable()->toggleable(),
                 TextColumn::make('Nilai_UAS')->label('UAS')->sortable()->toggleable(),
-                TextColumn::make('Nilai_TGS')->label('Tugas 1')->sortable()->toggleable(),
+                TextColumn::make('Nilai_TGS_1')->label('Tugas 1')->sortable()->toggleable(),
                 TextColumn::make('Nilai_TGS_2')->label('Tugas 2')->sortable()->toggleable(),
                 TextColumn::make('Nilai_TGS_3')->label('Tugas 3')->sortable()->toggleable(),
                 TextColumn::make('Nilai_Performance')->label('Perf')->sortable()->toggleable(),

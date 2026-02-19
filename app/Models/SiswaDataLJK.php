@@ -37,7 +37,9 @@ class SiswaDataLJK extends Model
         'tugas',
         'tgl_upload_tugas',
         'Nilai_UTS',
-        'Nilai_TGS',
+        'Nilai_TGS_1',
+        'Nilai_TGS_2',
+        'Nilai_TGS_3',
         'Nilai_UAS',
         'Nilai_Performance',
         'Nilai_Akhir',
@@ -49,6 +51,12 @@ class SiswaDataLJK extends Model
         'cekal_kuliah',
         'ctt_uts',
         'ctt_uas',
+        'ljk_tugas_1',
+        'ctt_tugas_1',
+        'ljk_tugas_2',
+        'ctt_tugas_2',
+        'ljk_tugas_3',
+        'ctt_tugas_3',
     ];
 
     protected $casts = [

@@ -22,5 +22,10 @@ class AppServiceProvider extends ServiceProvider
         // Register observer untuk auto-create RiwayatPendidikan saat status kelulusan = Lulus
         \App\Models\SiswaDataPendaftar::observe(\App\Observers\SiswaDataPendaftarObserver::class);
         \App\Models\JenjangPendidikan::observe(\App\Observers\JenjangObserver::class);
+
+        // Super Admin Bypass
+        \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+            return $user->hasRole(\App\Helpers\SiakadRole::SUPER_ADMIN) ? true : null;
+        });
     }
 }

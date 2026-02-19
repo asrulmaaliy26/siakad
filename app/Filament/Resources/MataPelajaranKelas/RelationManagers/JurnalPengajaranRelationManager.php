@@ -263,7 +263,7 @@ class JurnalPengajaranRelationManager extends RelationManager
                                         Forms\Components\FileUpload::make($ljkField)
                                             ->label('File Tugas')
                                             ->disk('public')
-                                            ->directory('tugas-uploads')
+                                            ->directory(fn($get) => \App\Helpers\UploadPathHelper::uploadTugasPath($get, $record))
                                             ->downloadable()
                                             ->openable()
                                             ->columnSpan(1)

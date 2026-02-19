@@ -6,14 +6,36 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\SiakadRole;
 
 class JenjangScope implements Scope
 {
+    protected static array $isSuperAdminCache = [];
+
     /**
      * Apply the scope to a given Eloquent query builder.
      */
     public function apply(Builder $builder, Model $model): void
     {
+        // Bypass scope for User model during authentication (when no user is logged in yet)
+        if ($model instanceof \App\Models\User && !Auth::check()) {
+            return;
+        }
+
+        // Avoid infinite recursion by fetching user roles without global scopes
+        $userId = Auth::id();
+        if ($userId) {
+            if (!isset(self::$isSuperAdminCache[$userId])) {
+                $user = \App\Models\User::withoutGlobalScopes()->find($userId);
+                self::$isSuperAdminCache[$userId] = $user && $user->roles()->withoutGlobalScopes()->where('name', SiakadRole::SUPER_ADMIN)->exists();
+            }
+
+            if (self::$isSuperAdminCache[$userId]) {
+                return;
+            }
+        }
+
         $activeJenjangId = Session::get('active_jenjang_id');
 
         if ($activeJenjangId) {

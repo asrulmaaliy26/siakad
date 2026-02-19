@@ -12,6 +12,7 @@ use App\Models\AkademikKrs;
 use App\Models\MataPelajaranKelas;
 use App\Models\Kelas;
 use App\Models\SiswaDataPendaftar;
+use App\Models\JurnalPengajaran;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -170,6 +171,29 @@ class UploadPathHelper
             . Str::slug($type);
     }
 
+    public static function uploadTugasPath($get, $record)
+    {
+        // 1. Tahun Akademik + Periode
+        $tahun = self::getYear($record, $get);
+
+        // 2. Jenjang Pendidikan
+        $jenjangData = self::getJenjangData($record, $get);
+        $jenjangNama = $jenjangData['nama'] ?? 'Umum';
+
+        $jenjangType = strtolower($jenjangData['type'] ?? 'sekolah');
+        $typeFolder = ($jenjangType === 'kampus') ? 'mahasiswa' : 'siswa';
+
+        // 3. Nama Siswa/Mahasiswa
+        $namaSiswa = self::getNamaSiswa($record, $get);
+
+        // Format: uploads/{Tahun-Periode}/{Jenjang}/{siswa/mahasiswa}/{Nama}/tugas
+        return "uploads/"
+            . Str::slug($tahun) . "/"
+            . Str::slug($jenjangNama) . "/"
+            . Str::slug($typeFolder) . "/"
+            . Str::slug($namaSiswa) . "/tugas";
+    }
+
 
 
     public static function uploadSiswaDataPath($get, $record = null, string $table = 'foto_profil')
@@ -288,11 +312,13 @@ class UploadPathHelper
             $tahunAkademik = $record->kelas?->tahunAkademik;
         } elseif ($record instanceof MataPelajaranKelas) {
             $tahunAkademik = $record->kelas?->tahunAkademik;
+        } elseif ($record instanceof JurnalPengajaran) {
+            $tahunAkademik = $record->mataPelajaranKelas?->kelas?->tahunAkademik;
         } elseif ($record instanceof SiswaData) {
             // Untuk SiswaData, logika tahun ditangani khusus di uploadSiswaDataPath
             $tahunAkademik = null;
         } elseif ($get) {
-            if ($ljkId = $get('siswa_data_ljk_id')) {
+            if ($ljkId = ($get('siswa_data_ljk_id') ?? $get('student_id'))) {
                 $ljk = SiswaDataLJK::find($ljkId);
                 $tahunAkademik = $ljk?->mataPelajaranKelas?->kelas?->tahunAkademik;
             } elseif ($mpkId = $get('id_mata_pelajaran_kelas')) {
@@ -349,6 +375,10 @@ class UploadPathHelper
 
         if ($record instanceof MataPelajaranKelas) {
             return $record->kelas?->jurusan?->jenjangPendidikan?->nama ?? 'umum';
+        }
+
+        if ($record instanceof JurnalPengajaran) {
+            return $record->mataPelajaranKelas?->kelas?->jurusan?->jenjangPendidikan?->nama ?? 'umum';
         }
 
         if ($record instanceof \App\Models\PekanUjian) {
@@ -440,8 +470,10 @@ class UploadPathHelper
             $jenjang = $record->jurusan?->jenjangPendidikan;
         } elseif ($record instanceof MataPelajaranKelas) {
             $jenjang = $record->kelas?->jurusan?->jenjangPendidikan;
+        } elseif ($record instanceof JurnalPengajaran) {
+            $jenjang = $record->mataPelajaranKelas?->kelas?->jurusan?->jenjangPendidikan;
         } elseif ($get) {
-            if ($ljkId = $get('siswa_data_ljk_id')) {
+            if ($ljkId = ($get('siswa_data_ljk_id') ?? $get('student_id'))) {
                 $ljk = SiswaDataLJK::find($ljkId);
                 $jenjang = $ljk?->akademikKrs?->riwayatPendidikan?->jurusan?->jenjangPendidikan;
             } elseif ($riwayatId = $get('id_riwayat_pendidikan')) {
@@ -468,7 +500,7 @@ class UploadPathHelper
         } elseif ($record instanceof SiswaDataPendaftar) {
             return $record->siswaData?->nama ?? 'Tanpa Nama';
         } elseif ($get) {
-            if ($ljkId = $get('siswa_data_ljk_id')) {
+            if ($ljkId = ($get('siswa_data_ljk_id') ?? $get('student_id'))) {
                 $ljk = SiswaDataLJK::find($ljkId);
                 return $ljk?->akademikKrs?->riwayatPendidikan?->siswaData?->nama ?? 'Tanpa Nama';
             } elseif ($riwayatId = $get('id_riwayat_pendidikan')) {

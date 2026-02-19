@@ -23,6 +23,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Str;
 
 class MataPelajaranKelasRelationManager extends RelationManager
 {
@@ -265,7 +266,7 @@ class MataPelajaranKelasRelationManager extends RelationManager
                                         FileUpload::make($ljkField)
                                             ->label('File Lembar Jawaban (' . ($isUas ? 'UAS' : 'UTS') . ')')
                                             ->disk('public')
-                                            ->directory(fn() => 'uploads/ljk/' . ($isUas ? 'uas' : 'uts'))
+                                            ->directory(fn($get) => \App\Helpers\UploadPathHelper::uploadPekanUjianPath($get, $record, $isUas))
                                             ->downloadable()
                                             ->openable()
                                             ->columnSpanFull()

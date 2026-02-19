@@ -143,6 +143,32 @@ class UploadPathHelper
             . Str::slug($namaSiswa) . "/"
             . Str::slug($table);
     }
+    public static function uploadPekanUjianPath($get, $record, $isUas = false)
+    {
+        // 1. Tahun Akademik + Periode
+        $tahun = self::getYear($record, $get);
+
+        // 2. Jenjang Pendidikan
+        $jenjangData = self::getJenjangData($record, $get);
+        $jenjangNama = $jenjangData['nama'] ?? 'Umum';
+
+        $jenjangType = strtolower($jenjangData['type'] ?? 'sekolah');
+        $typeFolder = ($jenjangType === 'kampus') ? 'mahasiswa' : 'siswa';
+
+        // 3. Nama Siswa/Mahasiswa
+        $namaSiswa = self::getNamaSiswa($record, $get);
+
+        // 4. Folder Ujian (ljk-uts / ljk-uas)
+        $type = $isUas ? 'uas' : 'uts';
+
+        // Format: uploads/{Tahun-Periode}/{Jenjang}/{siswa/mahasiswa}/{Nama}/{ljk-uts|uas}
+        return "uploads/"
+            . Str::slug($tahun) . "/"
+            . Str::slug($jenjangNama) . "/"
+            . Str::slug($typeFolder) . "/"
+            . Str::slug($namaSiswa) . "/ljk-"
+            . Str::slug($type);
+    }
 
 
 
@@ -266,7 +292,10 @@ class UploadPathHelper
             // Untuk SiswaData, logika tahun ditangani khusus di uploadSiswaDataPath
             $tahunAkademik = null;
         } elseif ($get) {
-            if ($mpkId = $get('id_mata_pelajaran_kelas')) {
+            if ($ljkId = $get('siswa_data_ljk_id')) {
+                $ljk = SiswaDataLJK::find($ljkId);
+                $tahunAkademik = $ljk?->mataPelajaranKelas?->kelas?->tahunAkademik;
+            } elseif ($mpkId = $get('id_mata_pelajaran_kelas')) {
                 $mpk = MataPelajaranKelas::find($mpkId);
                 $tahunAkademik = $mpk?->kelas?->tahunAkademik;
             } elseif ($kelasId = $get('id_kelas')) {
@@ -322,6 +351,10 @@ class UploadPathHelper
             return $record->kelas?->jurusan?->jenjangPendidikan?->nama ?? 'umum';
         }
 
+        if ($record instanceof \App\Models\PekanUjian) {
+            return $record->jenjangPendidikan?->nama ?? 'umum';
+        }
+
         if ($record instanceof SiswaData) {
             return $record->riwayatPendidikanAktif?->jurusan?->jenjangPendidikan?->nama ?? 'umum';
         }
@@ -351,6 +384,10 @@ class UploadPathHelper
             if ($mpkId = $get('id_mata_pelajaran_kelas')) {
                 $mpk = MataPelajaranKelas::find($mpkId);
                 return $mpk?->kelas?->jurusan?->jenjangPendidikan?->nama ?? 'umum';
+            }
+            if ($ljkId = $get('siswa_data_ljk_id')) {
+                $ljk = SiswaDataLJK::find($ljkId);
+                return $ljk?->akademikKrs?->riwayatPendidikan?->jurusan?->jenjangPendidikan?->nama ?? 'umum';
             }
             if ($siswaId = $get('id_siswa_data')) {
                 $siswa = SiswaData::find($siswaId);
@@ -401,10 +438,18 @@ class UploadPathHelper
             }
         } elseif ($record instanceof SiswaDataPendaftar) {
             $jenjang = $record->jurusan?->jenjangPendidikan;
+        } elseif ($record instanceof MataPelajaranKelas) {
+            $jenjang = $record->kelas?->jurusan?->jenjangPendidikan;
         } elseif ($get) {
-            if ($riwayatId = $get('id_riwayat_pendidikan')) {
+            if ($ljkId = $get('siswa_data_ljk_id')) {
+                $ljk = SiswaDataLJK::find($ljkId);
+                $jenjang = $ljk?->akademikKrs?->riwayatPendidikan?->jurusan?->jenjangPendidikan;
+            } elseif ($riwayatId = $get('id_riwayat_pendidikan')) {
                 $riwayat = RiwayatPendidikan::find($riwayatId);
                 $jenjang = $riwayat?->jurusan?->jenjangPendidikan;
+            } elseif ($mpkId = $get('id_mata_pelajaran_kelas')) {
+                $mpk = MataPelajaranKelas::find($mpkId);
+                $jenjang = $mpk?->kelas?->jurusan?->jenjangPendidikan;
             }
         }
 
@@ -423,7 +468,10 @@ class UploadPathHelper
         } elseif ($record instanceof SiswaDataPendaftar) {
             return $record->siswaData?->nama ?? 'Tanpa Nama';
         } elseif ($get) {
-            if ($riwayatId = $get('id_riwayat_pendidikan')) {
+            if ($ljkId = $get('siswa_data_ljk_id')) {
+                $ljk = SiswaDataLJK::find($ljkId);
+                return $ljk?->akademikKrs?->riwayatPendidikan?->siswaData?->nama ?? 'Tanpa Nama';
+            } elseif ($riwayatId = $get('id_riwayat_pendidikan')) {
                 $riwayat = RiwayatPendidikan::find($riwayatId);
                 return $riwayat?->siswaData?->nama ?? 'Tanpa Nama';
             }

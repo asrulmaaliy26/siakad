@@ -333,7 +333,7 @@ class AbsensiSiswaRelationManager extends RelationManager
                             ->success()
                             ->send();
                     })
-                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
             ])
             ->actions([
                 EditAction::make()

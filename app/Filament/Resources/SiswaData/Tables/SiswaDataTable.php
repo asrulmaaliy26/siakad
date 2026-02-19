@@ -43,6 +43,7 @@ class SiswaDataTable
                         'aktif' => 'Aktif',
                         'tidak aktif' => 'Tidak Aktif',
                     ])
+                    ->selectablePlaceholder(false)
                     ->sortable()
                     ->searchable()
                     ->afterStateUpdated(function ($state, $record) {

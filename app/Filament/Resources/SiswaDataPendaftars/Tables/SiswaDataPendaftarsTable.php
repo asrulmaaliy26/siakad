@@ -99,6 +99,7 @@ class SiswaDataPendaftarsTable
                         'Y' => '✅ Diterima',
                         'N' => '❌ Ditolak',
                     ])
+                    ->selectablePlaceholder(false)
                     ->sortable()
 
                     ->disabled(fn() => Auth::user()->hasRole('murid') && !Auth::user()->hasAnyRole(['super_admin', 'admin'])),
@@ -110,6 +111,7 @@ class SiswaDataPendaftarsTable
                         'Y' => '🎓 Lulus',
                         'N' => '❌ Tidak Lulus',
                     ])
+                    ->selectablePlaceholder(false)
                     ->sortable()
                     ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 

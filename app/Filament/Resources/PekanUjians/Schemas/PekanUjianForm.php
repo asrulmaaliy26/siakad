@@ -25,6 +25,10 @@ class PekanUjianForm
                             ->preload()
                             ->getOptionLabelFromRecordUsing(fn($record) => "{$record->nama} - {$record->periode}"),
 
+                        \Filament\Forms\Components\Hidden::make('id_jenjang_pendidikan')
+                            ->default(session('active_jenjang_id'))
+                            ->required(),
+
                         Select::make('jenis_ujian')
                             ->label('Jenis Ujian')
                             ->options([

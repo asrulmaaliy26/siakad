@@ -15,15 +15,15 @@ class SetActiveJenjangMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = \Filament\Facades\Filament::auth()->user();
+        $user = auth()->user();
 
         if ($user) {
-            // Priority 1: Super Admin (Don't force, rely on switcher/session)
-            if ($user->hasRole('super_admin')) {
+            // Priority 1: Super Admin (Global Access)
+            if ($user->hasRole(\App\Helpers\SiakadRole::SUPER_ADMIN)) {
                 // Do nothing, let the switcher or existing session handle it
             }
-            // Priority 2: Murid (Force based on educational history)
-            elseif ($user->hasRole('murid')) {
+            // Priority 2: Mahasiswa (Force based on educational history)
+            elseif ($user->hasRole(\App\Helpers\SiakadRole::MAHASISWA)) {
                 $siswa = \App\Models\SiswaData::where('user_id', $user->id)->first();
                 if ($siswa) {
                     $riwayat = $siswa->riwayatPendidikanAktif;
@@ -40,20 +40,20 @@ class SetActiveJenjangMiddleware
                     }
                 }
             }
-            // Priority 3: Admin Jenjang (Force based on role name)
+            // Priority 3: Role-based Access (Jenjang Admin / Staff)
+            // Use the jenjang_id directly from the assigned role(s)
             else {
-                $roles = $user->getRoleNames();
-                foreach ($roles as $role) {
-                    if (str_starts_with($role, 'admin_jenjang_')) {
-                        $slug = str_replace('admin_jenjang_', '', $role);
-                        $jenjangMatch = \App\Models\JenjangPendidikan::all()->first(function ($j) use ($slug) {
-                            return \Illuminate\Support\Str::slug($j->nama) === $slug;
-                        });
+                // Get roles with jenjang relationship, ignoring the current active jenjang scope
+                $rolesWithJenjang = $user->roles()->withoutGlobalScope(\App\Models\Scopes\JenjangScope::class)->whereNotNull('jenjang_id')->with('jenjang')->get();
 
-                        if ($jenjangMatch) {
-                            session(['active_jenjang_id' => $jenjangMatch->id]);
-                            break;
-                        }
+                if ($rolesWithJenjang->isNotEmpty()) {
+                    // Force the first specific jenjang found
+                    $jenjangId = $rolesWithJenjang->first()->jenjang_id;
+
+                    if (session('active_jenjang_id') != $jenjangId) {
+                        session(['active_jenjang_id' => $jenjangId]);
+                        // Clear permission cache because roles (and thus permissions) may have changed visibility based on scope
+                        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
                     }
                 }
             }

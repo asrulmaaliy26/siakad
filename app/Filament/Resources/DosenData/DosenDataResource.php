@@ -70,7 +70,7 @@ class DosenDataResource extends Resource
         $user = auth()->user();
 
         // Jika user memiliki role 'pengajar' dan bukan super_admin/admin
-        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+        if ($user && $user->hasRole(\App\Helpers\SiakadRole::DOSEN) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
             $query->where('user_id', $user->id);
         }
 

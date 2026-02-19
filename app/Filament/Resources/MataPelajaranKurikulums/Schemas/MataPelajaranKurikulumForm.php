@@ -11,12 +11,19 @@ class MataPelajaranKurikulumForm
     {
         return $schema
             ->components([
-                TextInput::make('id_kurikulum')
-                    ->numeric(),
-                TextInput::make('id_mata_pelajaran_master')
-                    ->numeric(),
+                \Filament\Forms\Components\Select::make('id_kurikulum')
+                    ->label('Kurikulum')
+                    ->options(\App\Models\Kurikulum::pluck('nama', 'id'))
+                    ->searchable()
+                    ->required(),
+                \Filament\Forms\Components\Select::make('id_mata_pelajaran_master')
+                    ->label('Mata Pelajaran Master')
+                    ->options(\App\Models\MataPelajaranMaster::pluck('nama', 'id'))
+                    ->searchable()
+                    ->required(),
                 TextInput::make('semester')
-                    ->numeric(),
+                    ->numeric()
+                    ->required(),
             ]);
     }
 }

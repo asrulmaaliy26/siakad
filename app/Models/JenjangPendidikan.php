@@ -11,18 +11,23 @@ class JenjangPendidikan extends Model
     protected $table = 'jenjang_pendidikan';
     protected $fillable = ['nama', 'deskripsi', 'type'];
 
+    public function jurusan()
+    {
+        return $this->hasMany(Jurusan::class, 'id_jenjang_pendidikan');
+    }
+
     public function kelas()
     {
-        return $this->hasMany(Kelas::class, 'id_jenjang_pendidikan');
+        return $this->hasManyThrough(Kelas::class, Jurusan::class, 'id_jenjang_pendidikan', 'id_jurusan');
     }
 
     public function riwayatPendidikan()
     {
-        return $this->hasMany(RiwayatPendidikan::class, 'id_jenjang_pendidikan');
+        return $this->hasManyThrough(RiwayatPendidikan::class, Jurusan::class, 'id_jenjang_pendidikan', 'id_jurusan');
     }
 
     public function pendaftar()
     {
-        return $this->hasMany(SiswaDataPendaftar::class, 'id_jenjang_pendidikan');
+        return $this->hasManyThrough(SiswaDataPendaftar::class, Jurusan::class, 'id_jenjang_pendidikan', 'id_jurusan');
     }
 }

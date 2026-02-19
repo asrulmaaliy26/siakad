@@ -29,22 +29,19 @@ class JenjangObserver
      */
     public function deleted(JenjangPendidikan $jenjang): void
     {
-        $roleName = 'admin_jenjang_' . \Illuminate\Support\Str::slug($jenjang->nama);
-        Role::where('name', $roleName)->delete();
+        Role::where('name', \App\Helpers\SiakadRole::ADMIN)
+            ->where('jenjang_id', $jenjang->id)
+            ->delete();
     }
 
     protected function syncRole(JenjangPendidikan $jenjang): void
     {
-        $roleName = 'admin_jenjang_' . \Illuminate\Support\Str::slug($jenjang->nama);
+        $roleName = \App\Helpers\SiakadRole::ADMIN;
 
         Role::firstOrCreate([
             'name' => $roleName,
-            'guard_name' => 'web'
-        ], [
+            'guard_name' => 'web',
             'jenjang_id' => $jenjang->id
         ]);
-
-        // If role exists but jenjang_id is not set, update it
-        Role::where('name', $roleName)->update(['jenjang_id' => $jenjang->id]);
     }
 }

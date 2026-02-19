@@ -31,19 +31,21 @@ class SyncJenjangRoles extends Command
         $this->info('Syncing roles for Jenjang Pendidikan...');
 
         foreach (JenjangPendidikan::all() as $jenjang) {
-            $roleName = 'admin_jenjang_' . Str::slug($jenjang->nama);
+            $roleName = \App\Helpers\SiakadRole::ADMIN;
 
             $role = Role::firstOrCreate([
                 'name' => $roleName,
-                'guard_name' => 'web'
-            ], [
+                'guard_name' => 'web',
                 'jenjang_id' => $jenjang->id
             ]);
 
-            // Ensure jenjang_id is set for existing roles
-            $role->update(['jenjang_id' => $jenjang->id]);
+            $this->line('Role synced for ' . $jenjang->nama . ': ' . $roleName);
+        }
 
-            $this->line('Role synced: ' . $roleName);
+        // Delete legacy roles
+        $legacyRolesCount = Role::where('name', 'like', 'admin_jenjang_%')->delete();
+        if ($legacyRolesCount > 0) {
+            $this->warn("Deleted {$legacyRolesCount} legacy admin_jenjang_* roles.");
         }
 
         $this->info('Sync completed!');

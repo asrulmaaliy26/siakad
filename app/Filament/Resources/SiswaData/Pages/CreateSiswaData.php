@@ -38,8 +38,8 @@ class CreateSiswaData extends CreateRecord
         ]);
 
         // Assign Role 'murid'
-        if (\Spatie\Permission\Models\Role::where('name', 'murid')->exists()) {
-            $user->assignRole('murid');
+        if (\Spatie\Permission\Models\Role::where('name', \App\Helpers\SiakadRole::MAHASISWA)->exists()) {
+            $user->assignRole(\App\Helpers\SiakadRole::MAHASISWA);
         }
 
         // 5. Assign user_id to SiswaData

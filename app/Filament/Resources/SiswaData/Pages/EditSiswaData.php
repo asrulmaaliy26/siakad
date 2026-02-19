@@ -62,9 +62,9 @@ class EditSiswaData extends EditRecord
 
         // Ensure user has 'murid' role if user exists
         if ($user) {
-            if (\Spatie\Permission\Models\Role::where('name', 'murid')->exists()) {
-                if (!$user->hasRole('murid')) {
-                    $user->assignRole('murid');
+            if (\Spatie\Permission\Models\Role::where('name', \App\Helpers\SiakadRole::MAHASISWA)->exists()) {
+                if (!$user->hasRole(\App\Helpers\SiakadRole::MAHASISWA)) {
+                    $user->assignRole(\App\Helpers\SiakadRole::MAHASISWA);
                 }
             }
 

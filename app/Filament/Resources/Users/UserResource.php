@@ -68,9 +68,9 @@ class UserResource extends Resource
         /** @var \App\Models\User $user */
         $user = \Filament\Facades\Filament::auth()->user();
 
-        if ($user && !$user->hasRole('super_admin')) {
+        if ($user && !$user->hasRole(\App\Helpers\SiakadRole::SUPER_ADMIN)) {
             $query->whereDoesntHave('roles', function ($q) {
-                $q->where('name', 'super_admin');
+                $q->where('name', \App\Helpers\SiakadRole::SUPER_ADMIN);
             });
         }
 

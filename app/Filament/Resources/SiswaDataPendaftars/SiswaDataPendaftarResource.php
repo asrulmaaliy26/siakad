@@ -60,7 +60,7 @@ class SiswaDataPendaftarResource extends Resource
         $user = auth()->user();
 
         // Jika user memiliki role 'murid' dan bukan super_admin/admin
-        if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+        if ($user && $user->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
             $query->whereHas('siswa', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             });

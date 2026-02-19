@@ -25,7 +25,7 @@ class MataPelajaranKelasResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'nama';
+    protected static ?string $recordTitleAttribute = 'id';
     protected static string | UnitEnum | null $navigationGroup = 'Perkuliahan';
     protected static ?int $navigationSort = 12;
     // protected static ?string $navigationLabel = 'Perkuliahan';
@@ -80,17 +80,23 @@ class MataPelajaranKelasResource extends Resource
         $query = parent::getEloquentQuery();
         $user = \Filament\Facades\Filament::auth()->user();
 
-        // Jika user memiliki role 'pengajar' dan bukan super_admin/admin
-        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+        // Filter untuk Dosen (Pengajar)
+        // Dosen hanya melihat mata pelajaran yang diajarkannya sendiri
+        if ($user && $user->hasRole(\App\Helpers\SiakadRole::DOSEN) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
             $query->whereHas('dosenData', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             });
         }
 
-        // Jika user memiliki role 'murid' dan bukan super_admin/admin
-        if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
-            $query->whereHas('siswaDataLjk.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
+        // Filter untuk Mahasiswa (Murid)
+        // Mahasiswa hanya melihat mata pelajaran yang diambilnya (via KRS)
+        if ($user && $user->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
+            $query->whereHas('krs', function ($q) use ($user) {
+                $q->whereHas('riwayatPendidikan', function ($q2) use ($user) {
+                    $q2->whereHas('siswaData', function ($q3) use ($user) {
+                        $q3->where('user_id', $user->id);
+                    });
+                });
             });
         }
 

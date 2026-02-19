@@ -30,8 +30,8 @@ class UserForm
                         $jenjang = \App\Models\JenjangPendidikan::find($activeJenjangId);
 
                         // Jika bukan super_admin, dilarang melihat/memberikan role super_admin
-                        if ($user && !$user->hasRole('super_admin')) {
-                            $query->where('name', '!=', 'super_admin');
+                        if ($user && !$user->hasRole(\App\Helpers\SiakadRole::SUPER_ADMIN)) {
+                            $query->where('name', '!=', \App\Helpers\SiakadRole::SUPER_ADMIN);
                         }
 
                         // Jika jenjang UMUM atau tidak ada jenjang aktif (dan user adalah super_admin), tampilkan semua role sisa
@@ -49,6 +49,7 @@ class UserForm
                                 });
                         });
                     })
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->display_name)
                     ->multiple()
                     ->preload()
                     ->searchable(),

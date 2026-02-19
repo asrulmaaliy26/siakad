@@ -46,17 +46,17 @@ class SiswaDataPendaftarForm
                                         TextInput::make('No_Pendaftaran')
                                             ->label('No. Pendaftaran')
                                             ->maxLength(255)
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
 
                                         TextInput::make('Tahun_Masuk')
                                             ->label('Tahun Masuk')
                                             ->maxLength(4)
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
 
                                         DatePicker::make('Tgl_Daftar')
                                             ->label('Tanggal Daftar')
                                             ->default(now())
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
                                     ])
                                     ->columns(2),
 
@@ -71,7 +71,7 @@ class SiswaDataPendaftarForm
                                             ->searchable()
                                             // ->required()
                                             ->preload()
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
                                         // ->reactive()
                                         // ->afterStateUpdated(function ($state, callable $set) {
                                         //     // Logic removed as id_jenjang_pendidikan is removed
@@ -93,7 +93,7 @@ class SiswaDataPendaftarForm
                                             ->relationship('jurusan', 'nama')
                                             ->searchable()
                                             ->preload()
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
 
                                         Select::make('Prodi_Pilihan_1')
                                             ->label('Prodi Pilihan 1')
@@ -113,7 +113,7 @@ class SiswaDataPendaftarForm
                                             })
                                             ->searchable()
                                             ->preload()
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
 
                                         Select::make('Jenis_Pembiayaan')
                                             ->label('Jenis Pembiayaan')
@@ -122,7 +122,7 @@ class SiswaDataPendaftarForm
                                                 'Beasiswa' => 'Beasiswa',
                                                 'Lainnya' => 'Lainnya',
                                             ])
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
                                     ])
                                     ->columns(2),
                             ]),
@@ -216,7 +216,7 @@ class SiswaDataPendaftarForm
                                             ])
                                             ->default('0')
                                             ->required()
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
 
                                         Select::make('Status_Pendaftaran')
                                             ->label('Status Pendaftaran')
@@ -227,7 +227,7 @@ class SiswaDataPendaftarForm
                                             ])
                                             ->default('B')
                                             ->required()
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
 
                                         Select::make('Status_Kelulusan')
                                             ->label('Status Kelulusan')
@@ -238,7 +238,7 @@ class SiswaDataPendaftarForm
                                             ])
                                             ->default('B')
                                             ->required()
-                                            ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                                            ->disabled(fn() => auth()->user()->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])),
 
                                         TextInput::make('Diterima_di_Prodi')
                                             ->label('Diterima di Prodi'),

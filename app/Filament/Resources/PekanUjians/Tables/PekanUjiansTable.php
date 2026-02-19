@@ -30,6 +30,7 @@ class PekanUjiansTable
                         'UTS' => 'UTS',
                         'UAS' => 'UAS',
                     ])
+                    ->selectablePlaceholder(false)
                     ->sortable()
                     ->searchable()
                     ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PekanUjian extends Model
 {
-    use HasFactory, \App\Traits\HasActiveAcademicYear;
+    use HasFactory, \App\Traits\HasActiveAcademicYear, \App\Traits\HasJenjangScope;
 
     protected $table = 'pekan_ujian';
 
@@ -17,6 +17,7 @@ class PekanUjian extends Model
     // Jika ingin explicit fillable, uncomment. Tapi guarded=[] lebih fleksibel.
     protected $fillable = [
         'id_tahun_akademik',
+        'id_jenjang_pendidikan',
         'jenis_ujian',
         'status_akses',
         'status_bayar',
@@ -24,9 +25,19 @@ class PekanUjian extends Model
         'informasi',
     ];
 
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        return $query->where('id_jenjang_pendidikan', $jenjangId);
+    }
+
     public function tahunAkademik(): BelongsTo
     {
         return $this->belongsTo(TahunAkademik::class, 'id_tahun_akademik');
+    }
+
+    public function jenjangPendidikan(): BelongsTo
+    {
+        return $this->belongsTo(JenjangPendidikan::class, 'id_jenjang_pendidikan');
     }
 
     // Relasi ke Mata Pelajaran Kelas

@@ -84,7 +84,7 @@ class SiswaDataResource extends Resource
             });
 
         $user = auth()->user();
-        if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+        if ($user && $user->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
             $query->where('user_id', $user->id);
         }
 

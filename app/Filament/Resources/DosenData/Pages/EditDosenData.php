@@ -47,8 +47,8 @@ class EditDosenData extends EditRecord
             ]);
 
             // Assign Role 'pengajar'
-            if (\Spatie\Permission\Models\Role::where('name', 'pengajar')->exists()) {
-                $user->assignRole('pengajar');
+            if (\Spatie\Permission\Models\Role::where('name', \App\Helpers\SiakadRole::DOSEN)->exists()) {
+                $user->assignRole(\App\Helpers\SiakadRole::DOSEN);
             }
 
             // 5. Link user to the record

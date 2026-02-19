@@ -102,7 +102,9 @@ class JurnalPengajaranRelationManager extends RelationManager
                         'Y' => 'Publik',
                         'N' => 'Private',
                     ])
-                    ->sortable(),
+                    ->selectablePlaceholder(false)
+                    ->sortable()
+                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
 
                 Tables\Columns\SelectColumn::make('type')
                     ->label('Tipe')
@@ -110,7 +112,9 @@ class JurnalPengajaranRelationManager extends RelationManager
                         'Materi' => 'Materi',
                         'Tugas' => 'Tugas',
                     ])
-                    ->sortable(),
+                    ->selectablePlaceholder(false)
+                    ->sortable()
+                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
             ])
             ->filters([
                 //
@@ -134,7 +138,30 @@ class JurnalPengajaranRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                EditAction::make(),
+                EditAction::make()
+                    ->before(function (EditAction $action, array $data, $record) {
+                        // Check if changing TO 'tugas' from something else
+                        $newType = $data['type'] ?? $record->type;
+                        $oldType = $record->type;
+
+                        $isNewTugas = in_array(strtolower($newType), ['tugas']);
+                        $wasTugas = in_array(strtolower($oldType), ['tugas']);
+
+                        if ($isNewTugas && !$wasTugas) {
+                            $count = \App\Models\JurnalPengajaran::where('id_mata_pelajaran_kelas', $this->getOwnerRecord()->id)
+                                ->whereIn('type', ['tugas', 'Tugas'])
+                                ->count();
+
+                            if ($count >= 3) {
+                                \Filament\Notifications\Notification::make()
+                                    ->title('Maksimal 3 Tugas')
+                                    ->body('Mata pelajaran ini sudah memiliki 3 jurnal bertipe tugas. Tidak bisa mengubah jurnal ini menjadi tugas.')
+                                    ->danger()
+                                    ->send();
+                                $action->halt();
+                            }
+                        }
+                    }),
                 DeleteAction::make(),
                 ViewAction::make()
                     ->visible(fn($record) => $record->status_akses !== 'N'),
@@ -186,14 +213,39 @@ class JurnalPengajaranRelationManager extends RelationManager
                                     Forms\Components\Select::make('student_id')
                                         ->label('Pilih Mahasiswa')
                                         ->options(function () use ($record) {
-                                            return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
-                                                ->with('akademikKrs.riwayatPendidikan.siswaData')
-                                                ->get()
+                                            $user = auth()->user();
+                                            // Ensure permissions are correctly loaded
+                                            if ($user && $user->can('view_any_mata_pelajaran_kelas')) { // Or check role 'murid'
+                                                // Wait, best check is role
+                                            }
+
+                                            $query = \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
+                                                ->with('akademikKrs.riwayatPendidikan.siswaData');
+
+                                            if ($user && $user->hasRole('murid')) {
+                                                $query->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                                                    $q->where('user_id', $user->id);
+                                                });
+                                            }
+
+                                            return $query->get()
                                                 ->mapWithKeys(function ($ljk) {
                                                     $nama = $ljk->akademikKrs->riwayatPendidikan->siswaData->nama ?? 'Unknown';
                                                     return [$ljk->id => $nama];
                                                 });
                                         })
+                                        ->default(function () use ($record) {
+                                            $user = auth()->user();
+                                            if ($user && $user->hasRole('murid')) {
+                                                return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
+                                                    ->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                                                        $q->where('user_id', $user->id);
+                                                    })->value('id');
+                                            }
+                                            return null;
+                                        })
+                                        ->disabled(fn() => auth()->user() && auth()->user()->hasRole('murid'))
+                                        ->dehydrated() // Ensure value is passed even if disabled
                                         ->searchable()
                                         ->preload()
                                         ->reactive()
@@ -214,10 +266,30 @@ class JurnalPengajaranRelationManager extends RelationManager
                                             ->downloadable()
                                             ->openable()
                                             ->columnSpan(1)
+                                            ->default(function () use ($record, $ljkField) {
+                                                $user = auth()->user();
+                                                if ($user && $user->hasRole('murid')) {
+                                                    return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
+                                                        ->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                                                            $q->where('user_id', $user->id);
+                                                        })->value($ljkField);
+                                                }
+                                                return null;
+                                            })
                                             ->visible(fn($get) => filled($get('student_id'))),
                                         Forms\Components\RichEditor::make($cttField)
                                             ->label('Catatan Tugas')
                                             ->columnSpan(1)
+                                            ->default(function () use ($record, $cttField) {
+                                                $user = auth()->user();
+                                                if ($user && $user->hasRole('murid')) {
+                                                    return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
+                                                        ->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                                                            $q->where('user_id', $user->id);
+                                                        })->value($cttField);
+                                                }
+                                                return null;
+                                            })
                                             ->visible(fn($get) => filled($get('student_id'))),
                                     ])->visible(fn($get) => filled($get('student_id')))
                                 ]);
@@ -254,83 +326,6 @@ class JurnalPengajaranRelationManager extends RelationManager
                     })
                     ->modalSubmitAction(fn($record) => ($record->type === 'tugas' || $record->type === 'Tugas') ? null : false)
                     ->modalCancelActionLabel('Tutup'),
-                // Action::make('kelola_tugas')
-                //     ->label('Lihat Pengumpulan')
-                //     ->icon('heroicon-o-clipboard-document-list')
-                //     ->visible(fn($record) => $record->type === 'tugas' || $record->type === 'Tugas')
-                //     ->form(function ($record) {
-                //         // Determine task index
-                //         $taskIndex = \App\Models\JurnalPengajaran::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
-                //             ->whereIn('type', ['tugas', 'Tugas'])
-                //             ->where('id', '<=', $record->id)
-                //             ->orderBy('id')
-                //             ->count();
-
-                //         $ljkField = "ljk_tugas_{$taskIndex}";
-                //         $cttField = "ctt_tugas_{$taskIndex}";
-
-                //         return [
-                //             Forms\Components\Select::make('student_id')
-                //                 ->label('Pilih Mahasiswa')
-                //                 ->options(function ($record) {
-                //                     return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
-                //                         ->with('akademikKrs.riwayatPendidikan.siswaData')
-                //                         ->get()
-                //                         ->mapWithKeys(function ($ljk) {
-                //                             $nama = $ljk->akademikKrs->riwayatPendidikan->siswaData->nama ?? 'Unknown';
-                //                             return [$ljk->id => $nama];
-                //                         });
-                //                 })
-                //                 ->searchable()
-                //                 ->reactive()
-                //                 ->afterStateUpdated(function ($state, $set) use ($ljkField, $cttField) {
-                //                     if ($state) {
-                //                         $ljk = \App\Models\SiswaDataLJK::find($state);
-                //                         if ($ljk) {
-                //                             $set($ljkField, $ljk->$ljkField);
-                //                             $set($cttField, $ljk->$cttField);
-                //                         }
-                //                     }
-                //                 }),
-                //             Forms\Components\FileUpload::make($ljkField)
-                //                 ->label('File Tugas')
-                //                 ->disk('public')
-                //                 ->directory('tugas-uploads')
-                //                 ->downloadable()
-                //                 ->openable()
-                //                 ->visible(fn($get) => filled($get('student_id'))),
-                //             Forms\Components\RichEditor::make($cttField)
-                //                 ->label('Catatan Tugas')
-                //                 ->visible(fn($get) => filled($get('student_id'))),
-                //         ];
-                //     })
-                //     ->action(function (array $data, $record) {
-                //         if (!empty($data['student_id'])) {
-                //             $ljk = \App\Models\SiswaDataLJK::find($data['student_id']);
-                //             if ($ljk) {
-                //                 // Determine task index
-                //                 $taskIndex = \App\Models\JurnalPengajaran::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
-                //                     ->whereIn('type', ['tugas', 'Tugas'])
-                //                     ->where('id', '<=', $record->id)
-                //                     ->orderBy('id')
-                //                     ->count();
-
-                //                 $ljkField = "ljk_tugas_{$taskIndex}";
-                //                 $cttField = "ctt_tugas_{$taskIndex}";
-
-                //                 $ljk->update([
-                //                     $ljkField => $data[$ljkField],
-                //                     $cttField => $data[$cttField],
-                //                     'tgl_upload_tugas' => now(),
-                //                 ]);
-
-                //                 \Filament\Notifications\Notification::make()
-                //                     ->title('Tugas berhasil disimpan')
-                //                     ->success()
-                //                     ->send();
-                //             }
-                //         }
-                //     }),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

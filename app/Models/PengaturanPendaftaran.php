@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PengaturanPendaftaran extends Model
 {
-    use HasFactory, \App\Traits\HasActiveAcademicYear;
+    use HasFactory, \App\Traits\HasActiveAcademicYear, \App\Traits\HasJenjangScope;
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        return $query->where('jenjang_id', $jenjangId);
+    }
 
     protected $table = 'pengaturan_pendaftaran';
 
@@ -21,6 +26,7 @@ class PengaturanPendaftaran extends Model
         'tanggal_buka',
         'tanggal_tutup',
         'id_tahun_akademik',
+        'jenjang_id',
         'pengumuman',
         'kontak_admin',
         'email_admin',

@@ -140,6 +140,14 @@ class PengaturanPendaftaranResource extends Resource
                                             ->helperText('Pilih tahun akademik untuk periode pendaftaran ini')
                                             ->getOptionLabelFromRecordUsing(fn($record) => "{$record->nama} - {$record->periode}"),
 
+                                        Select::make('jenjang_id')
+                                            ->label('Jenjang Pendidikan')
+                                            ->relationship('jenjang', 'nama')
+                                            ->searchable()
+                                            ->preload()
+                                            ->required()
+                                            ->helperText('Pilih jenjang pendidikan untuk pengaturan ini'),
+
                                         Textarea::make('pengumuman')
                                             ->label('Pengumuman')
                                             ->rows(3)
@@ -172,6 +180,12 @@ class PengaturanPendaftaranResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
+
+                TextColumn::make('jenjang.nama')
+                    ->label('Jenjang')
+                    ->searchable()
+                    ->sortable()
+                    ->badge(),
 
                 ToggleColumn::make('status_pendaftaran')
                     ->label('Status Pendaftaran')

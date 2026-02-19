@@ -40,7 +40,17 @@ class SetActiveJenjangMiddleware
                     }
                 }
             }
-            // Priority 3: Role-based Access (Jenjang Admin / Staff)
+            // Priority 3: Pengajar (Force based on DosenData)
+            elseif ($user->hasRole(\App\Helpers\SiakadRole::DOSEN)) {
+                $dosen = \App\Models\DosenData::where('user_id', $user->id)->first();
+                if ($dosen && $dosen->id_jurusan) {
+                    $jenjangId = \App\Models\Jurusan::find($dosen->id_jurusan)?->id_jenjang_pendidikan;
+                    if ($jenjangId) {
+                        session(['active_jenjang_id' => $jenjangId]);
+                    }
+                }
+            }
+            // Priority 4: Role-based Access (Jenjang Admin / Staff)
             // Use the jenjang_id directly from the assigned role(s)
             else {
                 // Get roles with jenjang relationship, ignoring the current active jenjang scope

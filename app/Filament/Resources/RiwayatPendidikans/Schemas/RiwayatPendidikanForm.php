@@ -19,26 +19,27 @@ class RiwayatPendidikanForm
             ->components([
                 Select::make('id_siswa_data')
                     ->label('Data Siswa')
-                    ->options(SiswaData::pluck('nama', 'id'))
-                    ->searchable(),
-                Select::make('id_jenjang_pendidikan')
-                    ->label('Jenjang Pendidikan')
-                    ->options(JenjangPendidikan::pluck('nama', 'id'))
-                    ->searchable(),
+                    ->relationship('siswa', 'nama')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 Select::make('id_jurusan')
                     ->label('Jurusan')
-                    ->options(Jurusan::pluck('nama', 'id'))
-                    ->searchable(),
+                    ->relationship('jurusan', 'nama')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 Select::make('ro_status_siswa')
                     ->label('Status Siswa')
-                    ->options(StatusSiswa::pluck('nilai', 'id'))
-                    ->searchable(),
+                    ->relationship('statusSiswa', 'nilai')
+                    ->searchable()
+                    ->preload(),
                 TextInput::make('angkatan'),
                 TextInput::make('nomor_induk'),
                 DatePicker::make('tanggal_mulai'),
                 DatePicker::make('tanggal_selesai'),
-                Select::make('status_aktif')
-                    ->options(['Y' => 'Y', 'N' => 'N']),
+                Select::make('status')
+                    ->options(['Aktif' => 'Aktif', 'Lulus' => 'Lulus', 'Keluar' => 'Keluar', 'Cuti' => 'Cuti']),
             ]);
     }
 }

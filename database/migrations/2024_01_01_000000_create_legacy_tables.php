@@ -36,9 +36,7 @@ return new class extends Migration
             Schema::create('dosen_data', function (Blueprint $table) {
                 $table->id();
                 $table->string('nama')->nullable();
-                // user_id might be added by subsequent migration, but we can add it here too or leave it to the other migration
-                // The other migration ADDS it. So we should NOT add it here if we want to test the other migration.
-                // But wait, the other migration is 'add_user_id_to_dosen_data_table'. So we should omit user_id here.
+                $table->foreignId('id_jurusan')->nullable();
                 $table->timestamps();
             });
         }
@@ -52,8 +50,8 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('siswa_data_pendaftars')) {
-            Schema::create('siswa_data_pendaftars', function (Blueprint $table) {
+        if (!Schema::hasTable('siswa_data_pendaftar')) {
+            Schema::create('siswa_data_pendaftar', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('id_siswa_data')->nullable();
                 $table->foreignId('id_jurusan')->nullable();
@@ -67,6 +65,44 @@ return new class extends Migration
                 $table->foreignId('id_siswa_data')->nullable();
                 $table->foreignId('id_jurusan')->nullable();
                 $table->string('status')->nullable();
+                $table->timestamps();
+            });
+        }
+
+        if (!Schema::hasTable('kelas')) {
+            Schema::create('kelas', function (Blueprint $table) {
+                $table->id();
+                $table->string('nama')->nullable();
+                $table->foreignId('id_jurusan')->nullable();
+                $table->foreignId('id_tahun_akademik')->nullable();
+                $table->timestamps();
+            });
+        }
+
+        if (!Schema::hasTable('tahun_akademik')) {
+            Schema::create('tahun_akademik', function (Blueprint $table) {
+                $table->id();
+                $table->string('nama');
+                $table->string('periode')->nullable();
+                $table->string('status')->nullable();
+                $table->timestamps();
+            });
+        }
+
+        if (!Schema::hasTable('mata_pelajaran_kelas')) {
+            Schema::create('mata_pelajaran_kelas', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('id_kelas')->nullable();
+                $table->string('nama')->nullable();
+                $table->timestamps();
+            });
+        }
+
+        if (!Schema::hasTable('siswa_data_ljk')) {
+            Schema::create('siswa_data_ljk', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('id_mata_pelajaran_kelas')->nullable();
+                $table->float('nilai')->nullable();
                 $table->timestamps();
             });
         }

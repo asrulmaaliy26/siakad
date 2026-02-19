@@ -57,7 +57,7 @@ class SiswaDataLJKResource extends Resource
         $user = auth()->user();
 
         // Jika user memiliki role 'pengajar' dan bukan super_admin/admin
-        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+        if ($user && $user->hasRole(\App\Helpers\SiakadRole::DOSEN) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
             $query->whereHas('mataPelajaranKelas', function ($q) use ($user) {
                 $q->whereHas('dosenData', function ($dq) use ($user) {
                     $dq->where('user_id', $user->id);
@@ -66,7 +66,7 @@ class SiswaDataLJKResource extends Resource
         }
 
         // Jika user memiliki role 'murid' dan bukan super_admin/admin
-        if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+        if ($user && $user->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
             $query->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             });

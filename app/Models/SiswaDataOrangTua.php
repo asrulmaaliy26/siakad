@@ -7,7 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SiswaDataOrangTua extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope;
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        // Path: siswa_data_orang_tua -> siswa -> (pendaftar/riwayat) -> jurusan -> jenjang
+        return $query->whereHas('siswa', function ($q) use ($jenjangId) {
+            $q->byJenjang($jenjangId);
+        });
+    }
+
     protected $table = 'siswa_data_orang_tua';
     protected $fillable = [
         'nama',

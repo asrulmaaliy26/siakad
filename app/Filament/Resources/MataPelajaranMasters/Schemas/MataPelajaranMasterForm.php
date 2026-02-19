@@ -18,14 +18,16 @@ class MataPelajaranMasterForm
                     ->required(),
                 Select::make('id_jurusan')
                     ->label('Jurusan')
-                    ->options(Jurusan::pluck('nama', 'id'))
-                    ->searchable(),
+                    ->relationship('jurusan', 'nama')
+                    ->searchable()
+                    ->preload(),
                 TextInput::make('bobot')
                     ->numeric(),
                 Select::make('ro_jenis')
                     ->label('Jenis Pelajaran')
-                    ->options(JenisMapel::pluck('nilai', 'id'))
-                    ->searchable(),
+                    ->relationship('jenisMapel', 'nilai')
+                    ->searchable()
+                    ->preload(),
             ]);
     }
 }

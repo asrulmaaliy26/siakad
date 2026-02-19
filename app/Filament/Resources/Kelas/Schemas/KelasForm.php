@@ -16,27 +16,24 @@ class KelasForm
             ->components([
                 Select::make('ro_program_kelas')
                     ->label('Program Kelas')
-                    ->options(\App\Models\RefOption\ProgramKelas::pluck('nilai', 'id'))
+                    ->relationship('programKelas', 'nilai')
                     ->searchable()
+                    ->preload()
                     ->required(),
-                // TextInput::make('nama'),
-                // ->numeric(),
                 TextInput::make('semester'),
                 Select::make('id_tahun_akademik')
                     ->label('Tahun Akademik')
-                    ->options(TahunAkademik::pluck('nama', 'id'))
-                    ->searchable(),
+                    ->relationship('tahunAkademik', 'nama')
+                    ->searchable()
+                    ->preload(),
                 Select::make('id_jurusan')
                     ->label('Jurusan')
-                    ->options(\App\Models\Jurusan::pluck('nama', 'id'))
+                    ->relationship('jurusan', 'nama')
                     ->searchable()
+                    ->preload()
                     ->required(),
-                // Select::make('id_jenjang_pendidikan') // Removed as per request
-                //     ->label('Jenjang Pendidikan')
-                //     ->options(JenjangPendidikan::pluck('nama', 'id'))
-                //     ->searchable(),
                 Select::make('status_aktif')
-                    ->options(['Y' => 'Y', 'N' => 'N']),
+                    ->options(['Y' => 'Aktif', 'N' => 'Tidak Aktif']),
             ]);
     }
 }

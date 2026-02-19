@@ -9,7 +9,16 @@ use App\Models\RefOption\RuangKelas;
 
 class MataPelajaranKelasDistribusi extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasJenjangScope, \App\Traits\HasActiveAcademicYear;
+
+    public function scopeByJenjang($query, $jenjangId)
+    {
+        // Path: mata_pelajaran_kelas -> kelas -> jurusan -> id_jenjang_pendidikan
+        return $query->whereHas('kelas.jurusan', function ($q) use ($jenjangId) {
+            $q->where('id_jenjang_pendidikan', $jenjangId);
+        });
+    }
+
     protected $table = 'mata_pelajaran_kelas';
     protected $fillable = [
         'id_mata_pelajaran_kurikulum',

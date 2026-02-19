@@ -15,21 +15,21 @@ class KurikulumForm
     {
         return $schema
             ->components([
-                TextInput::make('nama'),
+                TextInput::make('nama')
+                    ->required(),
                 Select::make('id_jurusan')
                     ->label('Jurusan')
-                    ->options(Jurusan::pluck('nama', 'id'))
-                    ->searchable(),
+                    ->relationship('jurusan', 'nama')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 Select::make('id_tahun_akademik')
                     ->label('Tahun Akademik')
-                    ->options(TahunAkademik::pluck('nama', 'id'))
-                    ->searchable(),
-                // Select::make('id_jenjang_pendidikan') // Removed as per request
-                //     ->label('Jenjang Pendidikan')
-                //     ->options(JenjangPendidikan::pluck('nama', 'id'))
-                //     ->searchable(),
+                    ->relationship('tahunAkademik', 'nama')
+                    ->searchable()
+                    ->preload(),
                 Select::make('status_aktif')
-                    ->options(['Y' => 'Y', 'N' => 'N']),
+                    ->options(['Y' => 'Aktif', 'N' => 'Tidak Aktif']),
             ]);
     }
 }

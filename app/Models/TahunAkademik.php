@@ -15,4 +15,9 @@ class TahunAkademik extends Model
     {
         return $this->hasMany(PengaturanPendaftaran::class, 'id_tahun_akademik');
     }
+
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'id_tahun_akademik');
+    }
 }

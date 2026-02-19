@@ -91,7 +91,7 @@ class MataPelajaranKelasResource extends Resource
         // Filter untuk Mahasiswa (Murid)
         // Mahasiswa hanya melihat mata pelajaran yang diambilnya (via KRS)
         if ($user && $user->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
-            $query->whereHas('krs', function ($q) use ($user) {
+            $query->whereHas('kelas.akademikKrs', function ($q) use ($user) {
                 $q->whereHas('riwayatPendidikan', function ($q2) use ($user) {
                     $q2->whereHas('siswaData', function ($q3) use ($user) {
                         $q3->where('user_id', $user->id);

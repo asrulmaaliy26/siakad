@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\AbsensiSiswa;
-use App\Models\PertemuanKelas;
 use App\Models\AkademikKrs;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AbsensiSiswa>
  */
@@ -20,7 +20,6 @@ class AbsensiSiswaFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_pertemuan' => PertemuanKelas::factory(),
             'id_krs' => AkademikKrs::factory(),
             'status' => $this->faker->randomElement(['Hadir', 'Izin', 'Sakit', 'Alpa']),
             'waktu_absen' => now(),

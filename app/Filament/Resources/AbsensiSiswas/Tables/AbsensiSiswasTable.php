@@ -32,7 +32,7 @@ class AbsensiSiswasTable
                     ->searchable(),
 
                 TextColumn::make(
-                    'pertemuan.mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.nama'
+                    'mataPelajaranKelas.mataPelajaranKurikulum.mataPelajaranMaster.nama'
                 )
                     ->label('Mata Pelajaran')
                     ->sortable()
@@ -46,12 +46,9 @@ class AbsensiSiswasTable
                     ->label('Semester')
                     ->sortable(),
 
-                TextColumn::make('pertemuan.pertemuan_ke')
-                    ->label('Pertemuan')
-                    ->sortable(),
-
-                TextColumn::make('pertemuan.tanggal')
-                    ->date()
+                TextColumn::make('waktu_absen')
+                    ->label('Waktu Absen')
+                    ->dateTime()
                     ->sortable(),
 
                 TextColumn::make('status')

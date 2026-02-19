@@ -33,7 +33,7 @@ class SiswaDataLJKForm
                             ->label('Mata Kuliah')
                             ->relationship('mataPelajaranKelas', 'id', modifyQueryUsing: function ($query) {
                                 $user = auth()->user();
-                                if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+                                if ($user && $user->hasRole(\App\Helpers\SiakadRole::DOSEN) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
                                     $query->whereHas('dosenData', function ($q) use ($user) {
                                         $q->where('user_id', $user->id);
                                     });

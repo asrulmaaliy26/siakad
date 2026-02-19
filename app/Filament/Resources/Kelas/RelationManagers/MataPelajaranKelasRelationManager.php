@@ -19,6 +19,8 @@ use App\Models\MataPelajaranMaster;
 use App\Models\Jurusan;
 use App\Models\Kurikulum;
 use App\Models\MataPelajaranKurikulum;
+use Illuminate\Database\Eloquent\Builder;
+use App\Helpers\SiakadRole;
 
 class MataPelajaranKelasRelationManager extends RelationManager
 {
@@ -108,7 +110,7 @@ class MataPelajaranKelasRelationManager extends RelationManager
         return $table
             ->modifyQueryUsing(function (Builder $query) {
                 $user = auth()->user();
-                if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+                if ($user && $user->hasRole(SiakadRole::DOSEN) && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])) {
                     $query->whereHas('dosenData', function ($q) use ($user) {
                         $q->where('user_id', $user->id);
                     });
@@ -153,9 +155,7 @@ class MataPelajaranKelasRelationManager extends RelationManager
             ])
             ->actions([
                 // DeleteAction::make(),
-                DeleteAction::make()
-                    ->disabled(fn($record) => $record->pertemuanKelas()->exists())
-                    ->tooltip('Masih memiliki data pertemuan')
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

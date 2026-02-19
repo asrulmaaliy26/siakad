@@ -44,11 +44,16 @@ class PekanUjian extends Model
     // Note: Relasi ini kompleks (PekanUjian -> TahunAkademik <- Kelas <- MataPelajaranKelas).
     // Tidak bisa menggunakan hasManyThrough standar karena arah relasi yang tidak linear.
     // Logic query akan di-handle di MataPelajaranKelasRelationManager::getRelationship().
-    public function mataPelajaranKelas(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function mataPelajaranKelas(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
     {
-        // Return dummy relation to satisfy interfaces if needed, 
-        // valid logic is in RelationManager override.
-        return $this->hasMany(MataPelajaranKelas::class, 'id_kelas', 'id');
+        return $this->hasManyThrough(
+            MataPelajaranKelas::class,
+            Kelas::class,
+            'id_tahun_akademik', // Foreign key on Kelas
+            'id_kelas',          // Foreign key on MataPelajaranKelas
+            'id_tahun_akademik', // Local key on PekanUjian
+            'id'                 // Local key on Kelas
+        );
     }
 
     // Alternatif: Jika relasi lebih sederhana (langsung)

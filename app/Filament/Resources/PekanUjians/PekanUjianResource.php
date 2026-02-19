@@ -68,11 +68,11 @@ class PekanUjianResource extends Resource
         $user = \Filament\Facades\Filament::auth()->user();
 
         // Optional: Filter Pekan Ujian itself if needed for students
-        // if ($user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin'])) {
-        //     $query->whereHas('tahunAkademik.kelas.mataPelajaranKelas.siswaDataLjk.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
-        //         $q->where('user_id', $user->id);
-        //     });
-        // }
+        if ($user && $user->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
+            $query->whereHas('tahunAkademik.kelas.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
 
         return $query;
     }

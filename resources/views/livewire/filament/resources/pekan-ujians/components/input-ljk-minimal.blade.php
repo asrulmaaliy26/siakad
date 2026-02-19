@@ -24,6 +24,12 @@
     </div>
     @endif
 
+    @if($debugInfo)
+    <div class="mb-4 p-2 bg-yellow-100 text-yellow-800 text-xs rounded border border-yellow-200">
+        {{ $debugInfo }}
+    </div>
+    @endif
+
     @if($selectedStudentId && $this->getSelectedLjkRecord())
     @php
     $selectedLjk = $this->getSelectedLjkRecord();

@@ -170,12 +170,8 @@
         </div>
     </div>
     @endif
-
-    <!-- Input LJK Mahasiswa (Livewire Component) -->
-    <div class="mt-6">
-        @livewire('filament.resources.pekan-ujians.components.input-ljk-minimal', ['record' => $record, 'type' => $type], key('input-ljk-' . $record->id))
-    </div>
 </div>
+
 
 <!-- Tambahkan CSS untuk meningkatkan tampilan select di dark mode -->
 <style>

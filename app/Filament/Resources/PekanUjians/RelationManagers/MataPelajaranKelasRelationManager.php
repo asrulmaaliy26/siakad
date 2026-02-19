@@ -17,6 +17,12 @@ use Filament\Actions\BulkAction;
 use Filament\Actions\Action;
 use App\Models\Kelas;
 use App\Models\MataPelajaranKelas;
+use App\Helpers\SiakadRole;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 
 class MataPelajaranKelasRelationManager extends RelationManager
 {
@@ -37,12 +43,12 @@ class MataPelajaranKelasRelationManager extends RelationManager
                         $query->where('id_tahun_akademik', $this->getOwnerRecord()->id_tahun_akademik);
                     })
                     ->when(
-                        $user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin']),
+                        $user && $user->hasRole(SiakadRole::DOSEN) && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN]),
                         fn(Builder $query) => $query->whereHas('dosenData', fn(Builder $q) => $q->where('user_id', $user->id))
                     )
                     ->when(
-                        $user && $user->hasRole('murid') && !$user->hasAnyRole(['super_admin', 'admin']),
-                        fn(Builder $query) => $query->whereHas('siswaDataLjk.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                        $user && $user->hasRole(SiakadRole::MAHASISWA) && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN]),
+                        fn(Builder $query) => $query->whereHas('kelas.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
                             $q->where('user_id', $user->id);
                         })
                     );
@@ -88,7 +94,7 @@ class MataPelajaranKelasRelationManager extends RelationManager
                     ->label('Status Ujian')
                     ->onColor('success')
                     ->offColor('danger')
-                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole('murid') && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole(SiakadRole::MAHASISWA) && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
                 Tables\Columns\TextColumn::make('soal_check')
                     ->label('Soal')
                     ->badge()
@@ -163,8 +169,9 @@ class MataPelajaranKelasRelationManager extends RelationManager
                 // Tidak perlu tambah data karena ini hanya menampilkan
             ])
             ->actions([
-                ViewAction::make()
+                Action::make('view_soal')
                     ->label('Lihat Soal')
+                    ->icon('heroicon-o-eye')
                     ->visible(function ($record) {
                         $jenisUjian = strtolower($this->getOwnerRecord()->jenis_ujian ?? '');
                         $column = str_contains($jenisUjian, 'uas') ? 'status_uas' : 'status_uts';
@@ -185,9 +192,106 @@ class MataPelajaranKelasRelationManager extends RelationManager
                             'type' => $type
                         ]);
                     })
-                    ->modalSubmitAction(false)
+                    ->form(function ($record) {
+                        $jenisUjian = strtolower($this->getOwnerRecord()->jenis_ujian ?? '');
+                        $isUas = str_contains($jenisUjian, 'uas');
+                        $ljkField = $isUas ? 'ljk_uas' : 'ljk_uts';
+                        $cttField = $isUas ? 'ctt_uas' : 'ctt_uts';
+
+                        return [
+                            Section::make('Lembar Jawaban Mahasiswa')
+                                ->description('Pilih mahasiswa untuk melihat atau mengunggah lembar jawaban.')
+                                ->icon('heroicon-o-clipboard-document-check')
+                                ->schema([
+                                    Select::make('siswa_data_ljk_id')
+                                        ->label('Pilih Mahasiswa')
+                                        ->options(function () use ($record) {
+                                            $user = auth()->user();
+                                            $query = \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id)
+                                                ->with('akademikKrs.riwayatPendidikan.siswaData');
+
+                                            if ($user && $user->hasRole(SiakadRole::MAHASISWA)) {
+                                                $query->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                                                    $q->where('user_id', $user->id);
+                                                });
+                                            }
+
+                                            return $query->get()
+                                                ->mapWithKeys(function ($ljk) {
+                                                    $nama = $ljk->akademikKrs->riwayatPendidikan->siswaData->nama ?? 'Unknown';
+                                                    $nim = $ljk->akademikKrs->riwayatPendidikan->nomor_induk ?? '';
+                                                    return [$ljk->id => "{$nama} ({$nim})"];
+                                                });
+                                        })
+                                        ->default(function () use ($record) {
+                                            $user = auth()->user();
+                                            if ($user && $user->hasRole(SiakadRole::MAHASISWA)) {
+                                                return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id)
+                                                    ->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+                                                        $q->where('user_id', $user->id);
+                                                    })->value('id');
+                                            }
+                                            return null;
+                                        })
+                                        ->disabled(fn() => auth()->user() && auth()->user()->hasRole(SiakadRole::MAHASISWA))
+                                        ->dehydrated()
+                                        ->searchable()
+                                        ->preload()
+                                        ->live()
+                                        ->afterStateUpdated(function ($state, $set) use ($ljkField, $cttField) {
+                                            if ($state) {
+                                                $ljk = \App\Models\SiswaDataLJK::find($state);
+                                                if ($ljk) {
+                                                    $set($ljkField, $ljk->$ljkField);
+                                                    $set($cttField, $ljk->$cttField);
+                                                }
+                                            } else {
+                                                $set($ljkField, null);
+                                                $set($cttField, null);
+                                            }
+                                        }),
+                                    Grid::make(1)->schema([
+                                        FileUpload::make($ljkField)
+                                            ->label('File Lembar Jawaban (' . ($isUas ? 'UAS' : 'UTS') . ')')
+                                            ->disk('public')
+                                            ->directory(fn() => 'uploads/ljk/' . ($isUas ? 'uas' : 'uts'))
+                                            ->downloadable()
+                                            ->openable()
+                                            ->columnSpanFull()
+                                            ->visible(fn($get) => filled($get('siswa_data_ljk_id'))),
+                                        RichEditor::make($cttField)
+                                            ->label('Catatan / Jawaban Teks')
+                                            ->columnSpanFull()
+                                            ->visible(fn($get) => filled($get('siswa_data_ljk_id'))),
+                                    ])->visible(fn($get) => filled($get('siswa_data_ljk_id')))
+                                ])
+                        ];
+                    })
+                    ->action(function (array $data) {
+                        if (!empty($data['siswa_data_ljk_id'])) {
+                            $ljk = \App\Models\SiswaDataLJK::find($data['siswa_data_ljk_id']);
+                            if ($ljk) {
+                                $jenisUjian = strtolower($this->getOwnerRecord()->jenis_ujian ?? '');
+                                $isUas = str_contains($jenisUjian, 'uas');
+                                $ljkField = $isUas ? 'ljk_uas' : 'ljk_uts';
+                                $cttField = $isUas ? 'ctt_uas' : 'ctt_uts';
+
+                                $ljk->update([
+                                    $ljkField => $data[$ljkField] ?? null,
+                                    $cttField => $data[$cttField] ?? null,
+                                    ($isUas ? 'tgl_upload_ljk_uas' : 'tgl_upload_ljk_uts') => now(),
+                                ]);
+
+                                Notification::make()
+                                    ->title('Lembar jawaban berhasil disimpan')
+                                    ->success()
+                                    ->send();
+                            }
+                        }
+                    })
+                    ->modalSubmitActionLabel('Simpan Lembar Jawaban')
                     ->modalWidth('7xl')
-                    ->modalCancelAction(fn() => \Filament\Actions\Action::make('tutup')->label('Tutup')->close()),
+                    ->modalCancelActionLabel('Tutup'),
             ])
             ->bulkActions([
                 BulkAction::make('update_status')
@@ -240,6 +344,11 @@ class MataPelajaranKelasRelationManager extends RelationManager
     // Optional: Method untuk mengecek apakah user bisa mengakses relation manager
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
+        $user = auth()->user();
+        if ($user && ($user->hasRole(SiakadRole::MAHASISWA) || $user->hasRole(SiakadRole::DOSEN))) {
+            return true;
+        }
+
         // Hanya tampilkan jika owner record memiliki id_tahun_akademik
         return $ownerRecord->id_tahun_akademik !== null;
     }

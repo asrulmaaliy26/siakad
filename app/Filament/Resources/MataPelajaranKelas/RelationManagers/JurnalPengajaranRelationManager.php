@@ -17,6 +17,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
+use App\Helpers\SiakadRole;
 
 class JurnalPengajaranRelationManager extends RelationManager
 {
@@ -104,7 +105,7 @@ class JurnalPengajaranRelationManager extends RelationManager
                     ])
                     ->selectablePlaceholder(false)
                     ->sortable()
-                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => auth()->user()->hasRole(SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
 
                 Tables\Columns\SelectColumn::make('type')
                     ->label('Tipe')
@@ -114,7 +115,7 @@ class JurnalPengajaranRelationManager extends RelationManager
                     ])
                     ->selectablePlaceholder(false)
                     ->sortable()
-                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => auth()->user()->hasRole(SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
             ])
             ->filters([
                 //
@@ -222,7 +223,7 @@ class JurnalPengajaranRelationManager extends RelationManager
                                             $query = \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
                                                 ->with('akademikKrs.riwayatPendidikan.siswaData');
 
-                                            if ($user && $user->hasRole('murid')) {
+                                            if ($user && $user->hasRole(SiakadRole::MAHASISWA)) {
                                                 $query->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
                                                     $q->where('user_id', $user->id);
                                                 });
@@ -236,7 +237,7 @@ class JurnalPengajaranRelationManager extends RelationManager
                                         })
                                         ->default(function () use ($record) {
                                             $user = auth()->user();
-                                            if ($user && $user->hasRole('murid')) {
+                                            if ($user && $user->hasRole(SiakadRole::MAHASISWA)) {
                                                 return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
                                                     ->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
                                                         $q->where('user_id', $user->id);
@@ -244,7 +245,7 @@ class JurnalPengajaranRelationManager extends RelationManager
                                             }
                                             return null;
                                         })
-                                        ->disabled(fn() => auth()->user() && auth()->user()->hasRole('murid'))
+                                        ->disabled(fn() => auth()->user() && auth()->user()->hasRole(SiakadRole::MAHASISWA))
                                         ->dehydrated() // Ensure value is passed even if disabled
                                         ->searchable()
                                         ->preload()
@@ -268,7 +269,7 @@ class JurnalPengajaranRelationManager extends RelationManager
                                             ->columnSpan(1)
                                             ->default(function () use ($record, $ljkField) {
                                                 $user = auth()->user();
-                                                if ($user && $user->hasRole('murid')) {
+                                                if ($user && $user->hasRole(SiakadRole::MAHASISWA)) {
                                                     return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
                                                         ->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
                                                             $q->where('user_id', $user->id);
@@ -282,7 +283,7 @@ class JurnalPengajaranRelationManager extends RelationManager
                                             ->columnSpan(1)
                                             ->default(function () use ($record, $cttField) {
                                                 $user = auth()->user();
-                                                if ($user && $user->hasRole('murid')) {
+                                                if ($user && $user->hasRole(SiakadRole::MAHASISWA)) {
                                                     return \App\Models\SiswaDataLJK::where('id_mata_pelajaran_kelas', $record->id_mata_pelajaran_kelas)
                                                         ->whereHas('akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
                                                             $q->where('user_id', $user->id);

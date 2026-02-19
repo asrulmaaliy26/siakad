@@ -67,12 +67,4 @@ class MataPelajaranKelasDistribusi extends Model
     {
         return $this->belongsTo(PelaksanaanKelas::class, 'ro_pelaksanaan_kelas');
     }
-    public function pertemuanKelas()
-    {
-        return $this->hasMany(
-            PertemuanKelas::class,
-            'id_mata_pelajaran_kelas',   // FK di tabel mata_pelajaran_kelas
-            'id'          // PK di tabel kelas
-        );
-    }
 }

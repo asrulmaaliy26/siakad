@@ -12,6 +12,7 @@ use Filament\Tables\Table;
 
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use App\Helpers\SiakadRole;
 
 class PekanUjiansTable
 {
@@ -33,25 +34,25 @@ class PekanUjiansTable
                     ->selectablePlaceholder(false)
                     ->sortable()
                     ->searchable()
-                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => auth()->user()->hasRole(SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
 
                 ToggleColumn::make('status_akses')
                     ->label('Status Akses')
                     ->onColor('success')
                     ->offColor('danger')
-                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole('murid') && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole(SiakadRole::MAHASISWA) && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
 
                 ToggleColumn::make('status_bayar')
                     ->label('Syarat Pembayaran')
                     ->onColor('success')
                     ->offColor('warning')
-                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole('murid') && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole(SiakadRole::MAHASISWA) && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
 
                 ToggleColumn::make('status_ujian')
                     ->label('Status Aktif')
                     ->onColor('success')
                     ->offColor('gray')
-                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole('murid') && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => \Filament\Facades\Filament::auth()->user()?->hasRole(SiakadRole::MAHASISWA) && !\Filament\Facades\Filament::auth()->user()?->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
 
                 TextColumn::make('informasi')
                     ->label('Informasi')

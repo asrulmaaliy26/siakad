@@ -81,11 +81,6 @@ class MataPelajaranKelas extends Model
         return $this->hasMany(SiswaDataLJK::class, 'id_mata_pelajaran_kelas');
     }
 
-    public function pertemuanKelas()
-    {
-        return $this->hasMany(PertemuanKelas::class, 'id_mata_pelajaran_kelas');
-    }
-
     public function absensiSiswa()
     {
         return $this->hasMany(AbsensiSiswa::class, 'id_mata_pelajaran_kelas');
@@ -107,12 +102,7 @@ class MataPelajaranKelas extends Model
         return $this->kelas ? $this->kelas->akademikKrs()->count() : 0;
     }
 
-    public function getProgressAttribute()
-    {
-        $totalPertemuan = 16; // Asumsi standar 16 pertemuan
-        $jumlahPertemuan = $this->pertemuanKelas()->count();
-        return ($jumlahPertemuan / $totalPertemuan) * 100;
-    }
+
     protected function statusUts(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(

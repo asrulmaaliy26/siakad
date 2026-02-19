@@ -15,6 +15,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use App\Models\MataPelajaranKelas;
 use Illuminate\Database\Eloquent\Builder;
+use App\Helpers\SiakadRole;
 
 class SiswaDataLjkRelationManager extends RelationManager
 {
@@ -30,7 +31,7 @@ class SiswaDataLjkRelationManager extends RelationManager
                         $query->with(['mataPelajaranKurikulum.mataPelajaranMaster', 'dosenData', 'ruangKelas']);
 
                         $user = auth()->user();
-                        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+                        if ($user && $user->hasRole(SiakadRole::DOSEN) && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])) {
                             $query->whereHas('dosenData', function ($q) use ($user) {
                                 $q->where('user_id', $user->id);
                             });
@@ -106,7 +107,7 @@ class SiswaDataLjkRelationManager extends RelationManager
         $query = parent::getEloquentQuery();
         $user = auth()->user();
 
-        if ($user && $user->hasRole('pengajar') && !$user->hasAnyRole(['super_admin', 'admin'])) {
+        if ($user && $user->hasRole(SiakadRole::DOSEN) && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])) {
             $query->whereHas('mataPelajaranKelas', function ($q) use ($user) {
                 $q->whereHas('dosenData', function ($dq) use ($user) {
                     $dq->where('user_id', $user->id);

@@ -13,6 +13,7 @@ use Filament\Tables\Columns\SelectColumn;
 use Filament\Actions\Action;
 use Filament\Support\Icons\Heroicon;
 use App\Filament\Resources\SiswaData\SiswaDataResource;
+use App\Helpers\SiakadRole;
 
 class SiswaDataTable
 {
@@ -103,7 +104,7 @@ class SiswaDataTable
                             }
                         }
                     })
-                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => auth()->user()->hasRole(SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -179,7 +180,7 @@ class SiswaDataTable
                                 ->success()
                                 ->send();
                         })
-                        ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                        ->disabled(fn() => auth()->user()->hasRole(SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
                 ]),
             ])
             // ->toolbarActions([])

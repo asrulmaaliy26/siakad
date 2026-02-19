@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\SiakadRole;
 
 class SiswaDataPendaftarsTable
 {
@@ -82,7 +83,7 @@ class SiswaDataPendaftarsTable
                     ])
                     ->selectablePlaceholder(false)
                     ->sortable()
-                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => auth()->user()->hasRole(SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
 
                 TextColumn::make('reff')
                     ->label('Referral')
@@ -102,7 +103,7 @@ class SiswaDataPendaftarsTable
                     ->selectablePlaceholder(false)
                     ->sortable()
 
-                    ->disabled(fn() => Auth::user()->hasRole('murid') && !Auth::user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => Auth::user()->hasRole(SiakadRole::MAHASISWA) && !Auth::user()->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
 
                 SelectColumn::make('Status_Kelulusan')
                     ->label('Status Kelulusan')
@@ -113,7 +114,7 @@ class SiswaDataPendaftarsTable
                     ])
                     ->selectablePlaceholder(false)
                     ->sortable()
-                    ->disabled(fn() => auth()->user()->hasRole('murid') && !auth()->user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->disabled(fn() => auth()->user()->hasRole(SiakadRole::MAHASISWA) && !auth()->user()->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])),
 
                 TextColumn::make('Diterima_di_Prodi')
                     ->label('Diterima di Prodi')

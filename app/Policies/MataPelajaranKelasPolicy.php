@@ -14,11 +14,17 @@ class MataPelajaranKelasPolicy
 
     public function viewAny(AuthUser $authUser): bool
     {
+        if ($authUser->hasRole(\App\Helpers\SiakadRole::MAHASISWA) || $authUser->hasRole(\App\Helpers\SiakadRole::DOSEN)) {
+            return true;
+        }
         return $authUser->can('ViewAny:MataPelajaranKelas');
     }
 
     public function view(AuthUser $authUser, MataPelajaranKelas $mataPelajaranKelas): bool
     {
+        if ($authUser->hasRole(\App\Helpers\SiakadRole::MAHASISWA) || $authUser->hasRole(\App\Helpers\SiakadRole::DOSEN)) {
+            return true;
+        }
         return $authUser->can('View:MataPelajaranKelas');
     }
 

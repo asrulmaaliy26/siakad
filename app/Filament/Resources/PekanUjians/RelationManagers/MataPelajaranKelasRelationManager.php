@@ -35,22 +35,33 @@ class MataPelajaranKelasRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->query(function () {
+            ->modifyQueryUsing(function (Builder $query) {
                 $user = \Filament\Facades\Filament::auth()->user();
-                return MataPelajaranKelas::query()
-                    ->whereHas('kelas', function (Builder $query) {
-                        // Filter: Hanya tampilkan mata pelajaran kelas yang berada di tahun akademik yang sama dengan Pekan Ujian
-                        $query->where('id_tahun_akademik', $this->getOwnerRecord()->id_tahun_akademik);
-                    })
-                    ->when(
-                        $user && $user->hasRole(SiakadRole::DOSEN) && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN]),
-                        fn(Builder $query) => $query->whereHas('dosenData', fn(Builder $q) => $q->where('user_id', $user->id))
-                    )
-                    ->when(
-                        $user && $user->hasRole(SiakadRole::MAHASISWA) && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN]),
-                        fn(Builder $query) => $query->whereHas('kelas.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
+
+                // Jika user adalah Mahasiswa atau Dosen, kita bypass Global Scopes yang mungkin membatasi view
+                if ($user && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN])) {
+                    $query->withoutGlobalScopes();
+                }
+
+                if ($user && $user->hasRole(SiakadRole::MAHASISWA)) {
+                    // Ambil ID Kelas yang Diambil Mahasiswa (Bypass scopes untuk memastikan data ketemu)
+                    $kelasIds = \App\Models\AkademikKrs::query()
+                        ->withoutGlobalScopes()
+                        ->whereHas('riwayatPendidikan.siswa', function ($q) use ($user) {
                             $q->where('user_id', $user->id);
                         })
+                        ->pluck('id_kelas')
+                        ->filter()
+                        ->unique()
+                        ->toArray();
+
+                    $query->whereIn($query->getModel()->getTable() . '.id_kelas', $kelasIds);
+                }
+
+                return $query
+                    ->when(
+                        $user && $user->hasRole(SiakadRole::DOSEN) && !$user->hasAnyRole([SiakadRole::SUPER_ADMIN, SiakadRole::ADMIN]),
+                        fn(Builder $q) => $q->whereHas('dosenData', fn(Builder $q) => $q->where('user_id', $user->id))
                     );
             })
             ->recordTitleAttribute('id_mata_pelajaran_kelas')
@@ -258,10 +269,18 @@ class MataPelajaranKelasRelationManager extends RelationManager
                                             ->downloadable()
                                             ->openable()
                                             ->columnSpanFull()
+                                            ->default(function ($get) use ($ljkField) {
+                                                $id = $get('siswa_data_ljk_id');
+                                                return $id ? \App\Models\SiswaDataLJK::find($id)?->$ljkField : null;
+                                            })
                                             ->visible(fn($get) => filled($get('siswa_data_ljk_id'))),
                                         RichEditor::make($cttField)
                                             ->label('Catatan / Jawaban Teks')
                                             ->columnSpanFull()
+                                            ->default(function ($get) use ($cttField) {
+                                                $id = $get('siswa_data_ljk_id');
+                                                return $id ? \App\Models\SiswaDataLJK::find($id)?->$cttField : null;
+                                            })
                                             ->visible(fn($get) => filled($get('siswa_data_ljk_id'))),
                                     ])->visible(fn($get) => filled($get('siswa_data_ljk_id')))
                                 ])

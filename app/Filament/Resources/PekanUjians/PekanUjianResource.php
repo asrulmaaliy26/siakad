@@ -67,6 +67,11 @@ class PekanUjianResource extends Resource
         $query = parent::getEloquentQuery();
         $user = \Filament\Facades\Filament::auth()->user();
 
+        // Bypass global scopes for students/lecturers to ensure visibility
+        if ($user && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
+            $query->withoutGlobalScopes();
+        }
+
         // Optional: Filter Pekan Ujian itself if needed for students
         if ($user && $user->hasRole(\App\Helpers\SiakadRole::MAHASISWA) && !$user->hasAnyRole([\App\Helpers\SiakadRole::SUPER_ADMIN, \App\Helpers\SiakadRole::ADMIN])) {
             $query->whereHas('tahunAkademik.kelas.akademikKrs.riwayatPendidikan.siswa', function ($q) use ($user) {
